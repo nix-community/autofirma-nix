@@ -3,16 +3,16 @@
     "autofirma-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1716805628,
-        "narHash": "sha256-GQyj3QuWIHTkYwdJ4oKVsG923YG9mCUXfhqdIvEWNMA=",
+        "lastModified": 1735048485,
+        "narHash": "sha256-dy/LYISKqpp3/Kqzw2PGWvUy4evnB7uCE8C34D1TYbs=",
         "owner": "ctt-gob-es",
         "repo": "clienteafirma",
-        "rev": "f8888062394a4ca41c5802beb2524597a5ce465a",
+        "rev": "7882191d9f1dec6241326b4f63a4c9c720463c81",
         "type": "github"
       },
       "original": {
         "owner": "ctt-gob-es",
-        "ref": "v1.8.3",
+        "ref": "develop",
         "repo": "clienteafirma",
         "type": "github"
       }
@@ -20,16 +20,15 @@
     "clienteafirma-external-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1712248159,
-        "narHash": "sha256-iS3I6zIxuKG133s/FqDlXZzOZ2ZOJcqZK9X6Tv3+3lc=",
+        "lastModified": 1733219330,
+        "narHash": "sha256-XqfgxjdoPA5AHBRCuA4MqKsa1CTAVPiVBKsTtJ0YJ5E=",
         "owner": "ctt-gob-es",
         "repo": "clienteafirma-external",
-        "rev": "f450ac76094ffe387f6590b9ac61b5ada5a501e7",
+        "rev": "0005d056e04b9e73b34f6e4c0071ceefa76cc04c",
         "type": "github"
       },
       "original": {
         "owner": "ctt-gob-es",
-        "ref": "OT_14395",
         "repo": "clienteafirma-external",
         "type": "github"
       }
