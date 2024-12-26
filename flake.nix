@@ -121,7 +121,7 @@
 
             src = autofirma-src;
 
-            maven-dependencies-hash = "sha256-zPWjBu1YtN0U9+wy/WG0NWg1EsO3MD0nhnkUsV7h6Ew=";
+            maven-dependencies-hash = "sha256-N+F5dtboeEw3o1UFWSqiVGrGWLamU/MtCg4yOAE7TVU=";
           };
           docs = import ./docs { inherit pkgs inputs; inherit (nixpkgs) lib; };
           default = self'.packages.autofirma;
