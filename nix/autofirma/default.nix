@@ -31,7 +31,6 @@
 
     patches =
       [
-        ./patches/clienteafirma/detect_java_version.patch
         ./patches/clienteafirma/pr-367.patch
         ./patches/clienteafirma/certutilpath.patch
         ./patches/clienteafirma/etc_config.patch
