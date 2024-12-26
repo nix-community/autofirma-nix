@@ -25,12 +25,12 @@
     };
 
     clienteafirma-external-src = {
-      url = "github:ctt-gob-es/clienteafirma-external/OT_14395";
+      url = "github:ctt-gob-es/clienteafirma-external";
       flake = false;
     };
 
     autofirma-src = {
-      url = "github:ctt-gob-es/clienteafirma/v1.8.3";
+      url = "github:ctt-gob-es/clienteafirma/develop";
       flake = false;
     };
   };
