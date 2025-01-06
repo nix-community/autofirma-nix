@@ -27,7 +27,9 @@ in {
   config = mkIf cfg.enable {
     environment.systemPackages = [cfg.finalPackage];
     programs.firefox = mkIf cfg.firefoxIntegration.enable {
-      autoConfig = builtins.readFile "${cfg.finalPackage}/etc/firefox/pref/configuradorfnmt.js";
+      autoConfigFiles = lib.mkAfter [
+        "${cfg.finalPackage}/etc/firefox/pref/configuradorfnmt.js"
+      ];
     };
   };
 }
