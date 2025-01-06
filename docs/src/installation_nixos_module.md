@@ -1,4 +1,4 @@
-# NixOS Module
+# NixOS module
 
 For those who prefer system-wide configurations, **autofirma-nix** offers a dedicated NixOS module. Below is an example of how to configure the NixOS module. (The `inputs` section is covered in the previous section.)
 

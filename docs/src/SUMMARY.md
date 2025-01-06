@@ -1,16 +1,15 @@
 [Introduction](./introduction.md)
 
-# User Guide
+# User guide
 
 - [Installation](./installation.md)
-  - [NixOS Module](./installation_nixos_module.md)
-  - [Home-Manager Module](./installation_home_manager_module.md)
-  - [Post-Install Steps](./post_install_steps.md)
+  - [NixOS module](./installation_nixos_module.md)
+  - [Home Manager module](./installation_home_manager_module.md)
+  - [Post-install steps](./post_install_steps.md)
 - [Security](./security.md)
 - [Troubleshooting](./troubleshooting.md)
 
 # Reference
 
-- [NixOS Options](./nixos_options.md)
-- [Home-Manager Options](./home_manager_options.md)
-
+- [NixOS options](./nixos_options.md)
+- [Home Manager options](./home_manager_options.md)

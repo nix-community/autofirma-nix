@@ -1,4 +1,4 @@
-# Home Manager Module
+# Home Manager module
 
 If you prefer per-user flexibility and customization, the **autofirma-nix** Home Manager module is the way to go. Here’s how you can set it up in your Home Manager configuration:
 
