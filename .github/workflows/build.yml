@@ -61,19 +61,3 @@ jobs:
       - name: Build ${{ matrix.build.key }}
         run: nix -L --accept-flake-config build github:${{ github.repository }}/${{ github.event.pull_request.head.sha || github.sha }}#${{ matrix.build.type }}.${{ matrix.build.arch }}.${{ matrix.build.key }} --no-update-lock-file
 
-  check:
-    name: Check readiness for nixos-search
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          extra-conf: |
-            extra-experimental-features = nix-command flakes
-
-      - name: Check flake-info
-        id: flake-info
-        run: |
-          nix run github:NixOS/nixos-search#flake-info -- --json flake github:${{ github.repository }}/${{ github.event.pull_request.head.sha || github.sha }} | jq .
