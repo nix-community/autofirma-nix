@@ -128,7 +128,8 @@
           default = self'.packages.autofirma;
         };
         checks = {
-          nixos-module-sign = pkgs.callPackage ./nix/tests/test-sign.nix { inherit self; };
+          nixos-autofirma-sign = pkgs.callPackage ./nix/tests/nixos/autofirma-sign.nix { inherit self; };
+          hm-nixos-module-installation-autofirma-sign = pkgs.callPackage ./nix/tests/hm/nixos-module-installation/autofirma-sign.nix { inherit self home-manager; };
         };
       };
     };
