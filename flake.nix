@@ -128,11 +128,19 @@
           default = self'.packages.autofirma;
         };
         checks = {
+          # NixOS Modules
+          ## AutoFirma
           nixos-autofirma-cli-sign-document = pkgs.callPackage ./nix/tests/nixos/autofirma/cli/sign-document.nix { inherit self; };
           nixos-autofirma-firefoxIntegration-sign-document = pkgs.callPackage ./nix/tests/nixos/autofirma/firefoxIntegration/sign-document.nix { inherit self; };
+          ## Configurador FNMT-RCM
           nixos-configuradorfnmt-firefoxIntegration-request = pkgs.callPackage ./nix/tests/nixos/configuradorfnmt/firefoxIntegration/request-certificate.nix { inherit self; };
+
+          # Home Manager Modules
+          ## AutoFirma
           hm-as-nixos-module-autofirma-cli-sign-document = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/cli/sign-document.nix { inherit self home-manager; };
           hm-as-nixos-module-autofirma-firefoxIntegration-sign-document = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/firefoxIntegration/sign-document.nix { inherit self home-manager; };
+          ## Configurador FNMT-RCM
+          hm-as-nixos-module-configuradorfnmt-firefoxIntegration-request = pkgs.callPackage ./nix/tests/hm-as-nixos-module/configuradorfnmt/firefoxIntegration/request-certificate.nix { inherit self home-manager; };
         };
       };
     };
