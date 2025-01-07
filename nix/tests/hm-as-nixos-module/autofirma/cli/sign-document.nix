@@ -4,7 +4,7 @@ let
 in
 
 pkgs.nixosTest {
-  name = "test-nixos-module-sign";
+  name = "test-hm-as-nixos-module-autofirma-firefoxIntegration-sign-document";
   nodes.machine = { config, pkgs, modulesPath, ... }: {
     imports = [
       home-manager.nixosModules.home-manager

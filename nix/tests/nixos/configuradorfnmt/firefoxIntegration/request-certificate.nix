@@ -3,7 +3,7 @@ let
   stateVersion = "${lib.versions.major lib.version}.${lib.versions.minor lib.version}";
 in
 pkgs.nixosTest {
-  name = "test-nixos-configuradorfnmt-request";
+  name = "test-nixos-configuradorfnmt-firefoxIntegration-request-certificate";
   nodes.machine = { config, pkgs, modulesPath, ... }: {
     imports = [
       self.nixosModules.configuradorfnmt

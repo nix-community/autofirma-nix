@@ -4,7 +4,7 @@ let
 in
 
 pkgs.nixosTest {
-  name = "test-nixos-module-sign";
+  name = "test-nixos-autofirma-cli-sign-document";
   nodes.machine = { config, pkgs, modulesPath, ... }: {
     imports = [
       self.nixosModules.autofirma
