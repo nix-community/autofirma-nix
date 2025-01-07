@@ -128,9 +128,10 @@
           default = self'.packages.autofirma;
         };
         checks = {
-          nixos-autofirma-sign = pkgs.callPackage ./nix/tests/nixos/autofirma-sign.nix { inherit self; };
-          nixos-configuradorfnmt-request = pkgs.callPackage ./nix/tests/nixos/configuradorfnmt-request.nix { inherit self; };
-          hm-nixos-module-installation-autofirma-sign = pkgs.callPackage ./nix/tests/hm/nixos-module-installation/autofirma-sign.nix { inherit self home-manager; };
+          nixos-autofirma-cli-sign-document = pkgs.callPackage ./nix/tests/nixos/autofirma/cli/sign-document.nix { inherit self; };
+          nixos-autofirma-firefoxIntegration-sign-document = pkgs.callPackage ./nix/tests/nixos/autofirma/firefoxIntegration/sign-document.nix { inherit self; };
+          nixos-configuradorfnmt-firefoxIntegration-request = pkgs.callPackage ./nix/tests/nixos/configuradorfnmt/firefoxIntegration/request-certificate.nix { inherit self; };
+          hm-as-nixos-module-autofirma-cli-sign-document = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/cli/sign-document.nix { inherit self home-manager; };
         };
       };
     };
