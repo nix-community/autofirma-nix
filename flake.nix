@@ -132,6 +132,7 @@
           nixos-autofirma-firefoxIntegration-sign-document = pkgs.callPackage ./nix/tests/nixos/autofirma/firefoxIntegration/sign-document.nix { inherit self; };
           nixos-configuradorfnmt-firefoxIntegration-request = pkgs.callPackage ./nix/tests/nixos/configuradorfnmt/firefoxIntegration/request-certificate.nix { inherit self; };
           hm-as-nixos-module-autofirma-cli-sign-document = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/cli/sign-document.nix { inherit self home-manager; };
+          hm-as-nixos-module-autofirma-firefoxIntegration-sign-document = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/firefoxIntegration/sign-document.nix { inherit self home-manager; };
         };
       };
     };
