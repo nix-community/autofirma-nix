@@ -141,6 +141,11 @@
           hm-as-nixos-module-autofirma-firefoxIntegration-sign-document = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/firefoxIntegration/sign-document.nix { inherit self home-manager; };
           ## Configurador FNMT-RCM
           hm-as-nixos-module-configuradorfnmt-firefoxIntegration-request = pkgs.callPackage ./nix/tests/hm-as-nixos-module/configuradorfnmt/firefoxIntegration/request-certificate.nix { inherit self home-manager; };
+          ## DNIe Remote
+          hm-as-nixos-module-dnieremote-config-jumpintro-wifi = pkgs.callPackage ./nix/tests/hm-as-nixos-module/dnieremote/config/jumpintro-wifi.nix { inherit self home-manager; };
+          hm-as-nixos-module-dnieremote-config-jumpintro-usb = pkgs.callPackage ./nix/tests/hm-as-nixos-module/dnieremote/config/jumpintro-usb.nix { inherit self home-manager; };
+          hm-as-nixos-module-dnieremote-config-jumpintro-no = pkgs.callPackage ./nix/tests/hm-as-nixos-module/dnieremote/config/jumpintro-no.nix { inherit self home-manager; };
+          hm-as-nixos-module-dnieremote-config-wifiport = pkgs.callPackage ./nix/tests/hm-as-nixos-module/dnieremote/config/wifiport.nix { inherit self home-manager; };
         };
       };
     };
