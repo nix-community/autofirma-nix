@@ -30,17 +30,17 @@ in {
     jumpIntro = mkOption {
       type = types.enum [ "usb" "wifi" "no" ];
       default = "no";
-      description = "Jump to the intro screen after the DNIeRemote is started.";
+      description = "Skip the intro and jump to a specific screen.";
     };
     wifiPort = mkOption {
       type = types.int;
       default = 9501;
-      description = "The port to use for the wifi connection.";
+      description = "The port to use for the Wi-Fi connection.";
     };
     usbPort = mkOption {
       type = types.int;
       default = 9501;
-      description = "The port to use for the usb connection.";
+      description = "The port to use for the USB connection.";
     };
   };
   config = mkIf cfg.enable {
