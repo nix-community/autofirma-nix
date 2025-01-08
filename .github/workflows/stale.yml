@@ -20,6 +20,6 @@ jobs:
           close-issue-message: "This issue was closed because it has been inactive for 7 days since being marked as stale."
           days-before-pr-stale: -1
           days-before-pr-close: -1
-          exempt-issue-labels: "bug,enhancement"
+          exempt-issue-labels: "bug,enhancement,progress-tracking"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
