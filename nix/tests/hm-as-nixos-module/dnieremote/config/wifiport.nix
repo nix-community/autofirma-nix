@@ -4,7 +4,7 @@ let
 in
 
 pkgs.nixosTest {
-  name = "test-hm-as-nixos-module-dnieremote-config-jumpintro-wifi";
+  name = "test-hm-as-nixos-module-dnieremote-config-wifiport";
   nodes.machine = { config, pkgs, modulesPath, ... }: {
     imports = [
       home-manager.nixosModules.home-manager
