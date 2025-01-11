@@ -1,4 +1,4 @@
-# Post-install Steps
+# Post-install steps
 
 After installing AutoFirma, you’ll need to add a local self-signed certificate so your browser can talk to AutoFirma without throwing its hands up in panic. Below are the steps for installing (and uninstalling) the certificate.
 
