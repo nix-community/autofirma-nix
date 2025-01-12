@@ -134,7 +134,10 @@ pkgs.nixosTest {
     machine.succeed("firefox --headless --CreateProfile default")
     profile_dir = machine.succeed("grep -oP 'Path=\\K.*' ~/.mozilla/firefox/profiles.ini").rstrip("\n")
     machine.execute("firefox >&2 &")
-    machine.sleep(10)
+
+    machine.wait_for_file(f"~/.mozilla/firefox/{profile_dir}/cert9.db")
+    machine.wait_for_file(f"~/.mozilla/firefox/{profile_dir}/key4.db")
+    machine.sleep(3)
 
     machine.succeed(f'pk12util -i ${testCerts}/ciudadano_scard_act.p12 -d sql:/home/root/.mozilla/firefox/{profile_dir} -W ""')
 
