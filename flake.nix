@@ -145,6 +145,7 @@
           ## AutoFirma
           hm-as-nixos-module-autofirma-cli-sign-document = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/cli/sign-document.nix { inherit self home-manager; };
           hm-as-nixos-module-autofirma-firefoxIntegration-sign-document = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/firefoxIntegration/sign-document.nix { inherit self home-manager; };
+          hm-as-nixos-module-autofirma-firefoxIntegration-sign-via-socket = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/firefoxIntegration/sign-via-socket/default.nix { inherit self home-manager; };
           ## Configurador FNMT-RCM
           hm-as-nixos-module-configuradorfnmt-firefoxIntegration-request = pkgs.callPackage ./nix/tests/hm-as-nixos-module/configuradorfnmt/firefoxIntegration/request-certificate.nix { inherit self home-manager; };
           ## DNIe Remote
