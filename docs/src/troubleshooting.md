@@ -46,3 +46,10 @@ $HOME/.cache/opensc](https://github.com/OpenSC/OpenSC/wiki/Environment-variables
 ```console
 $ rm -rf $HOME/.cache/opensc
 ```
+
+
+## AutoFirma doesn't work in Firefox running as `root`
+
+This is a limitation of `autofirma-setup` at the moment. As a workaround
+you can execute `autofirma-setup` and manually import the certificate at
+`/root/.afirma/AutoFirma/AutoFirma_ROOT.cer` in your Firefox profile of choice.
