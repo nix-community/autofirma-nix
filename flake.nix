@@ -132,6 +132,7 @@
           ## AutoFirma
           nixos-autofirma-cli-sign-document = pkgs.callPackage ./nix/tests/nixos/autofirma/cli/sign-document.nix { inherit self; };
           nixos-autofirma-firefoxIntegration-sign-document = pkgs.callPackage ./nix/tests/nixos/autofirma/firefoxIntegration/sign-document.nix { inherit self; };
+          nixos-autofirma-firefoxIntegration-sign-via-socket = pkgs.callPackage ./nix/tests/nixos/autofirma/firefoxIntegration/sign-via-socket/default.nix { inherit self; };
           ## Configurador FNMT-RCM
           nixos-configuradorfnmt-firefoxIntegration-request = pkgs.callPackage ./nix/tests/nixos/configuradorfnmt/firefoxIntegration/request-certificate.nix { inherit self; };
           ##DNIe Remote
