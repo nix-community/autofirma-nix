@@ -1,6 +1,20 @@
 { pkgs, lib, config, ... }:
 let
   cfg = config.autofirma-test-server;
+  autoscript = pkgs.stdenv.mkDerivation {
+    pname = "AutoScript";
+    version = "1-8-2-1";
+    src = pkgs.fetchzip {
+      url = "https://administracionelectronica.gob.es/ctt/resources/Soluciones/138/Descargas/AutoScript%20v1-8-2-1.zip?idIniciativa=138&idElemento=17573";
+      extension = "zip";
+      hash = "sha256-r8V+v5wCnjOGGFzgVW9+qIcVufimeXOmz085dhPoD80=";
+    };
+    phases = "installPhase";
+    installPhase = ''
+      mkdir -p $out
+      cp -rv "$src/js" $out
+    '';
+  };
   autofirma-nix-test-certs = pkgs.stdenv.mkDerivation {
     name = "autofirma-nix-test-certs";
     buildInputs = [ pkgs.openssl ];
@@ -85,6 +99,11 @@ in
 
           handle_path /tests/* {
             root * ${cfg.jsTestsPath}
+            file_server
+          }
+
+          handle_path /js/* {
+            root * ${autoscript}/js
             file_server
           }
 

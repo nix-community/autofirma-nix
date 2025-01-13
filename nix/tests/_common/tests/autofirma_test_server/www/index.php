@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     echo "<body>\n";
 
     // Always load autoscript.js.
-    echo "    <script src=\"autoscript.js\"></script>\n";
+    echo "    <script src=\"js/autoscript.js\"></script>\n";
 
     // Conditionally load the user-specified script if provided.
     if (!empty($testScript)) {
