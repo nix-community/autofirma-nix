@@ -1,13 +1,11 @@
 { self, pkgs, lib }:
-let
-  stateVersion = "${lib.versions.major lib.version}.${lib.versions.minor lib.version}";
-in
 pkgs.nixosTest {
   name = "test-nixos-configuradorfnmt-firefoxIntegration-request-certificate";
   nodes.machine = { config, pkgs, modulesPath, ... }: {
     imports = [
       self.nixosModules.configuradorfnmt
       (modulesPath + "./../tests/common/x11.nix")
+      ../../../_common/nixos/stateVersion.nix
     ];
 
     programs.configuradorfnmt.enable = true;
@@ -36,7 +34,6 @@ pkgs.nixosTest {
         ${lib.getExe config.programs.firefox.package} /tmp/configuradorfnmt.html
       '')
     ];
-    system.stateVersion = stateVersion;
   };
 
   testScript = ''

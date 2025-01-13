@@ -9,11 +9,10 @@ pkgs.nixosTest {
     imports = [
       self.nixosModules.autofirma
       (modulesPath + "./../tests/common/x11.nix")
+      ../../../_common/nixos/stateVersion.nix
     ];
 
     programs.autofirma.enable = true;
-
-    system.stateVersion = "${lib.versions.major lib.version}.${lib.versions.minor lib.version}";
   };
 
   testScript = ''

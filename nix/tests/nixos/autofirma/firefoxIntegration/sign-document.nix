@@ -1,13 +1,11 @@
 { self, pkgs, lib }:
-let
-  stateVersion = "${lib.versions.major lib.version}.${lib.versions.minor lib.version}";
-in
 pkgs.nixosTest {
   name = "test-nixos-autofirma-firefoxIntegration-sign-document";
   nodes.machine = { config, pkgs, modulesPath, ... }: {
     imports = [
       self.nixosModules.autofirma
       (modulesPath + "./../tests/common/x11.nix")
+      ../../../_common/nixos/stateVersion.nix
     ];
 
     programs.autofirma.enable = true;
@@ -36,7 +34,6 @@ pkgs.nixosTest {
         ${lib.getExe config.programs.firefox.package} /tmp/autofirma.html
       '')
     ];
-    system.stateVersion = stateVersion;
   };
 
   testScript = ''

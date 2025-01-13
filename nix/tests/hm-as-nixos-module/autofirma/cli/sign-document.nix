@@ -9,20 +9,14 @@ pkgs.nixosTest {
     imports = [
       home-manager.nixosModules.home-manager
       (modulesPath + "./../tests/common/x11.nix")
+      ../../../_common/hm-as-nixos-module/autofirma-user.nix
     ];
-
-    test-support.displayManager.auto.user = "autofirma-user";
-
-    users.users.autofirma-user = {
-      isNormalUser = true;
-    };
 
     home-manager.users.autofirma-user = {
       imports = [
         self.homeManagerModules.autofirma
       ];
       programs.autofirma.enable = true;
-      home.stateVersion = "${lib.versions.major lib.version}.${lib.versions.minor lib.version}";
     };
 
     system.stateVersion = "${lib.versions.major lib.version}.${lib.versions.minor lib.version}";

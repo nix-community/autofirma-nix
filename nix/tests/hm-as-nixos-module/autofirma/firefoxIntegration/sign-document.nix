@@ -1,21 +1,12 @@
 { self, pkgs, home-manager, lib }:
-let
-  stateVersion = "${lib.versions.major lib.version}.${lib.versions.minor lib.version}";
-in
-
 pkgs.nixosTest {
   name = "test-hm-as-nixos-module-autofirma-firefoxIntegration-sign-document";
   nodes.machine = { config, pkgs, modulesPath, ... }: {
     imports = [
       home-manager.nixosModules.home-manager
       (modulesPath + "./../tests/common/x11.nix")
+      ../../../_common/hm-as-nixos-module/autofirma-user.nix
     ];
-
-    test-support.displayManager.auto.user = "autofirma-user";
-
-    users.users.autofirma-user = {
-      isNormalUser = true;
-    };
 
     home-manager.users.autofirma-user = {config, ... }: {
       imports = [
@@ -44,13 +35,7 @@ pkgs.nixosTest {
           ${lib.getExe config.programs.firefox.finalPackage} /tmp/autofirma.html
         '')
       ];
-      home.stateVersion = stateVersion;
     };
-
-    environment.systemPackages = with pkgs; [
-      xorg.xhost.out
-    ];
-    system.stateVersion = stateVersion;
   };
 
   testScript = ''
@@ -61,7 +46,7 @@ pkgs.nixosTest {
     machine.wait_for_x()
 
     # Authorize root (testScript user) to connect to the user's X server
-    machine.succeed(user_cmd("xhost +local:"))
+    # machine.succeed(user_cmd("xhost +local:"))
 
     # Open firefox and allow it to import AutoConfig settings
     machine.execute(user_cmd("firefox >&2 &"))

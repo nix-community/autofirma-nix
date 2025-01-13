@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     // Conditionally load the user-specified script if provided.
     if (!empty($testScript)) {
-        echo "    <script src=\"" . $testScript . "\"></script>\n";
+        echo "    <script src=\"tests/" . $testScript . "\"></script>\n";
     }
 
     echo "</body>\n";

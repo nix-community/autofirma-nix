@@ -1,23 +1,14 @@
 { self, pkgs, home-manager, lib }:
-let
-  stateVersion = "${lib.versions.major lib.version}.${lib.versions.minor lib.version}";
-in
-
 pkgs.nixosTest {
   name = "test-hm-as-nixos-module-configuradorfnmt-firefoxIntegration-request-certificate";
   nodes.machine = { config, pkgs, modulesPath, ... }: {
     imports = [
       home-manager.nixosModules.home-manager
       (modulesPath + "./../tests/common/x11.nix")
+      ../../../_common/hm-as-nixos-module/autofirma-user.nix
     ];
 
-    test-support.displayManager.auto.user = "configuradorfnmt-user";
-
-    users.users.configuradorfnmt-user = {
-      isNormalUser = true;
-    };
-
-    home-manager.users.configuradorfnmt-user = {config, ... }: {
+    home-manager.users.autofirma-user = {config, ... }: {
       imports = [
         self.homeManagerModules.configuradorfnmt
       ];
@@ -44,24 +35,15 @@ pkgs.nixosTest {
           ${lib.getExe config.programs.firefox.finalPackage} /tmp/configuradorfnmt.html
         '')
       ];
-      home.stateVersion = stateVersion;
     };
-
-    environment.systemPackages = with pkgs; [
-      xorg.xhost.out
-    ];
-    system.stateVersion = stateVersion;
   };
 
   testScript = ''
     def user_cmd(cmd):
-      return f"su -l configuradorfnmt-user --shell /bin/sh -c $'export XDG_RUNTIME_DIR=/run/user/$UID ; {cmd}'"
+      return f"su -l autofirma-user --shell /bin/sh -c $'export XDG_RUNTIME_DIR=/run/user/$UID ; {cmd}'"
 
     machine.wait_for_unit("default.target")
     machine.wait_for_x()
-
-    # Authorize root (testScript user) to connect to the user's X server
-    machine.succeed(user_cmd("xhost +local:"))
 
     # Open firefox and allow it to import AutoConfig settings
     machine.execute(user_cmd("firefox >&2 &"))
