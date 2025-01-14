@@ -5,8 +5,6 @@ $outputFile = "/tmp/test_output.txt";
 
 // Handle GET request.
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    // Get the "test" parameter from the URL.
-    $testScript = isset($_GET['test']) ? htmlspecialchars($_GET['test']) : '';
 
     // Prepare the HTML content.
     echo "<!DOCTYPE html>\n";
@@ -20,11 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     // Always load autoscript.js.
     echo "    <script src=\"js/autoscript.js\"></script>\n";
-
-    // Conditionally load the user-specified script if provided.
-    if (!empty($testScript)) {
-        echo "    <script src=\"tests/" . $testScript . "\"></script>\n";
-    }
+    echo "    <script src=\"test.js\"></script>\n";
 
     echo "</body>\n";
     echo "</html>\n";

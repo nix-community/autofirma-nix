@@ -1,9 +1,10 @@
+{ testName, jsTestFile }:
 { self, pkgs, lib, system }:
 let
   testCerts = pkgs.callPackage ../../../../_common/pkgs/test_certs.nix {};
 in
 pkgs.nixosTest {
-  name = "test-nixos-autofirma-firefoxIntegration-sign-via-socket";
+  name = testName;
   nodes.machine = { config, pkgs, modulesPath, ... }: {
     imports = [
       self.nixosModules.autofirma
@@ -27,7 +28,7 @@ pkgs.nixosTest {
       pref("network.protocol-handler.expose.afirma", true);
     '';
 
-    autofirma-test-server.jsTestsPath = ./js_tests;
+    autofirma-test-server.jsTestFile = jsTestFile;
 
     environment.systemPackages = [
       pkgs.nss.tools
@@ -57,17 +58,12 @@ pkgs.nixosTest {
 
     machine.succeed("autofirma-setup")
 
-    for testfile in ("test_websocket", "test_xhr", "test_auxiliary_services"):
-      machine.succeed("rm -f /tmp/test_output.txt")
+    # Open firefox and allow it to import AutoConfig settings
+    machine.execute("firefox --new-tab https://autofirma-nix.com/index.php >&2 &")
 
-      # Open firefox and allow it to import AutoConfig settings
-      machine.execute(f"firefox --new-tab https://autofirma-nix.com/index.php?test={testfile}.js >&2 &")
-
-      machine.wait_for_file("/tmp/test_output.txt")
-      machine.sleep(3)
-      machine.succeed("grep 'Signature Successful:' /tmp/test_output.txt")
-      machine.execute("pkill -f AutoFirma.jar")
-      machine.sleep(3)
+    machine.wait_for_file("/tmp/test_output.txt")
+    machine.sleep(3)
+    machine.succeed("grep 'Signature Successful:' /tmp/test_output.txt")
 
   '';
 }

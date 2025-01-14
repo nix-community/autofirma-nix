@@ -1,11 +1,11 @@
 { self, pkgs, home-manager, lib }:
 pkgs.nixosTest {
-  name = "test-hm-as-nixos-module-autofirma-firefoxIntegration-sign-document";
+  name = "test-hm-as-nixos-module-autofirma-firefoxIntegration-protocol-handler";
   nodes.machine = { config, pkgs, modulesPath, ... }: {
     imports = [
       home-manager.nixosModules.home-manager
       (modulesPath + "./../tests/common/x11.nix")
-      ../../../_common/hm-as-nixos-module/autofirma-user.nix
+      ../../../../_common/hm-as-nixos-module/autofirma-user.nix
     ];
 
     home-manager.users.autofirma-user = {config, ... }: {

@@ -5,7 +5,7 @@ pkgs.nixosTest {
     imports = [
       self.nixosModules.autofirma
       (modulesPath + "./../tests/common/x11.nix")
-      ../../../_common/nixos/stateVersion.nix
+      ../../../../_common/nixos/stateVersion.nix
     ];
 
     programs.autofirma.enable = true;

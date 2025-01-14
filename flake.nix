@@ -131,8 +131,11 @@
           # NixOS Modules
           ## AutoFirma
           nixos-autofirma-cli-sign-document = pkgs.callPackage ./nix/tests/nixos/autofirma/cli/sign-document.nix { inherit self; };
-          nixos-autofirma-firefoxIntegration-sign-document = pkgs.callPackage ./nix/tests/nixos/autofirma/firefoxIntegration/sign-document.nix { inherit self; };
-          nixos-autofirma-firefoxIntegration-sign-via-socket = pkgs.callPackage ./nix/tests/nixos/autofirma/firefoxIntegration/sign-via-socket/default.nix { inherit self; };
+          nixos-autofirma-firefoxIntegration-protocol-handler = pkgs.callPackage ./nix/tests/nixos/autofirma/firefoxIntegration/protocol-handler { inherit self; };
+          nixos-autofirma-firefoxIntegration-connection-method-websocket = pkgs.callPackage ./nix/tests/nixos/autofirma/firefoxIntegration/connection-method/websocket { inherit self; };
+          nixos-autofirma-firefoxIntegration-connection-method-xhr = pkgs.callPackage ./nix/tests/nixos/autofirma/firefoxIntegration/connection-method/xhr { inherit self; };
+          nixos-autofirma-firefoxIntegration-connection-method-auxiliary-servers = pkgs.callPackage ./nix/tests/nixos/autofirma/firefoxIntegration/connection-method/auxiliary-servers { inherit self; };
+
           ## Configurador FNMT-RCM
           nixos-configuradorfnmt-firefoxIntegration-request = pkgs.callPackage ./nix/tests/nixos/configuradorfnmt/firefoxIntegration/request-certificate.nix { inherit self; };
           ##DNIe Remote
@@ -144,8 +147,10 @@
           # Home Manager Modules
           ## AutoFirma
           hm-as-nixos-module-autofirma-cli-sign-document = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/cli/sign-document.nix { inherit self home-manager; };
-          hm-as-nixos-module-autofirma-firefoxIntegration-sign-document = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/firefoxIntegration/sign-document.nix { inherit self home-manager; };
-          hm-as-nixos-module-autofirma-firefoxIntegration-sign-via-socket = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/firefoxIntegration/sign-via-socket/default.nix { inherit self home-manager; };
+          hm-as-nixos-module-autofirma-firefoxIntegration-protocol-handler = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/firefoxIntegration/protocol-handler { inherit self home-manager; };
+          hm-as-nixos-module-autofirma-firefoxIntegration-connection-method-websocket = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/firefoxIntegration/connection-method/websocket { inherit self home-manager; };
+          hm-as-nixos-module-autofirma-firefoxIntegration-connection-method-xhr = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/firefoxIntegration/connection-method/xhr { inherit self home-manager; };
+          hm-as-nixos-module-autofirma-firefoxIntegration-connection-method-auxiliary-servers = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/firefoxIntegration/connection-method/auxiliary-servers { inherit self home-manager; };
           ## Configurador FNMT-RCM
           hm-as-nixos-module-configuradorfnmt-firefoxIntegration-request = pkgs.callPackage ./nix/tests/hm-as-nixos-module/configuradorfnmt/firefoxIntegration/request-certificate.nix { inherit self home-manager; };
           ## DNIe Remote

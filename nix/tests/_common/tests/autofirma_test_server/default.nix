@@ -104,9 +104,9 @@ in
 {
   options = {
     autofirma-test-server = {
-      jsTestsPath = lib.mkOption {
+      jsTestFile = lib.mkOption {
         type = lib.types.path;
-        description = "Path to the JavaScript tests";
+        description = "Path to the JavaScript test";
       };
     };
   };
@@ -171,8 +171,8 @@ in
 
       php_fastcgi unix/${config.services.phpfpm.pools.autofirma-nix-tests.socket}
 
-      handle_path /tests/* {
-        root * ${cfg.jsTestsPath}
+      handle_path /test.js {
+        root * ${cfg.jsTestFile}
         file_server
       }
 
