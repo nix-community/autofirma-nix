@@ -1,4 +1,4 @@
-{ self, pkgs, lib }:
+{ self, pkgs, lib, system }:
 let
   testCerts = pkgs.callPackage ../../../../_common/pkgs/test_certs.nix {};
 in
@@ -13,6 +13,11 @@ pkgs.nixosTest {
     ];
 
     programs.autofirma.enable = true;
+    programs.autofirma.truststore.package = self.packages."${system}".autofirma-truststore.override (old: {
+      caBundle = config.environment.etc."ssl/certs/ca-certificates.crt".source;
+      govTrustedCerts = old.govTrustedCerts ++ config.security.pki.certificateFiles;
+    });
+
     programs.autofirma.firefoxIntegration.enable = true;
 
     programs.firefox.enable = true;
@@ -52,7 +57,7 @@ pkgs.nixosTest {
 
     machine.succeed("autofirma-setup")
 
-    for testfile in ("test_websocket", "test_xhr"):
+    for testfile in ("test_websocket", "test_xhr", "test_auxiliary_services"):
       machine.succeed("rm -f /tmp/test_output.txt")
 
       # Open firefox and allow it to import AutoConfig settings
@@ -61,6 +66,8 @@ pkgs.nixosTest {
       machine.wait_for_file("/tmp/test_output.txt")
       machine.sleep(3)
       machine.succeed("grep 'Signature Successful:' /tmp/test_output.txt")
+      machine.execute("pkill -f AutoFirma.jar")
+      machine.sleep(3)
 
   '';
 }

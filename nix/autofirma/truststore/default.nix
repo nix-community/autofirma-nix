@@ -36,6 +36,7 @@ in
       done
     '';
     passthru = {
+      inherit govTrustedCerts;
       pemBundle = stdenv.mkDerivation {
         name = "autofirma-truststore-bundle.pem";
         srcs = builtins.map to-pem-file govTrustedCerts;
