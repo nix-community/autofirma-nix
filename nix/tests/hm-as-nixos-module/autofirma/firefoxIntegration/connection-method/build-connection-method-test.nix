@@ -64,7 +64,7 @@ pkgs.nixosTest {
     machine.execute(user_cmd("firefox --new-tab https://autofirma-nix.com/index.php >&2 &"))
 
     machine.wait_for_file("/tmp/test_output.txt")
-    machine.sleep(3)
+    machine.sleep(5)
     machine.succeed("grep 'Signature Successful:' /tmp/test_output.txt")
 
   '';
