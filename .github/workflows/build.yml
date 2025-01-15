@@ -77,17 +77,16 @@ jobs:
 
     steps:
       - name: Install Nix
-        uses: cachix/install-nix-action@v27
+        uses: DeterminateSystems/nix-installer-action@main
         with:
-          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          extra-conf: |
+            extra-experimental-features = nix-command flakes
 
-      - name: Set up Cachix
-        uses: cachix/cachix-action@v15
-        with:
-          name: autofirma-nix
-          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+      - name: Set up cache
+        uses: DeterminateSystems/magic-nix-cache-action@main
 
-      - name: Build ${{ matrix.build.key }}
+      - name: Test ${{ matrix.build.key }}
         run: nix -L --accept-flake-config run github:${{ github.repository }}/${{ github.event.pull_request.head.sha || github.sha }}#${{ matrix.build.type }}.${{ matrix.build.arch }}.${{ matrix.build.key }}.driver --no-update-lock-file
 
   check-nixos-search:
