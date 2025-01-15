@@ -44,7 +44,7 @@ jobs:
       matrix:
         build: ${{ fromJSON(needs.evaluate.outputs.packages) }}
 
-    name: ${{ matrix.build.key }} on ${{ matrix.build.arch }}
+    name: Build ${{ matrix.build.key }} on ${{ matrix.build.arch }}
 
     runs-on: ubuntu-latest
 
@@ -64,14 +64,14 @@ jobs:
         run: nix -L --accept-flake-config build github:${{ github.repository }}/${{ github.event.pull_request.head.sha || github.sha }}#${{ matrix.build.type }}.${{ matrix.build.arch }}.${{ matrix.build.key }} --no-update-lock-file
 
   run-checks:
-    needs: build-packages
+    needs: [ evaluate, build-packages ]
 
     strategy:
       fail-fast: false
       matrix:
         build: ${{ fromJSON(needs.evaluate.outputs.checks) }}
 
-    name: ${{ matrix.build.key }} on ${{ matrix.build.arch }}
+    name: Test ${{ matrix.build.key }} on ${{ matrix.build.arch }}
 
     runs-on: ubuntu-latest
 
