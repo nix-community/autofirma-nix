@@ -1,6 +1,6 @@
 inputs: {
   pkgs,
-  osConfig ? null,
+  osConfig,
   config,
   lib,
   ...

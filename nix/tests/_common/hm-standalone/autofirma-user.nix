@@ -13,15 +13,6 @@ in
       extra-experimental-features = [ "nix-command" "flakes" ];
     };
 
-    # home-manager.users.autofirma-user = {config, ... }: {
-    #   xsession.enable = true;
-    #   xsession.initExtra = ''
-    #     xhost +SI:localuser:root
-    #   '';
-
-    #   home.stateVersion = stateVersion;
-    # };
-
     environment.systemPackages = with pkgs; [
       xorg.xhost.out
     ];
