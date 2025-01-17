@@ -56,8 +56,6 @@ pkgs.nixosTest {
 
     machine.succeed(user_cmd(f'pk12util -i ${testCerts}/ciudadano_scard_act.p12 -d sql:/home/autofirma-user/.mozilla/firefox/{profile_dir} -W ""'))
 
-    machine.succeed(user_cmd("autofirma-setup"))
-
     machine.succeed("rm -f /tmp/test_output.txt")
 
     # Open firefox and allow it to import AutoConfig settings

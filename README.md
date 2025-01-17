@@ -22,9 +22,6 @@ A NixOS module is provided to enable AutoFirma on NixOS and another one for Home
 You only need to enable one of them, depending on whether you want AutoFirma
 system-wide or at the user level.
 
-Once you have enabled one of these modules, if you want to use AutoFirma in Firefox,
-you must run the `autofirma-setup` command (see below).
-
 ### Home Manager Configuration
 
 The integration of AutoFirma in Home Manager enables the `autofirma` command for
@@ -161,26 +158,6 @@ Android mobile via DNIeRemote.
     };
   };
 }
-```
-
-### Creating Certificates
-
-Once AutoFirma is installed and enabled, you need to create a certificate so that
-the browser can communicate with AutoFirma. To do this, run the following command
-(with Firefox open):
-
-```
-$ autofirma-setup
-```
-
-Afterwards, restart Firefox for the changes to take effect.
-
-### Uninstalling Certificates
-
-If you wish to uninstall the certificates created by `autofirma-setup`, you can run:
-
-```
-$ autofirma-setup --uninstall
 ```
 
 ## Managing Certificates in **autofirma-nix**

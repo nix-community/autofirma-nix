@@ -45,9 +45,6 @@ pkgs.nixosTest {
     machine.wait_for_unit("default.target")
     machine.wait_for_x()
 
-    # Authorize root (testScript user) to connect to the user's X server
-    # machine.succeed(user_cmd("xhost +local:"))
-
     # Open firefox and allow it to import AutoConfig settings
     machine.execute(user_cmd("firefox >&2 &"))
     machine.wait_for_window("Mozilla Firefox")

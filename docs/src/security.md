@@ -4,7 +4,7 @@ AutoFirma chats with remote servers in a couple of different ways to handle docu
 
 ## Browser-based scenario
 
-In most cases, your friendly web browser takes care of the heavy lifting for server authentication: it connects to the remote server and confirms the server’s identity with its own certificate store. After that, the browser opens a WebSocket to AutoFirma, relaying commands back and forth. The command `autofirma-setup` sets up this local WebSocket by installing a special self-signed certificate so that your browser can trust the connection.
+In most cases, your friendly web browser takes care of the heavy lifting for server authentication: it connects to the remote server and confirms the server’s identity with its own certificate store. After that, the browser opens a WebSocket to AutoFirma, relaying commands back and forth. For this communication to work, a SSL certificate is created and added to Firefox; depending on the installation method you chose is located either in `/etc/AutoFirma` or in `$HOME/.afirma/AutoFirma`.
 
 ## Direct connection scenario
 

@@ -34,10 +34,6 @@ pkgs.nixosTest {
       pkgs.nss.tools
     ];
 
-    # Stupid hack to make autofirma-setup work with the root user *facepalm*.
-    users.users.root.home = lib.mkForce "/home/root";
-    environment.variables.XAUTHORITY = "/home/root/.Xauthority";
-    environment.variables.HOME = "/home/root/";
   };
 
   testScript = ''
@@ -54,9 +50,7 @@ pkgs.nixosTest {
     machine.wait_for_file(f"~/.mozilla/firefox/{profile_dir}/key4.db")
     machine.sleep(3)
 
-    machine.succeed(f'pk12util -i ${testCerts}/ciudadano_scard_act.p12 -d sql:/home/root/.mozilla/firefox/{profile_dir} -W ""')
-
-    machine.succeed("autofirma-setup")
+    machine.succeed(f'pk12util -i ${testCerts}/ciudadano_scard_act.p12 -d sql:/root/.mozilla/firefox/{profile_dir} -W ""')
 
     # Open firefox and allow it to import AutoConfig settings
     machine.execute("firefox --new-tab https://autofirma-nix.com/index.php >&2 &")

@@ -7,6 +7,11 @@ inputs: {
 with lib; let
   cfg = config.programs.autofirma;
   inherit (pkgs.stdenv.hostPlatform) system;
+  create-autofirma-cert = pkgs.writeShellApplication {
+    name = "create-autofirma-cert";
+    runtimeInputs = with pkgs; [ openssl ];
+    text = builtins.readFile ./create-autofirma-cert;
+  };
 in {
   options.programs.autofirma.truststore = {
     package = mkPackageOption inputs.self.packages.${system} "autofirma-truststore" {};
@@ -44,13 +49,31 @@ in {
     firefoxIntegration.enable = mkEnableOption "Firefox integration";
   };
 
-  config.environment.systemPackages = mkIf cfg.enable (lib.warnIf cfg.fixJavaCerts "The option `programs.autofirma.fixJavaCerts` is deprecated." [cfg.finalPackage]);
+  config.environment.systemPackages = mkIf cfg.enable (lib.warnIf cfg.fixJavaCerts "The option `programs.autofirma.fixJavaCerts` is deprecated." [
+    cfg.finalPackage
+  ]);
 
   config.programs = mkIf cfg.enable {
     firefox = mkIf cfg.firefoxIntegration.enable {
       autoConfigFiles = lib.mkAfter [
         "${cfg.finalPackage}/etc/firefox/pref/AutoFirma.js"
       ];
+      policies.Certificates.ImportEnterpriseRoots = true;
+      policies.Certificates.Install = [ "/etc/AutoFirma/AutoFirma_ROOT.cer" ];
+    };
+  };
+
+  config.systemd.services = mkIf (cfg.enable && cfg.firefoxIntegration.enable) {
+    create-autofirma-cert = {
+      enable = true;
+      description = "Create certificate for AutoFirma and browser communication";
+      wants = [ "display-manager.service" ];
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${lib.getExe create-autofirma-cert} /etc/AutoFirma";
+        RemainAfterExit = true;
+      };
+      wantedBy = [ "multi-user.target" ];
     };
   };
 
