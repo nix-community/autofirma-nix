@@ -1,12 +1,13 @@
 inputs: {
   pkgs,
-  osConfig,
+  osConfig ? null,
   config,
   lib,
   ...
 }:
 with lib; let
   cfg = config.programs.autofirma;
+  ca-certificates = if osConfig != null then osConfig.environment.etc."ssl/certs/ca-certificates.crt".source else "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
   inherit (pkgs.stdenv.hostPlatform) system;
 in {
   options.programs.autofirma.truststore = {
@@ -14,7 +15,7 @@ in {
     finalPackage = mkOption {
       type = types.package;
       readOnly = true;
-      default = cfg.truststore.package.override { caBundle = osConfig.environment.etc."ssl/certs/ca-certificates.crt".source; };
+      default = cfg.truststore.package.override { caBundle = ca-certificates; };
       defaultText =
         literalExpression
         "`programs.autofirma.truststore.package` with applied configuration";
