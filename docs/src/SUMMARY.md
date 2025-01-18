@@ -5,7 +5,6 @@
 - [Installation](./installation.md)
   - [NixOS module](./installation_nixos_module.md)
   - [Home Manager module](./installation_home_manager_module.md)
-  - [Post-install steps](./post_install_steps.md)
 - [Security](./security.md)
 - [Troubleshooting](./troubleshooting.md)
 

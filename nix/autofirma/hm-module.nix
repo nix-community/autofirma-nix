@@ -9,6 +9,12 @@ with lib; let
   cfg = config.programs.autofirma;
   ca-certificates = if osConfig != null then osConfig.environment.etc."ssl/certs/ca-certificates.crt".source else "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
   inherit (pkgs.stdenv.hostPlatform) system;
+  create-autofirma-cert = pkgs.writeShellApplication {
+    name = "create-autofirma-cert";
+    runtimeInputs = with pkgs; [ openssl ];
+    text = builtins.readFile ./create-autofirma-cert;
+  };
+  anyFirefoxIntegrationProfileIsEnabled = builtins.any (x: x.enable) (lib.attrsets.attrValues cfg.firefoxIntegration.profiles);
 in {
   options.programs.autofirma.truststore = {
     package = mkPackageOption inputs.self.packages.${system} "autofirma-truststore" {};
@@ -62,7 +68,14 @@ in {
     };
   };
   config = mkIf cfg.enable {
+    home.activation.createAutoFirmaCert = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      run ${lib.getExe create-autofirma-cert} ${config.home.homeDirectory}/.afirma/AutoFirma
+    '';
     home.packages = [cfg.finalPackage];
+    programs.firefox.policies.Certificates = mkIf anyFirefoxIntegrationProfileIsEnabled {
+      ImportEnterpriseRoots = true;
+      Install = [ "${config.home.homeDirectory}/.afirma/AutoFirma/AutoFirma_ROOT.cer" ];
+    };
     programs.firefox.profiles = flip mapAttrs cfg.firefoxIntegration.profiles (name: {enable, ...}: {
       settings = mkIf enable {
         "network.protocol-handler.app.afirma" = "${cfg.finalPackage}/bin/autofirma";

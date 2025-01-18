@@ -34,6 +34,7 @@
         ./patches/clienteafirma/detect_java_version.patch
         ./patches/clienteafirma/pr-367.patch
         ./patches/clienteafirma/certutilpath.patch
+        ./patches/clienteafirma/etc_config.patch
       ]
       ++ (lib.optional disableJavaVersionCheck [
         ./patches/clienteafirma/dont_check_java_version.patch
@@ -203,31 +204,6 @@
       substituteInPlace $out/etc/firefox/pref/AutoFirma.js \
         --replace-fail /usr/bin/autofirma $out/bin/autofirma
 
-      cat > $out/bin/autofirma-setup <<EOF
-      #!${runtimeShell}
-      set -xe
-      if [[ "\$1" = "--uninstall" ]]; then
-        if [[ -f ~/.afirma/AutoFirma/uninstall.sh ]]; then
-          source ~/.afirma/AutoFirma/uninstall.sh
-          rm -f ~/.afirma/AutoFirma/{script.sh,uninstall.sh,autofirma.pfx,AutoFirma_ROOT.cer,AUTOFIRMA-SETUP-ROOT}
-        else
-          echo "AutoFirma is not installed"
-          exit 1
-        fi
-      else
-        rm -f ~/.afirma/AutoFirma/{script.sh,uninstall.sh,autofirma.pfx,AutoFirma_ROOT.cer,AUTOFIRMA-SETUP-ROOT}
-        ${jre}/bin/java -jar ${autofirma-jar}/lib/AutoFirma/AutoFirmaConfigurador.jar -jnlp
-        if [[ -f ~/.afirma/AutoFirma/script.sh ]]; then
-          source ~/.afirma/AutoFirma/script.sh
-          nix-store --add-root ~/.afirma/AutoFirma/AUTOFIRMA-SETUP-ROOT -r ${nss.tools}
-        else
-          echo "AutoFirma setup failed"
-          exit 1
-        fi
-      fi
-      EOF
-      chmod +x $out/bin/autofirma-setup
-
     '';
 
     passthru = {
@@ -267,8 +243,10 @@ in
 
       mkdir -p $out/etc/firefox/pref
       ln -s ${thisPkg}/etc/firefox/pref/AutoFirma.js $out/etc/firefox/pref/AutoFirma.js
-      ln -s ${thisPkg}/bin/autofirma-setup $out/bin/autofirma-setup
     '';
+    extraBwrapArgs = [
+      "--ro-bind-try /etc/AutoFirma /etc/AutoFirma"
+    ];
     passthru = {
       clienteafirma = thisPkg;
     };

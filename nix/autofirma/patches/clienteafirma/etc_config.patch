@@ -1,0 +1,14 @@
+diff --git a/afirma-simple/src/main/java/es/gob/afirma/standalone/protocol/SecureSocketUtils.java b/afirma-simple/src/main/java/es/gob/afirma/standalone/protocol/SecureSocketUtils.java
+index 4485c27aa..6e96cb830 100644
+--- a/afirma-simple/src/main/java/es/gob/afirma/standalone/protocol/SecureSocketUtils.java
++++ b/afirma-simple/src/main/java/es/gob/afirma/standalone/protocol/SecureSocketUtils.java
+@@ -65,7 +65,8 @@ class SecureSocketUtils {
+ 	 * @return Almac&eacute;n de claves o {@code null} si no se encontr&oacute;. */
+ 	private static File getKeyStoreFile() {
+ 
+-		File appDir = AutoFirmaUtil.getApplicationDirectory();
++		// Check first in /etc for the KeyStoreFile
++		File appDir = new File("/etc/AutoFirma");
+ 
+ 		if (appDir != null && new File(appDir, KEYSTORE_NAME).exists()
+ 				&& new File(appDir, CA_ROOT_NAME).exists()) {
