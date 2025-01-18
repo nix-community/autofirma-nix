@@ -7,7 +7,7 @@ index 4485c27aa..6e96cb830 100644
  	private static File getKeyStoreFile() {
  
 -		File appDir = AutoFirmaUtil.getApplicationDirectory();
-+		// Primera opción: /etc/AutoFirma en lugar de getApplicationDirectory()
++		// Check first in /etc for the KeyStoreFile
 +		File appDir = new File("/etc/AutoFirma");
  
  		if (appDir != null && new File(appDir, KEYSTORE_NAME).exists()
