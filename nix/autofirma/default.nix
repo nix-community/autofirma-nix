@@ -8,7 +8,6 @@
   maven,
   nss,
   firefox,
-  runtimeShell,
   pom-tools,
   jmulticard,
   clienteafirma-external,
