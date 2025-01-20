@@ -96,6 +96,7 @@
         packages = let
           prestadores = pkgs.callPackage ./nix/autofirma/truststore/prestadores {};
           pom-tools = pkgs.callPackage ./nix/tools/pom-tools {};
+          properties-to-json = pkgs.callPackage ./nix/tools/properties-to-json {};
           jmulticard = pkgs.callPackage ./nix/autofirma/dependencies/jmulticard {
             inherit pom-tools;
 
@@ -118,11 +119,12 @@
           download-autofirma-trusted-providers = pkgs.callPackage ./nix/tools/download-autofirma-trusted-providers {};
           download-url-linked-CAs = pkgs.callPackage ./nix/tools/download-url-linked-CAs {};
           autofirma = pkgs.callPackage ./nix/autofirma/default.nix {
-            inherit jmulticard clienteafirma-external pom-tools autofirma-truststore;
+            inherit jmulticard clienteafirma-external pom-tools autofirma-truststore properties-to-json;
 
             src = autofirma-src;
 
-            maven-dependencies-hash = "sha256-zPWjBu1YtN0U9+wy/WG0NWg1EsO3MD0nhnkUsV7h6Ew=";
+            # maven-dependencies-hash = "sha256-4X/PQGlMu8AvJPPoRoTEFO7a1DE0ykDpoB16k40JqkM=";
+            maven-dependencies-hash = "sha256-Gn3Inx46A+gawQp4DP4HIxReuR2mToyZiWQUMFY7Ymk=";
           };
           docs = import ./docs { inherit pkgs inputs; inherit (nixpkgs) lib; };
           default = self'.packages.autofirma;
