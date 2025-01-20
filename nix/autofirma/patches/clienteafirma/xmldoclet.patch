@@ -1,0 +1,54 @@
+diff --git a/pom.xml b/pom.xml
+index 7d6ca9813..daeb2448c 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -141,6 +141,33 @@
+ 	</dependencyManagement>
+ 	
+ 	<build>
++		<plugins>
++			<plugin>
++				<groupId>org.apache.maven.plugins</groupId>
++				<artifactId>maven-javadoc-plugin</artifactId>
++				<version>3.11.2</version>
++				<executions>
++					<execution>
++					    <id>xml-doclet</id>
++					    <phase>prepare-package</phase>
++					    <goals>
++						<goal>javadoc</goal>
++					    </goals>
++					    <configuration>
++						<useStandardDocletOptions>false</useStandardDocletOptions>
++						<doclet>com.manticore.tools.xmldoclet.XmlDoclet</doclet>
++						<additionalOptions>-d ${project.build.directory}</additionalOptions>
++						<docletArtifact>
++							<groupId>com.manticore-projects.tools</groupId>
++							<artifactId>xml-doclet</artifactId>
++							<version>2.0.2</version>
++							<classifier>all</classifier>
++						</docletArtifact>
++					    </configuration>
++					</execution>
++				</executions>
++			</plugin>
++		</plugins>
+ 		<pluginManagement>
+ 			<plugins>
+ 				<plugin>
+@@ -484,7 +509,7 @@
+ 					<plugin>
+ 					  <groupId>org.apache.maven.plugins</groupId>
+ 					  <artifactId>maven-javadoc-plugin</artifactId>
+-					  <version>2.9.1</version>
++					  <version>3.11.2</version>
+ 					  <executions>
+ 						<execution>
+ 						  <id>attach-javadocs</id>
+@@ -537,4 +562,4 @@
+ 		</profile>
+ 	</profiles>
+ 	
+-</project>
+\ No newline at end of file
++</project>

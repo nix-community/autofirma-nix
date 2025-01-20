@@ -9,6 +9,7 @@
   nss,
   firefox,
   pom-tools,
+  properties-to-json,
   jmulticard,
   clienteafirma-external,
   autofirma-truststore,
@@ -35,6 +36,7 @@
         ./patches/clienteafirma/certutilpath.patch
         ./patches/clienteafirma/etc_config.patch
         ./patches/clienteafirma/aarch64_elf.patch  # Until https://github.com/ctt-gob-es/clienteafirma/pull/435 gets merged
+        ./patches/clienteafirma/xmldoclet.patch
       ]
       ++ (lib.optional disableJavaVersionCheck [
         ./patches/clienteafirma/dont_check_java_version.patch
@@ -51,7 +53,7 @@
     '';
 
     postPatch = ''
-      update-java-version "1.8"
+      update-java-version "17"
       update-pkg-version "${src.rev}-autofirma-nix"
 
       update-dependency-version-by-groupId "${clienteafirma-external.groupId}" "${clienteafirma-external.finalVersion}"
@@ -93,7 +95,7 @@
       chmod -R +w $out/.m2/repository
 
       mvn install -Dmaven.repo.local=$out/.m2/repository -DskipTests -Denv=dev  # Some install modules are only declared in the dev profile
-                                                                                # but are needed in the install profile.  We delete them later.
+
       mvn dependency:go-offline -Dmaven.repo.local=$out/.m2/repository -DskipTests -Denv=install
 
       runHook postBuild
@@ -138,6 +140,7 @@
       maven
       rsync
       nss
+      properties-to-json
     ];
 
     propagatedBuildInputs = [nss.tools];
@@ -151,9 +154,15 @@
 
       chmod -R u+w .m2
 
-      mvn --offline install -Dmaven.repo.local=.m2/repository -DskipTests -Denv=dev  # As in the dependencies derivation, some modules are only declared in the dev profile
+      mvn --offline install -Dmaven.javadoc.skip=true -Dmaven.repo.local=.m2/repository -DskipTests -Denv=dev  # As in the dependencies derivation, some modules are only declared in the dev profile
                                                                                      # but are needed in the install profile.
-      mvn --offline package -Dmaven.repo.local=.m2/repository -DskipTests -Denv=install
+      mvn --offline package -Dmaven.javadoc.skip=true -Dmaven.repo.local=.m2/repository -DskipTests -Denv=install
+
+      mvn --offline javadoc:javadoc@xml-doclet -Dmaven.repo.local=.m2/repository -DskipTests -Denv=dev
+      mvn --offline javadoc:javadoc@xml-doclet -Dmaven.repo.local=.m2/repository -DskipTests -Denv=install
+
+      properties-to-json "$src/afirma-simple/src/main/resources/properties/preferences.properties" afirma-simple/target/javadoc.xml > preferences.json
+
     '';
 
     installPhase = ''
@@ -161,6 +170,7 @@
       mkdir -p $out/bin $out/lib/AutoFirma
       install -Dm644 afirma-simple/target/AutoFirma.jar $out/lib/AutoFirma
       install -Dm644 afirma-ui-simple-configurator/target/AutoFirmaConfigurador.jar $out/lib/AutoFirma
+      install -Dm644 preferences.json $out/lib/AutoFirma/preferences.json
 
       runHook postInstall
     '';
@@ -203,7 +213,7 @@
 
       substituteInPlace $out/etc/firefox/pref/AutoFirma.js \
         --replace-fail /usr/bin/autofirma $out/bin/autofirma
-
+      
     '';
 
     passthru = {
@@ -214,6 +224,7 @@
         jmulticard = jmulticard;
         clienteafirma-external = clienteafirma-external;
       };
+      preferences = builtins.fromJSON (builtins.readFile "${autofirma-jar}/lib/AutoFirma/preferences.json");
     };
   };
 
