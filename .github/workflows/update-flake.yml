@@ -4,6 +4,7 @@ on:
     # Update every Sunday and Wednesday
     - cron: "51 3 * * 0,3"
   workflow_dispatch:
+  repository_dispatch:
 
 jobs:
   update:
@@ -16,5 +17,7 @@ jobs:
       - name: Update flake.lock
         uses: DeterminateSystems/update-flake-lock@v24
         with:
-          pr-labels: dependencies
+          pr-labels: |
+            dependencies
+            merge-queue
 
