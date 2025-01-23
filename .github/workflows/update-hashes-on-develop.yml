@@ -1,4 +1,4 @@
-name: unstable
+name: Update AutoFirma dependency hashes
 
 on:
   push:
@@ -24,15 +24,26 @@ jobs:
         with:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build packages and update hashes
+      - name: Build dependency (jmulticard) and update hash
+        if: always()
         shell: /usr/bin/bash -o pipefail -e {0}
         run: |
           nix build -L .#autofirma.clienteafirma.dependencies.jmulticard 2>&1 | .github/workflows/replace_mismatching_hashes.pl
+
+      - name: Build dependency (clienteafirma-external) and update hash
+        if: always()
+        shell: /usr/bin/bash -o pipefail -e {0}
+        run: |
           nix build -L .#autofirma.clienteafirma.dependencies.clienteafirma-external 2>&1 | .github/workflows/replace_mismatching_hashes.pl
+
+      - name: Build dependency (clienteafirma) and update hash
+        if: always()
+        shell: /usr/bin/bash -o pipefail -e {0}
+        run: |
           nix build -L .#autofirma.clienteafirma.dependencies.clienteafirma 2>&1 | .github/workflows/replace_mismatching_hashes.pl
 
       - name: Create Pull Request for the new working hashes
-        if: ${{ failure() && steps.build-updated-autofirma.conclusion == 'success' }}
+        if: ${{ failure() }}
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ steps.generate-token.outputs.token }}
