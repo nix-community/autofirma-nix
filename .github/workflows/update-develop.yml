@@ -18,6 +18,7 @@ jobs:
       - name: Update flake.lock
         uses: DeterminateSystems/update-flake-lock@v24
         with:
+          branch: update_autofirma_inputs_action
           pr-title: Follow upstream
           pr-labels: dependencies
           inputs: jmulticard-src clienteafirma-external-src autofirma-src
