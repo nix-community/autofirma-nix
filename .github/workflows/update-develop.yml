@@ -1,4 +1,4 @@
-name: Update flake inputs
+name: Track AutoFirma inputs
 on:
   schedule:
     # Update every Monday and Thursday
