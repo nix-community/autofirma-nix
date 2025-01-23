@@ -92,7 +92,16 @@
         pkgs = nixpkgs.legacyPackages.${system};
       in {
         formatter = pkgs.alejandra;
+        devShells.default = let
+          update-dependency-hashes = pkgs.callPackage ./nix/tools/update-dependency-hashes {};
+        in 
+        pkgs.mkShell {
+          packages = [
+            update-dependency-hashes
+          ];
+        };
         packages = let
+          dependency-hashes = builtins.fromJSON (builtins.readFile ./dependency-hashes.json);
           prestadores = pkgs.callPackage ./nix/autofirma/truststore/prestadores {};
           pom-tools = pkgs.callPackage ./nix/tools/pom-tools {};
           jmulticard = pkgs.callPackage ./nix/autofirma/dependencies/jmulticard {
@@ -100,14 +109,14 @@
 
             src = jmulticard-src;
 
-            maven-dependencies-hash = "sha256-qI6gYbGKTQ4Q4tV8NI37TSd3eQTyHHgndUGS943UvNU=";
+            maven-dependencies-hash = dependency-hashes."autofirma.clienteafirma.dependencies.jmulticard".hash;
           };
           clienteafirma-external = pkgs.callPackage ./nix/autofirma/dependencies/clienteafirma-external {
             inherit pom-tools;
 
             src = clienteafirma-external-src;
 
-            maven-dependencies-hash = "sha256-N2lFeRM/eu/tMFTCQRYSHYrbXNgbAv49S7qTaUmb2+Q=";
+            maven-dependencies-hash = dependency-hashes."autofirma.clienteafirma.dependencies.clienteafirma-external".hash;
           };
         in rec {
           autofirma-truststore = pkgs.callPackage ./nix/autofirma/truststore {
@@ -121,7 +130,7 @@
 
             src = autofirma-src;
 
-            maven-dependencies-hash = "sha256-zPWjBu1YtN0U9+wy/WG0NWg1EsO3MD0nhnkUsV7h6Ew=";
+            maven-dependencies-hash = dependency-hashes."autofirma.clienteafirma".hash;
           };
           docs = import ./docs { inherit pkgs inputs; inherit (nixpkgs) lib; };
           default = self'.packages.autofirma;
