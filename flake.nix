@@ -82,7 +82,6 @@
       };
       systems = [
         "x86_64-linux"
-        "i686-linux"
       ];
       perSystem = {
         config,
