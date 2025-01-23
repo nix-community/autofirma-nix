@@ -1,0 +1,54 @@
+name: unstable
+
+on:
+  push:
+    branches:
+      - update_autofirma_inputs_action
+
+permissions:
+  contents: read
+
+jobs:
+  update-hashes:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v27
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build packages and update hashes
+        shell: /usr/bin/bash -o pipefail -e {0}
+        run: |
+          nix build -L .#autofirma.clienteafirma.dependencies.jmulticard 2>&1 | .github/workflows/replace_mismatching_hashes.pl
+          nix build -L .#autofirma.clienteafirma.dependencies.clienteafirma-external 2>&1 | .github/workflows/replace_mismatching_hashes.pl
+          nix build -L .#autofirma.clienteafirma.dependencies.clienteafirma 2>&1 | .github/workflows/replace_mismatching_hashes.pl
+
+      - name: Create Pull Request for the new working hashes
+        if: ${{ failure() && steps.build-updated-autofirma.conclusion == 'success' }}
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+          branch: update_develop_hashes
+          assignees: |
+            nilp0inter
+          commit-message: 'fix: update AutoFirma dependency hashes in develop'
+          title: 'Updated AutoFirma dependency hashes in develop'
+          body: |
+            This is an automatic update. Please test before merging!
+            
+            To test, run the following command:
+
+            ```console
+            nix --accept-flake-config run github:nix-community/autofirma-nix/pull/<this_pr_number>/head#autofirma
+            ```
+          add-paths: |
+            flake.nix
+            flake.lock
