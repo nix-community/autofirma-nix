@@ -1,9 +1,11 @@
 name: Update AutoFirma dependency hashes
 
 on:
-  push:
+  pull_request_target:
     branches:
       - update_autofirma_inputs_action
+    paths:
+      - flake.lock
 
 permissions:
   contents: read
