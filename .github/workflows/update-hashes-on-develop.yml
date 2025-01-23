@@ -6,6 +6,7 @@ on:
       - update_autofirma_inputs_action
     paths:
       - flake.lock
+  workflow_dispatch:
 
 permissions:
   contents: read
