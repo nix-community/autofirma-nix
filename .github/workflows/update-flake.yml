@@ -19,7 +19,7 @@ jobs:
       matrix:
         branch: [
           "main",
-          "release-${{ env.NIXOS_STABLE_BRANCH }}"
+          "release-${{ vars.NIXOS_STABLE_BRANCH }}"
         ]
     env:
       UPDATE_BRANCH: update/flake/${{ matrix.branch }}
@@ -64,15 +64,15 @@ jobs:
 
   update_oldstable:
     name: Update Oldstable Branch
-    if: env.IS_NIXOS_OLDSTABLE_DEPRECATED == '1'
+    if: ${{ vars.IS_NIXOS_OLDSTABLE_DEPRECATED == '1' }}
     runs-on: ubuntu-latest
     env:
-      UPDATE_BRANCH: update/flake/release-${{ env.NIXOS_OLDSTABLE_BRANCH }}
+      UPDATE_BRANCH: update/flake/release-${{ vars.NIXOS_OLDSTABLE_BRANCH }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          ref: "release-${{ env.NIXOS_OLDSTABLE_BRANCH }}"
+          ref: "release-${{ vars.NIXOS_OLDSTABLE_BRANCH }}"
 
       - name: Install Nix
         uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
@@ -84,8 +84,8 @@ jobs:
           pr-labels: |
             dependencies
             merge-queue
-          pr-title: "Update flake.lock for `release-${{ env.NIXOS_OLDSTABLE_BRANCH }}`"
-          pr-base: "release-${{ env.NIXOS_OLDSTABLE_BRANCH }}"
+          pr-title: "Update flake.lock for `release-${{ vars.NIXOS_OLDSTABLE_BRANCH }}`"
+          pr-base: "release-${{ vars.NIXOS_OLDSTABLE_BRANCH }}"
           pr-body: |
             Automated changes by the [update-flake-lock](https://github.com/DeterminateSystems/update-flake-lock) GitHub Action.
 
