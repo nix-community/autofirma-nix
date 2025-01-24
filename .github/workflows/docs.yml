@@ -5,6 +5,7 @@ on:
     branches:
       - main
     paths:
+      - 'README.md'
       - 'docs/**'
       - 'nix/**/module.nix'
       - 'nix/**/hm-module.nix'

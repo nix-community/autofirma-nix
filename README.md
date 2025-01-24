@@ -1,8 +1,5 @@
 # autofirma-nix
 
-[![release-24.11](https://github.com/nix-community/autofirma-nix/actions/workflows/build-and-cache-24-11-on-schedule.yml/badge.svg)](https://github.com/nix-community/autofirma-nix/actions/workflows/build-and-cache-24-11-on-schedule.yml)
-[![unstable](https://github.com/nix-community/autofirma-nix/actions/workflows/build-and-cache-unstable-on-schedule.yml/badge.svg)](https://github.com/nix-community/autofirma-nix/actions/workflows/build-and-cache-unstable-on-schedule.yml)
-
 This repository provides a suite of tools needed to interact with Spain’s public administration,
 alongside NixOS and Home Manager modules for easy integration. These tools include:
 
