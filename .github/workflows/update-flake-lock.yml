@@ -1,4 +1,4 @@
-name: Update flake inputs
+name: Update Flake Lock
 on:
   schedule:
     # Update every Sunday and Wednesday at 03:51 UTC
