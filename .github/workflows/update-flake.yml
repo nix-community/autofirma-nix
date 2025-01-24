@@ -64,7 +64,7 @@ jobs:
 
   update_oldstable:
     name: Update Oldstable Branch
-    if: ${{ vars.IS_NIXOS_OLDSTABLE_DEPRECATED == '1' }}
+    if: ${{ vars.IS_NIXOS_OLDSTABLE_DEPRECATED == '0' }}
     runs-on: ubuntu-latest
     env:
       UPDATE_BRANCH: update/flake/release-${{ vars.NIXOS_OLDSTABLE_BRANCH }}
