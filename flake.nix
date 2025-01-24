@@ -93,15 +93,15 @@
       in {
         formatter = pkgs.alejandra;
         devShells.default = let
-          update-dependency-hashes = pkgs.callPackage ./nix/tools/update-dependency-hashes {};
+          update-fixed-output-derivations = pkgs.callPackage ./nix/tools/update-fixed-output-derivations {};
         in 
         pkgs.mkShell {
           packages = [
-            update-dependency-hashes
+            update-fixed-output-derivations
           ];
         };
         packages = let
-          dependency-hashes = builtins.fromJSON (builtins.readFile ./dependency-hashes.json);
+          fixed-output-derivations = builtins.fromJSON (builtins.readFile ./fixed-output-derivations.lock);
           prestadores = pkgs.callPackage ./nix/autofirma/truststore/prestadores {};
           pom-tools = pkgs.callPackage ./nix/tools/pom-tools {};
           jmulticard = pkgs.callPackage ./nix/autofirma/dependencies/jmulticard {
@@ -109,14 +109,14 @@
 
             src = jmulticard-src;
 
-            maven-dependencies-hash = dependency-hashes."autofirma.clienteafirma.dependencies.jmulticard".hash;
+            maven-dependencies-hash = fixed-output-derivations."autofirma.clienteafirma.dependencies.jmulticard".hash;
           };
           clienteafirma-external = pkgs.callPackage ./nix/autofirma/dependencies/clienteafirma-external {
             inherit pom-tools;
 
             src = clienteafirma-external-src;
 
-            maven-dependencies-hash = dependency-hashes."autofirma.clienteafirma.dependencies.clienteafirma-external".hash;
+            maven-dependencies-hash = fixed-output-derivations."autofirma.clienteafirma.dependencies.clienteafirma-external".hash;
           };
         in rec {
           autofirma-truststore = pkgs.callPackage ./nix/autofirma/truststore {
@@ -130,7 +130,7 @@
 
             src = autofirma-src;
 
-            maven-dependencies-hash = dependency-hashes."autofirma.clienteafirma".hash;
+            maven-dependencies-hash = fixed-output-derivations."autofirma.clienteafirma".hash;
           };
           docs = import ./docs { inherit pkgs inputs; inherit (nixpkgs) lib; };
           default = self'.packages.autofirma;

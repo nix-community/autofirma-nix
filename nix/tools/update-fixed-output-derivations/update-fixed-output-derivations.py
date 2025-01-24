@@ -10,7 +10,7 @@ import threading
 import toposort
 
 
-LOCK_FILE = "dependency-hashes.json"
+LOCK_FILE = "fixed-output-derivations.lock"
 FIND_HASHES_RE = re.compile(
     r"^\s+specified: sha256-A{43}=\n\s+got:\s+(?P<new_hash>sha256-.{44})$",
     re.MULTILINE)
@@ -206,12 +206,13 @@ def run_command_and_analyze(cmd, pattern):
     return match, returncode
 
 
-if __name__ == "__main__":
-    # main()
-    print("Hello")
-
+def main():
     with LockFile(LOCK_FILE) as lf:
         for derivation in lf:
             with derivation.clear_hash():
                 hash = derivation.build()
                 derivation.update_hash(hash)
+
+
+if __name__ == "__main__":
+    main()
