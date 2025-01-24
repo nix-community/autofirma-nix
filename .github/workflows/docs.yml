@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'docs/**'
+      - 'nix/**/module.nix'
+      - 'nix/**/hm-module.nix'
 
 jobs:
   build:
