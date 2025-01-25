@@ -12,3 +12,11 @@ pull_request_rules:
       - files~=\.*\.lock$
     actions:
       queue:
+  - name: delete branches of closed PRs updating lock files
+    conditions:
+      - base~=(main|develop|release-\d+\.\d+)
+      - label~=merge-queue|dependencies
+      - files~=\.*\.lock$
+      - closed
+    actions:
+      delete_head_branch:
