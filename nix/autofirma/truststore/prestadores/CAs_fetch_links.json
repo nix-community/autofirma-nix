@@ -1,0 +1,42 @@
+[
+  {
+    "url": "https://www.accv.es/servicios/empresas/descarga-de-certificados-jerarquia/",
+    "cif": "A40573396"
+  },
+  {
+    "url": "https://www.sede.fnmt.gob.es/descargas/certificados-raiz-de-la-fnmt",
+    "cif": "Q2826004J"
+  },
+  {
+    "url": "https://crl.anf.es/",
+    "cif": "G63287510"
+  },
+  {
+    "url": "https://www.anf.ac/certificados-ca-raiz/",
+    "cif": "B87341228"
+  },
+  {
+    "url": "https://www.policia.es/_es/certificados_digitales.php",
+    "cif": "S2816015H",
+    "curlOptsList": [
+      "--tls13-ciphers",
+      "TLS_AES_256_GCM_SHA384"
+    ]
+  },
+  {
+    "url": "https://eadtrust.eu/en/documents-in-force/",
+    "cif": "B85626240"
+  },
+  {
+    "url": "https://crl.firmaprofesional.com/",
+    "cif": "A62634068"
+  },
+  {
+    "url": "https://psc.sia.es/",
+    "cif": "A82733262"
+  },
+  {
+    "url": "https://www.izenpe.eus/descarga-de-certificados/webize01-cndoctecnica/es/",
+    "cif": "A01337260"
+  }
+]
