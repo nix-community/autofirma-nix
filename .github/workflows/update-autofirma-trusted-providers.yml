@@ -1,0 +1,47 @@
+name: Update AutoFirma Trusted Providers
+
+on:
+  schedule:
+    - cron: "51 3 * * 2,5"
+  workflow_dispatch:
+  repository_dispatch:
+
+jobs:
+  update_main_and_stable:
+    name: Update Main and Stable Branches
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+
+      - name: Update fixed-output derivations
+        run: |
+          nix develop --accept-flake-config --command download-autofirma-trusted-providers > nix/autofirma/truststore/prestadores/providers.json
+
+      - name: Create Pull Request for the new trusted providers file
+        uses: peter-evans/create-pull-request@67ccf781d68cd99b580ae25a5c18a1cc84ffff1f # v7.0.6
+        with:
+          branch: update/autofirma-trusted-providers
+          base: main
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          delete-branch: true
+          labels: |
+            security
+            merge-queue
+          commit-message: 'update: AutoFirma trusted providers'
+          title: "Update Trusted Providers List for autofirma-nix"
+          body: |
+            This PR updates the JSON file of trusted providers based on the latest official information. For reference, the human-readable PDF is available at: [PAe aFirma Anexo PSC](http://administracionelectronica.gob.es/PAe/aFirma-Anexo-PSC).  
+
+            #### Review Tasks:  
+            1. Verify the updated list aligns with the official source.  
+            2. For new providers, add their CA download page and CIF to `nix/autofirma/truststore/prestadores/CAs_fetch_links.json`.  
+            3. For removed providers, clean up related files in `nix/autofirma/truststore/prestadores/CAs-by-provider/`.  
+
+            Thank you for reviewing!
+            
+          add-paths: |
+            nix/autofirma/truststore/prestadores/providers.json
