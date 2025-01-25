@@ -43,12 +43,28 @@ jobs:
         with:
           branch: ${{ env.UPDATE_BRANCH }}
           base: ${{ matrix.branch }}
-          assignees: |
-            nilp0inter
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          labels: |
+            dependencies
           commit-message: 'fixed-output-derivations.lock'
           title: "Update fixed-output-derivations.lock for `${{ matrix.branch }}`"
           body: |
-            This is an automatic update. Please test before merging!
+            This pull request updates the `fixed-output-derivations.lock` file for the `${{ matrix.branch }}` branch. The updates ensure that the hashes for the fixed-output derivations are current, maintaining the integrity of our build process. These updates encompass all necessary external dependencies required for building the project's components.
+
+            #### Why This Update?
+            Keeping the `fixed-output-derivations.lock` file updated is crucial for:
+            - **Reproducible Builds:** Ensures that builds are consistent across different environments by locking dependency versions.
+            - **Security:** Helps in verifying the integrity of dependencies, mitigating potential security risks from tampered or malicious packages.
+
+            #### Reviewer Instructions:
+            1. **Verify Automated Tests:** Please ensure that all automated tests pass successfully.
+            2. **Merge Guidelines:** Once verification is complete, squash and merge this pull request to maintain a clean commit history.
+
+            Thank you for reviewing!
+
+            ---
+
+            *This PR was generated automatically by a bot to keep dependencies up-to-date.*
             
           add-paths: |
             fixed-output-derivations.lock
@@ -77,12 +93,28 @@ jobs:
         with:
           branch: ${{ env.UPDATE_BRANCH }}
           base: "release-${{ vars.NIXOS_OLDSTABLE_BRANCH }}"
-          assignees: |
-            nilp0inter
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          labels: |
+            dependencies
           commit-message: 'fixed-output-derivations.lock'
           title: "Update fixed-output-derivations.lock for `${{ vars.NIXOS_OLDSTABLE_BRANCH }}`"
           body: |
-            This is an automatic update. Please test before merging!
+            This pull request updates the `fixed-output-derivations.lock` file for the `${{ vars.NIXOS_OLDSTABLE_BRANCH }}` branch. The updates ensure that the hashes for the fixed-output derivations are current, maintaining the integrity of our build process. These updates encompass all necessary external dependencies required for building the project's components.
+
+            #### Why This Update?
+            Keeping the `fixed-output-derivations.lock` file updated is crucial for:
+            - **Reproducible Builds:** Ensures that builds are consistent across different environments by locking dependency versions.
+            - **Security:** Helps in verifying the integrity of dependencies, mitigating potential security risks from tampered or malicious packages.
+
+            #### Reviewer Instructions:
+            1. **Verify Automated Tests:** Please ensure that all automated tests pass successfully.
+            2. **Merge Guidelines:** Once verification is complete, squash and merge this pull request to maintain a clean commit history.
+
+            Thank you for reviewing!
+
+            ---
+
+            *This PR was generated automatically by a bot to keep dependencies up-to-date.*
             
           add-paths: |
             fixed-output-derivations.lock
