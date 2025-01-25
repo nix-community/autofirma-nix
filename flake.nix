@@ -87,6 +87,7 @@
         config,
         system,
         self',
+        lib,
         ...
       }: let
         pkgs = nixpkgs.legacyPackages.${system};
@@ -135,42 +136,50 @@
           docs = import ./docs { inherit pkgs inputs; inherit (nixpkgs) lib; };
           default = self'.packages.autofirma;
         };
-        checks = {
-          # NixOS Modules
-          ## AutoFirma
-          nixos-autofirma-cli-sign-document = pkgs.callPackage ./nix/tests/nixos/autofirma/cli/sign-document.nix { inherit self; };
-          nixos-autofirma-firefoxIntegration-protocol-handler = pkgs.callPackage ./nix/tests/nixos/autofirma/firefoxIntegration/protocol-handler { inherit self; };
-          nixos-autofirma-firefoxIntegration-connection-method-websocket = pkgs.callPackage ./nix/tests/nixos/autofirma/firefoxIntegration/connection-method/websocket { inherit self; };
-          nixos-autofirma-firefoxIntegration-connection-method-xhr = pkgs.callPackage ./nix/tests/nixos/autofirma/firefoxIntegration/connection-method/xhr { inherit self; };
-          nixos-autofirma-firefoxIntegration-connection-method-auxiliary-servers = pkgs.callPackage ./nix/tests/nixos/autofirma/firefoxIntegration/connection-method/auxiliary-servers { inherit self; };
+        checks = let
+          blacklistPackages = [ "docs" "download-autofirma-trusted-providers" "download-url-linked-CAs" ];
+          packages = lib.mapAttrs' (n: lib.nameValuePair "package-${n}") (lib.filterAttrs (n: _v: !(builtins.elem n blacklistPackages)) self'.packages);
+          checks = {
+            # NixOS Modules
+            ## AutoFirma
+            nixos-autofirma-cli-sign-document = pkgs.callPackage ./nix/tests/nixos/autofirma/cli/sign-document.nix { inherit self; };
+            nixos-autofirma-firefoxIntegration-protocol-handler = pkgs.callPackage ./nix/tests/nixos/autofirma/firefoxIntegration/protocol-handler { inherit self; };
+            nixos-autofirma-firefoxIntegration-connection-method-websocket = pkgs.callPackage ./nix/tests/nixos/autofirma/firefoxIntegration/connection-method/websocket { inherit self; };
+            nixos-autofirma-firefoxIntegration-connection-method-xhr = pkgs.callPackage ./nix/tests/nixos/autofirma/firefoxIntegration/connection-method/xhr { inherit self; };
+            nixos-autofirma-firefoxIntegration-connection-method-auxiliary-servers = pkgs.callPackage ./nix/tests/nixos/autofirma/firefoxIntegration/connection-method/auxiliary-servers { inherit self; };
 
-          ## Configurador FNMT-RCM
-          nixos-configuradorfnmt-firefoxIntegration-request = pkgs.callPackage ./nix/tests/nixos/configuradorfnmt/firefoxIntegration/request-certificate.nix { inherit self; };
-          ##DNIe Remote
-          nixos-dnieremote-config-jumpintro-wifi = pkgs.callPackage ./nix/tests/nixos/dnieremote/config/jumpintro-wifi.nix { inherit self; };
-          nixos-dnieremote-config-jumpintro-usb = pkgs.callPackage ./nix/tests/nixos/dnieremote/config/jumpintro-usb.nix { inherit self; };
-          nixos-dnieremote-config-jumpintro-no = pkgs.callPackage ./nix/tests/nixos/dnieremote/config/jumpintro-no.nix { inherit self; };
-          nixos-dnieremote-config-wifiport = pkgs.callPackage ./nix/tests/nixos/dnieremote/config/wifiport.nix { inherit self; };
+            ## Configurador FNMT-RCM
+            nixos-configuradorfnmt-firefoxIntegration-request = pkgs.callPackage ./nix/tests/nixos/configuradorfnmt/firefoxIntegration/request-certificate.nix { inherit self; };
+            ##DNIe Remote
+            nixos-dnieremote-config-jumpintro-wifi = pkgs.callPackage ./nix/tests/nixos/dnieremote/config/jumpintro-wifi.nix { inherit self; };
+            nixos-dnieremote-config-jumpintro-usb = pkgs.callPackage ./nix/tests/nixos/dnieremote/config/jumpintro-usb.nix { inherit self; };
+            nixos-dnieremote-config-jumpintro-no = pkgs.callPackage ./nix/tests/nixos/dnieremote/config/jumpintro-no.nix { inherit self; };
+            nixos-dnieremote-config-wifiport = pkgs.callPackage ./nix/tests/nixos/dnieremote/config/wifiport.nix { inherit self; };
 
-          # Home Manager Modules
-          ## HM installed as a NixOS Module
-          ### AutoFirma
-          hm-as-nixos-module-autofirma-cli-sign-document = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/cli/sign-document.nix { inherit self home-manager; };
-          hm-as-nixos-module-autofirma-firefoxIntegration-protocol-handler = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/firefoxIntegration/protocol-handler { inherit self home-manager; };
-          hm-as-nixos-module-autofirma-firefoxIntegration-connection-method-websocket = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/firefoxIntegration/connection-method/websocket { inherit self home-manager; };
-          hm-as-nixos-module-autofirma-firefoxIntegration-connection-method-xhr = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/firefoxIntegration/connection-method/xhr { inherit self home-manager; };
-          hm-as-nixos-module-autofirma-firefoxIntegration-connection-method-auxiliary-servers = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/firefoxIntegration/connection-method/auxiliary-servers { inherit self home-manager; };
-          ### Configurador FNMT-RCM
-          hm-as-nixos-module-configuradorfnmt-firefoxIntegration-request = pkgs.callPackage ./nix/tests/hm-as-nixos-module/configuradorfnmt/firefoxIntegration/request-certificate.nix { inherit self home-manager; };
-          ### DNIe Remote
-          hm-as-nixos-module-dnieremote-config-jumpintro-wifi = pkgs.callPackage ./nix/tests/hm-as-nixos-module/dnieremote/config/jumpintro-wifi.nix { inherit self home-manager; };
-          hm-as-nixos-module-dnieremote-config-jumpintro-usb = pkgs.callPackage ./nix/tests/hm-as-nixos-module/dnieremote/config/jumpintro-usb.nix { inherit self home-manager; };
-          hm-as-nixos-module-dnieremote-config-jumpintro-no = pkgs.callPackage ./nix/tests/hm-as-nixos-module/dnieremote/config/jumpintro-no.nix { inherit self home-manager; };
-          hm-as-nixos-module-dnieremote-config-wifiport = pkgs.callPackage ./nix/tests/hm-as-nixos-module/dnieremote/config/wifiport.nix { inherit self home-manager; };
-          # HM standalone installation
-          ### AutoFirma
-          hm-standalone-autofirma-cli-sign-document = pkgs.callPackage ./nix/tests/hm-standalone/autofirma/cli/sign-document.nix { inherit self home-manager; };
+            # Home Manager Modules
+            ## HM installed as a NixOS Module
+            ### AutoFirma
+            hm-as-nixos-module-autofirma-cli-sign-document = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/cli/sign-document.nix { inherit self home-manager; };
+            hm-as-nixos-module-autofirma-firefoxIntegration-protocol-handler = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/firefoxIntegration/protocol-handler { inherit self home-manager; };
+            hm-as-nixos-module-autofirma-firefoxIntegration-connection-method-websocket = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/firefoxIntegration/connection-method/websocket { inherit self home-manager; };
+            hm-as-nixos-module-autofirma-firefoxIntegration-connection-method-xhr = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/firefoxIntegration/connection-method/xhr { inherit self home-manager; };
+            hm-as-nixos-module-autofirma-firefoxIntegration-connection-method-auxiliary-servers = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/firefoxIntegration/connection-method/auxiliary-servers { inherit self home-manager; };
+
+            ### Configurador FNMT-RCM
+            hm-as-nixos-module-configuradorfnmt-firefoxIntegration-request = pkgs.callPackage ./nix/tests/hm-as-nixos-module/configuradorfnmt/firefoxIntegration/request-certificate.nix { inherit self home-manager; };
+
+            ### DNIe Remote
+            hm-as-nixos-module-dnieremote-config-jumpintro-wifi = pkgs.callPackage ./nix/tests/hm-as-nixos-module/dnieremote/config/jumpintro-wifi.nix { inherit self home-manager; };
+            hm-as-nixos-module-dnieremote-config-jumpintro-usb = pkgs.callPackage ./nix/tests/hm-as-nixos-module/dnieremote/config/jumpintro-usb.nix { inherit self home-manager; };
+            hm-as-nixos-module-dnieremote-config-jumpintro-no = pkgs.callPackage ./nix/tests/hm-as-nixos-module/dnieremote/config/jumpintro-no.nix { inherit self home-manager; };
+            hm-as-nixos-module-dnieremote-config-wifiport = pkgs.callPackage ./nix/tests/hm-as-nixos-module/dnieremote/config/wifiport.nix { inherit self home-manager; };
+
+            # HM standalone installation
+            ### AutoFirma
+            hm-standalone-autofirma-cli-sign-document = pkgs.callPackage ./nix/tests/hm-standalone/autofirma/cli/sign-document.nix { inherit self home-manager; };
         };
+      in
+        checks // packages;
       };
     };
 }
