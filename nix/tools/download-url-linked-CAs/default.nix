@@ -3,10 +3,9 @@
   openssl,
   chromedriver,
   chromium,
-  makeWrapper,
   nix,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   name = "download-url-linked-CAs";
   propagatedBuildInputs = [
     python3Packages.requests

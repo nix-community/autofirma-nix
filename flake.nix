@@ -95,10 +95,14 @@
         formatter = pkgs.alejandra;
         devShells.default = let
           update-fixed-output-derivations = pkgs.callPackage ./nix/tools/update-fixed-output-derivations {};
+          download-autofirma-trusted-providers = pkgs.callPackage ./nix/tools/download-autofirma-trusted-providers {};
+          download-url-linked-CAs = pkgs.callPackage ./nix/tools/download-url-linked-CAs {};
         in 
         pkgs.mkShell {
           packages = [
             update-fixed-output-derivations
+            download-autofirma-trusted-providers
+            download-url-linked-CAs
           ];
         };
         packages = let
@@ -124,8 +128,6 @@
             caBundle = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
             govTrustedCerts = prestadores;
           };
-          download-autofirma-trusted-providers = pkgs.callPackage ./nix/tools/download-autofirma-trusted-providers {};
-          download-url-linked-CAs = pkgs.callPackage ./nix/tools/download-url-linked-CAs {};
           autofirma = pkgs.callPackage ./nix/autofirma/default.nix {
             inherit jmulticard clienteafirma-external pom-tools autofirma-truststore;
 
@@ -137,7 +139,7 @@
           default = self'.packages.autofirma;
         };
         checks = let
-          blacklistPackages = [ "docs" "download-autofirma-trusted-providers" "download-url-linked-CAs" ];
+          blacklistPackages = [ "docs" ];
           packages = lib.mapAttrs' (n: lib.nameValuePair "package-${n}") (lib.filterAttrs (n: _v: !(builtins.elem n blacklistPackages)) self'.packages);
           checks = {
             # NixOS Modules
