@@ -24,16 +24,16 @@
     "source": "Registro Mercantil de Madrid: Tomo 26.403, Folio 63, Hoja M-475828 Insc: 1"
   },
   {
-    "name": "Fábrica Nacional de Moneda y Timbre - Real Casa de la Moneda (FNMT-RCM)",
-    "cif": "Q2826004J",
-    "website": "www.cert.fnmt.es",
-    "source": "Las competencias de la FNMT-RCM quedan definidas por el Real Decreto 1317/2001 de 30 de noviembre, por el que se desarrolla el artículo 81 de la Ley 66/1999"
-  },
-  {
     "name": "Firmaprofesional, S.A.",
     "cif": "A62634068",
     "website": "www.firmaprofesional.com",
     "source": "Registro Mercantil de Barcelona, Tomo 33996, Folio 152, Hoja B240292, Num. Insc. 2"
+  },
+  {
+    "name": "Fábrica Nacional de Moneda y Timbre - Real Casa de la Moneda, Entidad Pública Empresarial, Medio Propio (FNMT-RCM)",
+    "cif": "Q2826004J",
+    "website": "www.cert.fnmt.es",
+    "source": "Las competencias de la FNMT-RCM quedan definidas por el Real Decreto 1317/2001 de 30 de noviembre, por el que se desarrolla el artículo 81 de la Ley 66/1999"
   },
   {
     "name": "Infraestructuras y Servicios de Telecomunicaciones y Certificación S.A.",
