@@ -8,7 +8,9 @@
   maven,
   nss,
   firefox,
+  openjdk8,
   pom-tools,
+  properties-to-json,
   jmulticard,
   clienteafirma-external,
   autofirma-truststore,
@@ -34,6 +36,7 @@
         ./patches/clienteafirma/pr-367.patch
         ./patches/clienteafirma/certutilpath.patch
         ./patches/clienteafirma/etc_config.patch
+        ./patches/clienteafirma/xmldoclet.patch
       ]
       ++ (lib.optional disableJavaVersionCheck [
         ./patches/clienteafirma/dont_check_java_version.patch
@@ -78,6 +81,7 @@
     nativeBuildInputs = [
       maven
       rsync
+      openjdk8
     ];
 
     buildPhase = ''
@@ -91,9 +95,23 @@
 
       chmod -R +w $out/.m2/repository
 
+      export JAVA_HOME=${openjdk8}
+
       mvn install -Dmaven.repo.local=$out/.m2/repository -DskipTests -Denv=dev  # Some install modules are only declared in the dev profile
                                                                                 # but are needed in the install profile.  We delete them later.
       mvn dependency:go-offline -Dmaven.repo.local=$out/.m2/repository -DskipTests -Denv=install
+
+      mvn javadoc:javadoc@xml-doclet -Dmaven.repo.local=.m2/repository -DskipTests -Denv=dev -Ddryrun 2> /dev/null || true
+
+      # mvn dependency:get \
+      #   -Dmaven.repo.local=$out/.m2/repository \
+      #   -Dartifact=com.manticore-projects.tools:xml-doclet:1.3.0 \
+      #   -Dtransitive=true
+
+      # mvn dependency:get \
+      #   -Dartifact=org.apache.maven.plugins:maven-javadoc-plugin:3.11.2 \
+      #   -Dtransitive=true \
+      #   -Dmaven.repo.local=$out/.m2/repository
 
       runHook postBuild
     '';
@@ -137,6 +155,7 @@
       maven
       rsync
       nss
+      properties-to-json
     ];
 
     propagatedBuildInputs = [nss.tools];
@@ -150,9 +169,17 @@
 
       chmod -R u+w .m2
 
+      export JAVA_HOME=${openjdk8}
+
       mvn --offline install -Dmaven.repo.local=.m2/repository -DskipTests -Denv=dev  # As in the dependencies derivation, some modules are only declared in the dev profile
                                                                                      # but are needed in the install profile.
       mvn --offline package -Dmaven.repo.local=.m2/repository -DskipTests -Denv=install
+
+      mvn --offline javadoc:javadoc@xml-doclet -Dmaven.repo.local=.m2/repository -DskipTests -Denv=dev
+      mvn --offline javadoc:javadoc@xml-doclet -Dmaven.repo.local=.m2/repository -DskipTests -Denv=install
+
+      properties-to-json "$src/afirma-simple/src/main/resources/properties/preferences.properties" afirma-simple/target/reports/apidocs/javadoc.xml > preferences.json
+
     '';
 
     installPhase = ''
@@ -160,6 +187,7 @@
       mkdir -p $out/bin $out/lib/AutoFirma
       install -Dm644 afirma-simple/target/AutoFirma.jar $out/lib/AutoFirma
       install -Dm644 afirma-ui-simple-configurator/target/AutoFirmaConfigurador.jar $out/lib/AutoFirma
+      install -Dm644 preferences.json $out/lib/AutoFirma/preferences.json
 
       runHook postInstall
     '';
@@ -202,7 +230,7 @@
 
       substituteInPlace $out/etc/firefox/pref/AutoFirma.js \
         --replace-fail /usr/bin/autofirma $out/bin/autofirma
-
+      
     '';
 
     passthru = {
@@ -213,6 +241,7 @@
         jmulticard = jmulticard;
         clienteafirma-external = clienteafirma-external;
       };
+      preferences = builtins.fromJSON (builtins.readFile "${autofirma-jar}/lib/AutoFirma/preferences.json");
     };
   };
 
