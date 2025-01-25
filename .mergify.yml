@@ -5,9 +5,10 @@ queue_rules:
     merge_method: squash
 
 pull_request_rules:
-  - name: refactored queue action rule
+  - name: auto-merge PRs updating lock files
     conditions:
-      - base=main
+      - base~=(main|develop|release-\d+\.\d+)
       - label~=merge-queue|dependencies
+      - files~=\.*\.lock$
     actions:
       queue:
