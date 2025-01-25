@@ -46,6 +46,7 @@ jobs:
           author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
           labels: |
             dependencies
+            merge-queue
           commit-message: 'fixed-output-derivations.lock'
           title: "Update fixed-output-derivations.lock for `${{ matrix.branch }}`"
           body: |
@@ -96,6 +97,7 @@ jobs:
           author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
           labels: |
             dependencies
+            merge-queue
           commit-message: 'fixed-output-derivations.lock'
           title: "Update fixed-output-derivations.lock for `${{ vars.NIXOS_OLDSTABLE_BRANCH }}`"
           body: |
