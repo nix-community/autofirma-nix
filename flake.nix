@@ -89,6 +89,7 @@
         ...
       }: let
         pkgs = nixpkgs.legacyPackages.${system};
+        fixed-output-derivations = builtins.fromJSON (builtins.readFile ./fixed-output-derivations.lock);
       in {
         formatter = pkgs.alejandra;
         devShells.default = let
@@ -100,7 +101,6 @@
           ];
         };
         packages = rec {
-          fixed-output-derivations = builtins.fromJSON (builtins.readFile ./fixed-output-derivations.lock);
           pom-tools = pkgs.callPackage ./nix/pom-tools {};
           jmulticard = pkgs.callPackage ./nix/autofirma/dependencies/jmulticard {
             inherit pom-tools;
