@@ -1,12 +1,12 @@
 {
   "jmulticard": {
-    "hash": ""
+    "hash": "sha256-qI6gYbGKTQ4Q4tV8NI37TSd3eQTyHHgndUGS943UvNU="
   },
   "clienteafirma-external": {
-    "hash": ""
+    "hash": "sha256-N2lFeRM/eu/tMFTCQRYSHYrbXNgbAv49S7qTaUmb2+Q="
   },
   "autofirma": {
-    "hash": "",
+    "hash": "sha256-zPWjBu1YtN0U9+wy/WG0NWg1EsO3MD0nhnkUsV7h6Ew=",
     "dependencies": [
       "jmulticard",
       "clienteafirma-external"
