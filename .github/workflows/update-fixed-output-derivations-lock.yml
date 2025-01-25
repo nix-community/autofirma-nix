@@ -44,6 +44,7 @@ jobs:
           branch: ${{ env.UPDATE_BRANCH }}
           base: ${{ matrix.branch }}
           author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          delete-branch: true
           labels: |
             dependencies
             merge-queue
@@ -95,6 +96,7 @@ jobs:
           branch: ${{ env.UPDATE_BRANCH }}
           base: "release-${{ vars.NIXOS_OLDSTABLE_BRANCH }}"
           author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          delete-branch: true
           labels: |
             dependencies
             merge-queue
