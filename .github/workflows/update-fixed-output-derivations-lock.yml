@@ -17,6 +17,7 @@ jobs:
     name: Update Main and Stable Branches
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         branch: [
           "main",
