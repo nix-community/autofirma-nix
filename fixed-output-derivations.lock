@@ -1,0 +1,15 @@
+{
+  "jmulticard": {
+    "hash": ""
+  },
+  "clienteafirma-external": {
+    "hash": ""
+  },
+  "autofirma": {
+    "hash": "",
+    "dependencies": [
+      "jmulticard",
+      "clienteafirma-external"
+    ]
+  }
+}

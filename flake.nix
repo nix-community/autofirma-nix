@@ -91,28 +91,37 @@
         pkgs = nixpkgs.legacyPackages.${system};
       in {
         formatter = pkgs.alejandra;
+        devShells.default = let
+          update-fixed-output-derivations = pkgs.callPackage ./nix/tools/update-fixed-output-derivations {};
+        in 
+        pkgs.mkShell {
+          packages = [
+            update-fixed-output-derivations
+          ];
+        };
         packages = rec {
+          fixed-output-derivations = builtins.fromJSON (builtins.readFile ./fixed-output-derivations.lock);
           pom-tools = pkgs.callPackage ./nix/pom-tools {};
           jmulticard = pkgs.callPackage ./nix/autofirma/dependencies/jmulticard {
             inherit pom-tools;
 
             src = jmulticard-src;
 
-            maven-dependencies-hash = "sha256-qI6gYbGKTQ4Q4tV8NI37TSd3eQTyHHgndUGS943UvNU=";
+            maven-dependencies-hash = fixed-output-derivations."jmulticard".hash;
           };
           clienteafirma-external = pkgs.callPackage ./nix/autofirma/dependencies/clienteafirma-external {
             inherit pom-tools;
 
             src = clienteafirma-external-src;
 
-            maven-dependencies-hash = "sha256-N2lFeRM/eu/tMFTCQRYSHYrbXNgbAv49S7qTaUmb2+Q=";
+            maven-dependencies-hash = fixed-output-derivations."clienteafirma-external".hash;
           };
           autofirma = pkgs.callPackage ./nix/autofirma/default.nix {
             inherit jmulticard clienteafirma-external pom-tools;
 
             src = autofirma-src;
 
-            maven-dependencies-hash = "sha256-zPWjBu1YtN0U9+wy/WG0NWg1EsO3MD0nhnkUsV7h6Ew=";
+            maven-dependencies-hash = fixed-output-derivations."autofirma".hash;
           };
           default = self'.packages.autofirma;
         };
