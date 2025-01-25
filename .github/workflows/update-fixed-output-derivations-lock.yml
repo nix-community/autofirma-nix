@@ -1,0 +1,88 @@
+name: Update Fixed-Output Derivations Lock
+
+on:
+  schedule:
+    # Update every Sunday and Thursday at 03:51 UTC
+    - cron: "51 3 * * 1,4"
+  workflow_dispatch:
+  repository_dispatch:
+
+env:
+  IS_NIXOS_OLDSTABLE_DEPRECATED: ${{ vars.IS_NIXOS_OLDSTABLE_DEPRECATED }}
+  NIXOS_OLDSTABLE_BRANCH: ${{ vars.NIXOS_OLDSTABLE_BRANCH }}
+  NIXOS_STABLE_BRANCH: ${{ vars.NIXOS_STABLE_BRANCH }}
+
+jobs:
+  update_main_and_stable:
+    name: Update Main and Stable Branches
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        branch: [
+          "main",
+          "release-${{ vars.NIXOS_STABLE_BRANCH }}"
+        ]
+    env:
+      UPDATE_BRANCH: update/fixed-output-derivations/${{ matrix.branch }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ matrix.branch }}
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+
+      - name: Update fixed-output derivations
+        run: |
+          nix develop --accept-flake-config --command update-fixed-output-derivations
+
+      - name: Create Pull Request for the new fixed-output-derivations.lock file
+        uses: peter-evans/create-pull-request@67ccf781d68cd99b580ae25a5c18a1cc84ffff1f # v7.0.6
+        with:
+          branch: ${{ env.UPDATE_BRANCH }}
+          base: ${{ matrix.branch }}
+          assignees: |
+            nilp0inter
+          commit-message: 'fixed-output-derivations.lock'
+          title: "Update fixed-output-derivations.lock for `${{ matrix.branch }}`"
+          body: |
+            This is an automatic update. Please test before merging!
+            
+          add-paths: |
+            fixed-output-derivations.lock
+
+  update_oldstable:
+    name: Update Oldstable Branch
+    if: ${{ vars.IS_NIXOS_OLDSTABLE_DEPRECATED == '0' }}
+    runs-on: ubuntu-latest
+    env:
+      UPDATE_BRANCH: update/flake/release-${{ vars.NIXOS_OLDSTABLE_BRANCH }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: "release-${{ vars.NIXOS_OLDSTABLE_BRANCH }}"
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+
+      - name: Update fixed-output derivations
+        run: |
+          nix develop --accept-flake-config --command update-fixed-output-derivations
+
+      - name: Create Pull Request for the new fixed-output-derivations.lock file
+        uses: peter-evans/create-pull-request@67ccf781d68cd99b580ae25a5c18a1cc84ffff1f # v7.0.6
+        with:
+          branch: ${{ env.UPDATE_BRANCH }}
+          base: "release-${{ vars.NIXOS_OLDSTABLE_BRANCH }}"
+          assignees: |
+            nilp0inter
+          commit-message: 'fixed-output-derivations.lock'
+          title: "Update fixed-output-derivations.lock for `${{ vars.NIXOS_OLDSTABLE_BRANCH }}`"
+          body: |
+            This is an automatic update. Please test before merging!
+            
+          add-paths: |
+            fixed-output-derivations.lock
+
