@@ -55,7 +55,7 @@ jobs:
       - name: Upload CA Artifact for ${{ matrix.fetch_link.cif }}
         uses: actions/upload-artifact@v3
         with:
-          name: CA-file-${{ matrix.fetch_link.cif }}
+          name: CA-files
           path: nix/autofirma/truststore/prestadores/CAs-by-provider/${{ matrix.fetch_link.cif }}.json
 
   create-ca-pull-request:
@@ -74,7 +74,7 @@ jobs:
       - name: Download CA Artifacts
         uses: actions/download-artifact@v3
         with:
-          name: CA-file-${{ matrix.fetch_link.cif }} # Ensure this matches the upload name pattern
+          name: CA-files
           path: nix/autofirma/truststore/prestadores/CAs-by-provider
 
       - name: Create Pull Request for Updated CA Files
