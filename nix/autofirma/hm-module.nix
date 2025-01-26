@@ -70,7 +70,7 @@ in {
   config = mkIf cfg.enable {
     home.activation.createAutoFirmaCert = lib.hm.dag.entryAfter ["writeBoundary"] ''
       verboseEcho Running create-autofirma-cert
-      run ${lib.getExe create-autofirma-cert} $VERBOSE_ARG ''${DRY_RUN:+--dry-run} ${config.home.homeDirectory}/.afirma/AutoFirma
+      run ${lib.getExe create-autofirma-cert} $VERBOSE_ARG ${config.home.homeDirectory}/.afirma/AutoFirma
     '';
     home.packages = [cfg.finalPackage];
     programs.firefox.policies.Certificates = mkIf anyFirefoxIntegrationProfileIsEnabled {
