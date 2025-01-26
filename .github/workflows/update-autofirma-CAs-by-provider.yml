@@ -92,17 +92,17 @@ jobs:
           commit-message: 'update: AutoFirma CAs-by-provider'
           title: "Update Trusted Providers CAs for autofirma-nix"
           body: |
-            This PR updates the JSON file of each trusted provider based on the information available in their own websites.
+            This PR updates the JSON files for each trusted provider based on the information available on their respective websites.
 
-            This is the list of URLs of the providers:
+            **List of Provider URLs:**
 
             ${{ needs.parse-json.outputs.markdown_links }}
 
-            #### Review Tasks:  
-            1. Verify the updated list aligns with the official source.  
-            2. Beware of massive removal of entries (maybe the page is down temporarily?)
+            #### Review Checklist:
+            1. Verify that the updated list aligns with the official sources.
+            2. Ensure that no entries have been unintentionally removed, possibly due to temporary page outages.
 
-            Thank you for reviewing!
+            Thank you for your review!
             
           add-paths: |
             nix/autofirma/truststore/prestadores/CAs-by-provider
