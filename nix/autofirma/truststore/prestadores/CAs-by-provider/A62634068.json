@@ -1,14 +1,5 @@
 [
-  {
-    "hash": "sha256-5xoeM2uZt3fqjrffyVwrSLfic2Zxt8mSPBSuNCZhan8=",
-    "url": "https://crl.firmaprofesional.com/fprootprivate2020.crt"
-  },
-  {
-    "hash": "sha256-V94Fg+/Ssm4DYdqZ2p30ZI3vfuhEHDtyivqbzeD5smo=",
-    "url": "https://crl.firmaprofesional.com/caroot.crt"
-  },
-  {
-    "hash": "sha256-BASAKL8fKGTUj5rU2DKUNmqCiFZVPzsUMD+QFH9dQO8=",
-    "url": "https://crl.firmaprofesional.com/caroot_sha1.crt"
-  }
+  {"cif": "A62634068", "hash": "sha256-V94Fg+/Ssm4DYdqZ2p30ZI3vfuhEHDtyivqbzeD5smo=", "url": "https://crl.firmaprofesional.com/caroot.crt"},
+  {"cif": "A62634068", "hash": "sha256-BASAKL8fKGTUj5rU2DKUNmqCiFZVPzsUMD+QFH9dQO8=", "url": "https://crl.firmaprofesional.com/caroot_sha1.crt"},
+  {"cif": "A62634068", "hash": "sha256-5xoeM2uZt3fqjrffyVwrSLfic2Zxt8mSPBSuNCZhan8=", "url": "https://crl.firmaprofesional.com/fprootprivate2020.crt"}
 ]
