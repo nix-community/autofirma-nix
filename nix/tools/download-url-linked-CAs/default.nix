@@ -3,6 +3,7 @@
   openssl,
   chromedriver,
   chromium,
+  curl,
   nix,
   makeWrapper
 }:
@@ -12,9 +13,9 @@ python3Packages.buildPythonApplication {
     makeWrapper
   ];
   propagatedBuildInputs = [
-    python3Packages.requests
     python3Packages.beautifulsoup4
     python3Packages.selenium
+    curl
     openssl
     nix
     chromedriver

@@ -6,28 +6,34 @@ from urllib.parse import urljoin
 import argparse
 import json
 import os
+import random
 import re
 import subprocess
 import sys
 import tempfile
+import time
 
-from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-import requests
 
 
 def get_urls(url, driver):
     driver.get(url)
+    from bs4 import BeautifulSoup
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     return [urljoin(url, a['href']) for a in soup.find_all('a', href=re.compile(r'\.(crt|cert?|pem)$'))]
 
 
 def is_self_signed(path):
-    result = subprocess.run(['openssl', 'x509', '-in', path, '-noout', '-issuer', '-subject'], 
-                            capture_output=True, text=True)
+    """
+    Check if the X.509 certificate is self-signed by comparing
+    its subject and issuer lines. If they match, it's self-signed.
+    """
+    result = subprocess.run(
+        ['openssl', 'x509', '-in', path, '-noout', '-issuer', '-subject'], 
+        capture_output=True, text=True
+    )
     try:
         issuer_subject = set(line.split('=', 1)[1] for line in result.stdout.strip().split('\n'))
     except IndexError:
@@ -37,28 +43,84 @@ def is_self_signed(path):
 
 
 def get_sri_hash(path):
-    flat_hash = subprocess.run(['nix-hash', '--type', 'sha256', '--flat', path], 
-                               capture_output=True, text=True).stdout.strip()
-    return subprocess.run(['nix-hash', '--type', 'sha256', '--to-sri', flat_hash], 
-                          capture_output=True, text=True).stdout.strip()
+    """
+    Use nix-hash to compute a sha256-based SRI hash of the file at 'path'.
+    """
+    flat_hash = subprocess.run(
+        ['nix-hash', '--type', 'sha256', '--flat', path], 
+        capture_output=True, text=True
+    ).stdout.strip()
+
+    sri_hash = subprocess.run(
+        ['nix-hash', '--type', 'sha256', '--to-sri', flat_hash], 
+        capture_output=True, text=True
+    ).stdout.strip()
+
+    return sri_hash
 
 
+def escape_curl_opts(opts):
+    """Allow escaping dashes in curl options (as used in the original script)."""
+    return [re.sub(r'\\-', '-', opt) for opt in opts]
 
-def process_cert_url(cert_url, user_agent):
-    """Download one .crt/.pem link, check if it's self-signed, and return SRI hash if so."""
+
+def curl_download(url, dest_path, user_agent=None, extra_opts=None):
+    """
+    Download 'url' to 'dest_path' using curl. 
+    Respects 'user_agent' and any extra options in 'extra_opts'.
+    Equivalent to the original requests.get(..., verify=False),
+    we also add '-k' to ignore certificate issues.
+    """
+    cmd = [
+        'curl',
+        '-sS',       # silent + show errors
+        '-L',        # follow redirects (similar to requests default)
+        '-k',        # ignore cert errors (requests verify=False)
+        '-o', dest_path
+    ]
+    if user_agent:
+        cmd += ['-A', user_agent]
+
+    if extra_opts:
+        cmd += extra_opts
+
+    cmd.append(url)
+
+    # Run the curl command and capture any errors
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    if result.returncode != 0:
+        # Raise or handle errors as you see fit. Here we just print to stderr.
+        print(f"curl failed for {url}:\n{result.stderr}", file=sys.stderr)
+        return False
+
+    return True
+
+
+def process_cert_url(cert_url, user_agent, curl_opts=None):
+    """
+    Download one .crt/.pem link, check if it's self-signed, 
+    and return SRI hash dict if so, else None.
+    """
     print(f"Processing {cert_url}", file=sys.stderr)
+
+    # Be nice to the server 1 to 5 seconds delay
+    time.sleep(random.randint(1, 5))
 
     # Get extension from the URL
     ext = os.path.splitext(cert_url)[1].lower()
 
-    with tempfile.NamedTemporaryFile(suffix=ext) as tmp:
-        r = requests.get(
-            cert_url,
-            headers={'User-Agent': user_agent} if user_agent else None,
-            verify=False)
-        tmp.write(r.content)
-        tmp.flush()
-
+    with tempfile.NamedTemporaryFile(suffix=ext, delete=False) as tmp:
+        # Use curl to fetch the certificate
+        success = curl_download(
+            url=cert_url,
+            dest_path=tmp.name,
+            user_agent=user_agent,
+            extra_opts=curl_opts
+        )
+        
+        if not success:
+            return None
+        
         path = tmp.name
 
         if is_self_signed(path):
@@ -69,11 +131,6 @@ def process_cert_url(cert_url, user_agent):
             }
 
         return None  # Not self-signed
-
-
-def escape_curl_opts(opts):
-    """Allow escaping dashes in curl options"""
-    return [re.sub(r'\\-', '-', opt) for opt in opts]
 
 
 def do_scrape(url, headless, max_workers, user_agent, curl_opts):
@@ -91,14 +148,18 @@ def do_scrape(url, headless, max_workers, user_agent, curl_opts):
     service = Service(os.environ.get('CHROMEDRIVER_PATH'))  # or None
     driver = webdriver.Chrome(service=service, options=options)
 
-    # Turn off caching
+    # Turn off caching in Chrome
     driver.execute_cdp_cmd('Network.setCacheDisabled', {'cacheDisabled': True})
 
     results = []
     try:
         found_links = get_urls(url, driver)
+
+        # Filter out duplicates in found_links, if desired:
+        # found_links = list(set(found_links))
+
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            process_func = partial(process_cert_url, user_agent=user_agent)
+            process_func = partial(process_cert_url, user_agent=user_agent, curl_opts=curl_opts)
             # filter(None, ...) to drop any that returned None
             results = list(filter(None, executor.map(process_func, found_links)))
     finally:
@@ -107,10 +168,8 @@ def do_scrape(url, headless, max_workers, user_agent, curl_opts):
     # Deduplicate by turning each dict into a frozenset of (k,v)
     unique_results = [dict(t) for t in set(frozenset(d.items()) for d in results)]
 
-    # If we had extra curl options, add them to each item
+    # If we had extra curl options, store them in each item
     if curl_opts:
-        # Possibly adjust them first:
-        curl_opts = escape_curl_opts(curl_opts)
         for item in unique_results:
             item['curlOptsList'] = curl_opts
 
@@ -148,6 +207,10 @@ def main(cli_args):
     # "cif" is optional, but we can store it if present:
     cif = data.get('cif')
 
+    # Possibly escape them first (if you want the same behavior as original):
+    if curl_opts:
+        curl_opts = escape_curl_opts(curl_opts)
+
     # Scrape certificates:
     results = do_scrape(
         url=url,
@@ -175,7 +238,8 @@ if __name__ == "__main__":
                         help='Run Chrome in headless mode', default=True)
     parser.add_argument('-n', '--max-workers', type=int, default=8,
                         help='Maximum number of threads to use.')
-    parser.add_argument('--user-agent', default='Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0',
+    parser.add_argument('--user-agent',
+                        default='Mozilla/5.0 (X11; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0',
                         help='User agent string to use.')
     parser.add_argument('--extra-curl-opts', action='append',
                         help='Extra curl options to include in curlOptsList')
