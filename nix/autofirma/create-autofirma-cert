@@ -98,4 +98,8 @@ function do_init {
 }
 
 # If any required cert or key is missing rebuild it
-[[ ! -r "${_autofirma_ca}" || ! -r "${_autofirma_pfx}" ]] && do_init || true
+if [[ ! -r "${_autofirma_ca}" || ! -r "${_autofirma_pfx}" ]]; then
+    do_init
+else
+    true  # Explicit success exit code
+fi
