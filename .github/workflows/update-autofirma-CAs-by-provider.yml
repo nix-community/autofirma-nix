@@ -29,9 +29,7 @@ jobs:
       - id: set-matrix
         name: Read the entire JSON array as a single line
         run: |
-          MATRIX_JSON=$(nix develop --accept-flake-config --command -- jq -c '.' nix/autofirma/truststore/prestadores/CAs_fetch_links.json)
-          echo "::set-output name=fetch_links::$MATRIX_JSON"
-
+          echo "fetch_links=$(nix develop --accept-flake-config --command -- jq -c '.' nix/autofirma/truststore/prestadores/CAs_fetch_links.json)" >> $GITHUB_OUTPUT
           echo 'markdown_links<<EOF' >> $GITHUB_OUTPUT
           nix develop --command -- jq -r '.[] | "- [" + .cif + ".json](" + .url + ")"' nix/autofirma/truststore/prestadores/CAs_fetch_links.json >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
