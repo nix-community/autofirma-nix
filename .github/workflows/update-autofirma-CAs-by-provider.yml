@@ -17,8 +17,8 @@ jobs:
     name: Parse CAs_fetch_links.json
     runs-on: ubuntu-latest
     outputs:
-      fetch_links: ${{ steps.parse-json.outputs.fetch_links }}
-      markdown_links: ${{ steps.parse-json.outputs.markdown_links }}
+      fetch_links: ${{ steps.set-matrix.outputs.fetch_links }}
+      markdown_links: ${{ steps.set-matrix.outputs.markdown_links }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
