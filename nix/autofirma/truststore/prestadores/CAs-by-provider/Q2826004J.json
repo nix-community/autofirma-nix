@@ -1,10 +1,17 @@
 [
   {
+    "cif": "Q2826004J",
+    "hash": "sha256-68VXDCkBjE1nsaoSe68S9wO0YR68F7fatVc4lBebk/o=",
+    "url": "https://www.sede.fnmt.gob.es/documents/10445900/10526749/AC_Raiz_FNMT-RCM_SHA256.cer"
+  },
+  {
+    "cif": "Q2826004J",
     "hash": "sha256-VUFTsT0s+d23U7++Gk4K4I0KpBhwWP5gorhisuS4e8s=",
     "url": "https://www.sede.fnmt.gob.es/documents/10445900/10526749/AC_Raiz_FNMT-RCM-SS.cer"
   },
   {
-    "hash": "sha256-68VXDCkBjE1nsaoSe68S9wO0YR68F7fatVc4lBebk/o=",
-    "url": "https://www.sede.fnmt.gob.es/documents/10445900/10526749/AC_Raiz_FNMT-RCM_SHA256.cer"
+    "cif": "Q2826004J",
+    "hash": "sha256-vTzoQ4eTGakHoSpOsU+uhUsIOQTm3Ahn9xgFJcoimb4=",
+    "url": "https://www.sede.fnmt.gob.es/documents/10445900/10526749/AC_Raiz_FNMT-RCM_G2.cer"
   }
 ]
