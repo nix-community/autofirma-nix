@@ -1,26 +1,8 @@
 [
-  {
-    "hash": "sha256-4yaPYQa6i2ZaGpYt3qFFnSpGly8fJEAymzkLiVdJrUU=",
-    "url": "https://anf.es/certificates_download/ANF_Global_Root_CA_2033.cer"
-  },
-  {
-    "hash": "sha256-cdlBNsYP9XRujZMjJ6mu1b5qMfQsf1WwWjdPm29NJyc=",
-    "url": "https://www.anf.es/certificates_download/ANF_Server_CA_2015.cer"
-  },
-  {
-    "hash": "sha256-NpIAZZ8DJ5aq+es5o2glqjAgctn+QytFuJhalCHvPHU=",
-    "url": "https://anf.es/certificates_download/ANF_Server_CA_2010.cer"
-  },
-  {
-    "hash": "sha256-VEGU2dht7UxvLvGApmV6o6AnXX1uO0203XaxcPOk2nA=",
-    "url": "https://www.anf.es/certificates_download/ANF_Secure_Server_Root_CA_SHA25.cer"
-  },
-  {
-    "hash": "sha256-+4/sdZFpuRBrHlEWRMYYxRMENz9sBkMIjYvv/RuZdZk=",
-    "url": "https://www.anf.es/certificates-download/ANFSecureServerRootCA.cer"
-  },
-  {
-    "hash": "sha256-4K+9LA7pWmjNmjxZCy0/4HwKbQvnlq5SkeQk1HeSF44=",
-    "url": "https://anf.es/certificates_download/ANF_Global_Root_CA_SHA256_2036.cer"
-  }
+  {"cif": "B87341228", "hash": "sha256-4yaPYQa6i2ZaGpYt3qFFnSpGly8fJEAymzkLiVdJrUU=", "url": "https://anf.es/certificates_download/ANF_Global_Root_CA_2033.cer"},
+  {"cif": "B87341228", "hash": "sha256-4K+9LA7pWmjNmjxZCy0/4HwKbQvnlq5SkeQk1HeSF44=", "url": "https://anf.es/certificates_download/ANF_Global_Root_CA_SHA256_2036.cer"},
+  {"cif": "B87341228", "hash": "sha256-NpIAZZ8DJ5aq+es5o2glqjAgctn+QytFuJhalCHvPHU=", "url": "https://anf.es/certificates_download/ANF_Server_CA_2010.cer"},
+  {"cif": "B87341228", "hash": "sha256-+4/sdZFpuRBrHlEWRMYYxRMENz9sBkMIjYvv/RuZdZk=", "url": "https://www.anf.es/certificates-download/ANFSecureServerRootCA.cer"},
+  {"cif": "B87341228", "hash": "sha256-VEGU2dht7UxvLvGApmV6o6AnXX1uO0203XaxcPOk2nA=", "url": "https://www.anf.es/certificates_download/ANF_Secure_Server_Root_CA_SHA25.cer"},
+  {"cif": "B87341228", "hash": "sha256-cdlBNsYP9XRujZMjJ6mu1b5qMfQsf1WwWjdPm29NJyc=", "url": "https://www.anf.es/certificates_download/ANF_Server_CA_2015.cer"}
 ]

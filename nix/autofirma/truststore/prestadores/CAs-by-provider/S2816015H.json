@@ -1,18 +1,4 @@
 [
-  {
-    "curlOptsList": [
-      "--tls13-ciphers",
-      "TLS_AES_256_GCM_SHA384"
-    ],
-    "hash": "sha256-wqsaf94krHI0vEdmRNOlS8ugK8pfe9CBFVgXorSX5ts=",
-    "url": "https://www.policia.es/certs/AC_Raiz_DGP-SHA2.cer"
-  },
-  {
-    "curlOptsList": [
-      "--tls13-ciphers",
-      "TLS_AES_256_GCM_SHA384"
-    ],
-    "hash": "sha256-ztLM2UJO25WYdY9PW0fMBv0zvKl/kCYadnPBzx753N8=",
-    "url": "https://www.policia.es/certs/AC_Raiz_DGP2-SHA2.cer"
-  }
+  {"cif": "S2816015H", "curlOptsList": ["--tls13-ciphers", "TLS_AES_256_GCM_SHA384"], "hash": "sha256-wqsaf94krHI0vEdmRNOlS8ugK8pfe9CBFVgXorSX5ts=", "url": "https://www.policia.es/certs/AC_Raiz_DGP-SHA2.cer"},
+  {"cif": "S2816015H", "curlOptsList": ["--tls13-ciphers", "TLS_AES_256_GCM_SHA384"], "hash": "sha256-ztLM2UJO25WYdY9PW0fMBv0zvKl/kCYadnPBzx753N8=", "url": "https://www.policia.es/certs/AC_Raiz_DGP2-SHA2.cer"}
 ]

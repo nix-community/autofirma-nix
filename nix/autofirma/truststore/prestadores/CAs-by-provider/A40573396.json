@@ -1,34 +1,10 @@
 [
-  {
-    "hash": "sha256-rMrf6ruG3fp/K6Euo4UruQs809w5tYNkwy3ooqvQbLw=",
-    "url": "https://www.accv.es/fileadmin/Archivos/certificados/accv_root_ecc_eidas_tsa_2024.crt"
-  },
-  {
-    "hash": "sha256-Y8MIDMi/Y8lMdBpw2u9StSdKz+CD64zsKRMeogk4jCU=",
-    "url": "https://www.accv.es/fileadmin/Archivos/certificados/accv_root_rsa_eidas_tsa_2024.crt"
-  },
-  {
-    "hash": "sha256-Wnaes9nWqXcL3Bv0EmMr012tab3yTunNddK2WbSg3ck=",
-    "url": "https://www.accv.es/fileadmin/Archivos/certificados/accv_root_rsa_eidas_2023.crt"
-  },
-  {
-    "hash": "sha256-/gpljigppo6MmFE4u3tCYbVfX/Oh7ay0i19ajZJ+opQ=",
-    "url": "https://www.accv.es/fileadmin/Archivos/certificados/ACCVRAIZ1.crt"
-  },
-  {
-    "hash": "sha256-tAv6iICgL5MCVkPG27053xlKKFTQduFnor2EZ8+eLDQ=",
-    "url": "https://www.accv.es/fileadmin/Archivos/certificados/accv_root_rsa_tls_2024.crt"
-  },
-  {
-    "hash": "sha256-VGBy9f7Rp/dCazxDct3bb51Mos04Y5F66ZkNJRBhKDA=",
-    "url": "https://www.accv.es/fileadmin/Archivos/certificados/rootca.crt"
-  },
-  {
-    "hash": "sha256-ec1VRVKWrftVzfDb6RdphaC1A8VEJ2xakwXy7JtmaTo=",
-    "url": "https://www.accv.es/fileadmin/Archivos/certificados/accv_root_ecc_tls_2024.crt"
-  },
-  {
-    "hash": "sha256-8aoOxmJwW7KXtDf2fqnkZQ7FvF6VZ1eqfwTX2ZRUceM=",
-    "url": "https://www.accv.es/fileadmin/Archivos/certificados/accv_root_ecc_eidas_2023.crt"
-  }
+  {"cif": "A40573396", "hash": "sha256-/gpljigppo6MmFE4u3tCYbVfX/Oh7ay0i19ajZJ+opQ=", "url": "https://www.accv.es/fileadmin/Archivos/certificados/ACCVRAIZ1.crt"},
+  {"cif": "A40573396", "hash": "sha256-8aoOxmJwW7KXtDf2fqnkZQ7FvF6VZ1eqfwTX2ZRUceM=", "url": "https://www.accv.es/fileadmin/Archivos/certificados/accv_root_ecc_eidas_2023.crt"},
+  {"cif": "A40573396", "hash": "sha256-rMrf6ruG3fp/K6Euo4UruQs809w5tYNkwy3ooqvQbLw=", "url": "https://www.accv.es/fileadmin/Archivos/certificados/accv_root_ecc_eidas_tsa_2024.crt"},
+  {"cif": "A40573396", "hash": "sha256-ec1VRVKWrftVzfDb6RdphaC1A8VEJ2xakwXy7JtmaTo=", "url": "https://www.accv.es/fileadmin/Archivos/certificados/accv_root_ecc_tls_2024.crt"},
+  {"cif": "A40573396", "hash": "sha256-Wnaes9nWqXcL3Bv0EmMr012tab3yTunNddK2WbSg3ck=", "url": "https://www.accv.es/fileadmin/Archivos/certificados/accv_root_rsa_eidas_2023.crt"},
+  {"cif": "A40573396", "hash": "sha256-Y8MIDMi/Y8lMdBpw2u9StSdKz+CD64zsKRMeogk4jCU=", "url": "https://www.accv.es/fileadmin/Archivos/certificados/accv_root_rsa_eidas_tsa_2024.crt"},
+  {"cif": "A40573396", "hash": "sha256-tAv6iICgL5MCVkPG27053xlKKFTQduFnor2EZ8+eLDQ=", "url": "https://www.accv.es/fileadmin/Archivos/certificados/accv_root_rsa_tls_2024.crt"},
+  {"cif": "A40573396", "hash": "sha256-VGBy9f7Rp/dCazxDct3bb51Mos04Y5F66ZkNJRBhKDA=", "url": "https://www.accv.es/fileadmin/Archivos/certificados/rootca.crt"}
 ]
