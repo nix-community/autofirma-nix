@@ -52,7 +52,10 @@ def process_cert_url(cert_url, user_agent):
     ext = os.path.splitext(cert_url)[1].lower()
 
     with tempfile.NamedTemporaryFile(suffix=ext) as tmp:
-        r = requests.get(cert_url, headers={'User-Agent': user_agent} if user_agent else None)
+        r = requests.get(
+            cert_url,
+            headers={'User-Agent': user_agent} if user_agent else None,
+            verify=False)
         tmp.write(r.content)
         tmp.flush()
 
