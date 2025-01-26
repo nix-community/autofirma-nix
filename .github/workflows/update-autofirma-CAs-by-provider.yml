@@ -31,9 +31,6 @@ jobs:
           jq -r '.[] | "- [" + .cif + ".json](" + .url + ")"' nix/autofirma/truststore/prestadores/CAs_fetch_links.json >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
-      - name: Remove existing CAs-by-provider info
-        run: rm -f nix/autofirma/truststore/prestadores/CAs-by-provider/*.json
-
   download-CAs:
     name: Run download-url-linked-CAs for each provider
     needs: parse-json
@@ -56,6 +53,13 @@ jobs:
             | nix --accept-flake-config develop --command -- download-url-linked-CAs \
             | tee nix/truststore/prestadores/CAs-by-provider/${{ matrix.fetch_link.cif }}.json
 
+      - name: Upload CA artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: CA-files  # Artifact name to group all CA files
+          path: nix/truststore/prestadores/CAs-by-provider/${{ matrix.fetch_link.cif }}.json  # Path to the generated CA file
+
+
   create-pull-request:
     name: Create a PR with the new CAs-by-provider contents
     needs:
@@ -63,6 +67,18 @@ jobs:
       - parse-json
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Remove existing CAs-by-provider directory
+        run: rm -f nix/autofirma/truststore/prestadores/CAs-by-provider/*.json
+
+      - name: Download CA artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: CA-files  # Must match the upload name
+          path: nix/autofirma/truststore/prestadores/CAs-by-provider  # Destination directory for artifacts
+
       - name: Create Pull Request for the new trusted providers file
         uses: peter-evans/create-pull-request@67ccf781d68cd99b580ae25a5c18a1cc84ffff1f # v7.0.6
         with:
