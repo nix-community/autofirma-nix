@@ -51,13 +51,13 @@ jobs:
           # Convert the current matrix item to a single-line JSON object:
           echo '${{ toJson(matrix.fetch_link) }}' \
             | nix --accept-flake-config develop --command -- download-url-linked-CAs \
-            | tee nix/truststore/prestadores/CAs-by-provider/${{ matrix.fetch_link.cif }}.json
+            | tee nix/autofirma/truststore/prestadores/CAs-by-provider/${{ matrix.fetch_link.cif }}.json
 
       - name: Upload CA artifact
         uses: actions/upload-artifact@v3
         with:
           name: CA-files  # Artifact name to group all CA files
-          path: nix/truststore/prestadores/CAs-by-provider/${{ matrix.fetch_link.cif }}.json  # Path to the generated CA file
+          path: nix/autofirma/truststore/prestadores/CAs-by-provider/${{ matrix.fetch_link.cif }}.json  # Path to the generated CA file
 
 
   create-pull-request:
