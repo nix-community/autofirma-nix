@@ -13,73 +13,71 @@ on:
   repository_dispatch:
 
 jobs:
-  parse-json:
-    name: Parse CAs_fetch_links.json
+  parse-ca-fetch-links:
+    name: Parse CA Fetch Links JSON
     runs-on: ubuntu-latest
     outputs:
-      fetch_links: ${{ steps.set-matrix.outputs.fetch_links }}
-      markdown_links: ${{ steps.set-matrix.outputs.markdown_links }}
+      fetch_links: ${{ steps.extract-fetch-links.outputs.fetch_links }}
+      markdown_links: ${{ steps.extract-fetch-links.outputs.markdown_links }}
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - id: set-matrix
-        name: Read the entire JSON array as a single line
+      - id: extract-fetch-links
+        name: Extract Fetch Links and Generate Markdown
         run: |
           echo "fetch_links=$(jq -c '.' nix/autofirma/truststore/prestadores/CAs_fetch_links.json)" >> $GITHUB_OUTPUT
           echo 'markdown_links<<EOF' >> $GITHUB_OUTPUT
           jq -r '.[] | "- [" + .cif + ".json](" + .url + ")"' nix/autofirma/truststore/prestadores/CAs_fetch_links.json >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
-  download-CAs:
-    name: Run download-url-linked-CAs for each provider
-    needs: parse-json
+  download-ca-files:
+    name: Download CA Files for Each Provider
+    needs: parse-ca-fetch-links
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
       matrix:
-        fetch_link: ${{ fromJson(needs.parse-json.outputs.fetch_links) }}
+        fetch_link: ${{ fromJson(needs.parse-ca-fetch-links.outputs.fetch_links) }}
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - name: Install Nix
+      - name: Install Nix Package Manager
         uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
 
-      - name: Download CAs for ${{ matrix.provider.cif }}
+      - name: Download CA for ${{ matrix.fetch_link.cif }}
         run: |
-          # Convert the current matrix item to a single-line JSON object:
           echo '${{ toJson(matrix.fetch_link) }}' \
             | nix --accept-flake-config develop --command -- download-url-linked-CAs \
             | tee nix/autofirma/truststore/prestadores/CAs-by-provider/${{ matrix.fetch_link.cif }}.json
 
-      - name: Upload CA artifact
+      - name: Upload CA Artifact for ${{ matrix.fetch_link.cif }}
         uses: actions/upload-artifact@v3
         with:
-          name: CA-files  # Artifact name to group all CA files
-          path: nix/autofirma/truststore/prestadores/CAs-by-provider/${{ matrix.fetch_link.cif }}.json  # Path to the generated CA file
+          name: CA-file-${{ matrix.fetch_link.cif }}
+          path: nix/autofirma/truststore/prestadores/CAs-by-provider/${{ matrix.fetch_link.cif }}.json
 
-
-  create-pull-request:
-    name: Create a PR with the new CAs-by-provider contents
+  create-ca-pull-request:
+    name: Create Pull Request with Updated CA Files
     needs:
-      - download-CAs
-      - parse-json
+      - download-ca-files
+      - parse-ca-fetch-links
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - name: Remove existing CAs-by-provider directory
+      - name: Clear Existing CA Files
         run: rm -f nix/autofirma/truststore/prestadores/CAs-by-provider/*.json
 
-      - name: Download CA artifacts
+      - name: Download CA Artifacts
         uses: actions/download-artifact@v3
         with:
-          name: CA-files  # Must match the upload name
-          path: nix/autofirma/truststore/prestadores/CAs-by-provider  # Destination directory for artifacts
+          name: CA-file-${{ matrix.fetch_link.cif }} # Ensure this matches the upload name pattern
+          path: nix/autofirma/truststore/prestadores/CAs-by-provider
 
-      - name: Create Pull Request for the new trusted providers file
+      - name: Create Pull Request for Updated CA Files
         uses: peter-evans/create-pull-request@67ccf781d68cd99b580ae25a5c18a1cc84ffff1f # v7.0.6
         with:
           branch: update/autofirma-CAs-by-provider
@@ -96,7 +94,7 @@ jobs:
 
             **List of Provider URLs:**
 
-            ${{ needs.parse-json.outputs.markdown_links }}
+            ${{ needs.parse-ca-fetch-links.outputs.markdown_links }}
 
             #### Review Checklist:
             1. Verify that the updated list aligns with the official sources.
