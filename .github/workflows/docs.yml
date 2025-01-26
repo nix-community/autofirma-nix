@@ -21,14 +21,14 @@ jobs:
 
     steps:
       - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
+        uses: DeterminateSystems/nix-installer-action@e50d5f73bfe71c2dd0aa4218de8f4afa59f8f81d # v16
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           extra-conf: |
             extra-experimental-features = nix-command flakes
 
       - name: Set up cache
-        uses: DeterminateSystems/magic-nix-cache-action@main
+        uses: DeterminateSystems/magic-nix-cache-action@6221693898146dc97e38ad0e013488a16477a4c4 # v9
 
       - name: Build docs
         run: nix -L build github:${{ github.repository }}/${{ github.sha }}#docs
@@ -67,14 +67,14 @@ jobs:
 
     steps:
       - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
+        uses: DeterminateSystems/nix-installer-action@e50d5f73bfe71c2dd0aa4218de8f4afa59f8f81d # v16
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           extra-conf: |
             extra-experimental-features = nix-command flakes
 
       - name: Set up cache
-        uses: DeterminateSystems/magic-nix-cache-action@main
+        uses: DeterminateSystems/magic-nix-cache-action@6221693898146dc97e38ad0e013488a16477a4c4 # v9
 
       - name: Check flake-info
         id: flake-info
