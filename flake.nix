@@ -123,6 +123,7 @@
         in 
         pkgs.mkShell {
           packages = [
+            pkgs.jq
             update-fixed-output-derivations
             download-autofirma-trusted-providers
             download-url-linked-CAs
