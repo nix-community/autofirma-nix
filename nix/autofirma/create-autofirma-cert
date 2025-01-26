@@ -1,3 +1,8 @@
+if [[ "$1" == '--verbose' ]]; then
+	shift
+	set -o verbose
+fi
+
 _autofirma_dir="$1"
 _autofirma_ca="${_autofirma_dir}/AutoFirma_ROOT.cer"
 _autofirma_pfx="${_autofirma_dir}/autofirma.pfx"
