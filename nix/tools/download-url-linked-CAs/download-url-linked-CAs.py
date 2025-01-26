@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from concurrent.futures import ThreadPoolExecutor
+from _ctypes import PyObj_FromPtr
 from functools import partial
 from urllib.parse import urljoin
 import argparse
@@ -16,6 +17,46 @@ import time
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
+
+
+class NoIndent(object):
+    """ Value wrapper. """
+    def __init__(self, value):
+        self.value = value
+
+
+class MyEncoder(json.JSONEncoder):
+    FORMAT_SPEC = '@@{}@@'
+    regex = re.compile(FORMAT_SPEC.format(r'(\d+)'))
+
+    def __init__(self, **kwargs):
+        # Save copy of any keyword argument values needed for use here.
+        self.__sort_keys = kwargs.get('sort_keys', None)
+        super(MyEncoder, self).__init__(**kwargs)
+
+    def default(self, obj):
+        return (self.FORMAT_SPEC.format(id(obj)) if isinstance(obj, NoIndent)
+                else super(MyEncoder, self).default(obj))
+
+    def encode(self, obj):
+        format_spec = self.FORMAT_SPEC  # Local var to expedite access.
+        json_repr = super(MyEncoder, self).encode(obj)  # Default JSON.
+
+        # Replace any marked-up object ids in the JSON repr with the
+        # value returned from the json.dumps() of the corresponding
+        # wrapped Python object.
+        for match in self.regex.finditer(json_repr):
+            # see https://stackoverflow.com/a/15012814/355230
+            id = int(match.group(1))
+            no_indent = PyObj_FromPtr(id)
+            json_obj_repr = json.dumps(no_indent.value, sort_keys=self.__sort_keys)
+
+            # Replace the matched id string with json formatted representation
+            # of the corresponding Python object.
+            json_repr = json_repr.replace(
+                            '"{}"'.format(format_spec.format(id)), json_obj_repr)
+
+        return json_repr
 
 
 def get_urls(url, driver):
@@ -103,8 +144,8 @@ def process_cert_url(cert_url, user_agent, curl_opts=None):
     """
     print(f"Processing {cert_url}", file=sys.stderr)
 
-    # Be nice to the server 1 to 5 seconds delay
-    time.sleep(random.randint(1, 5))
+    # Be nice to the server 5 to 10 seconds delay
+    time.sleep(random.randint(5, 10))
 
     # Get extension from the URL
     ext = os.path.splitext(cert_url)[1].lower()
@@ -226,7 +267,8 @@ def main(cli_args):
             r['cif'] = cif
 
     # Print final JSON array
-    print(json.dumps(results, indent=2, sort_keys=True))
+    sorted_result = sorted([NoIndent(r) for r in  results], key=lambda r: r.value["url"])
+    print(json.dumps(sorted_result, cls=MyEncoder, indent=2, sort_keys=True))
 
 
 if __name__ == "__main__":
