@@ -1,0 +1,97 @@
+name: Update AutoFirma CAs by Provider
+
+on:
+  schedule:
+    - cron: "51 3 * * 3,6"
+  push:
+    branches:
+      - main
+    paths:
+      - 'nix/autofirma/truststore/prestadores/CAs_fetch_links.json'
+      - 'nix/autofirma/truststore/prestadores/providers.json'
+  workflow_dispatch:
+  repository_dispatch:
+
+jobs:
+  parse-json:
+    name: Parse CAs_fetch_links.json
+    runs-on: ubuntu-latest
+    outputs:
+      fetch_links: ${{ steps.parse-json.outputs.fetch_links }}
+      markdown_links: ${{ steps.parse-json.outputs.markdown_links }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+
+      - id: set-matrix
+        name: Read the entire JSON array as a single line
+        run: |
+          MATRIX_JSON=$(nix develop --accept-flake-config --command -- jq -c '.' nix/autofirma/truststore/prestadores/CAs_fetch_links.json)
+          echo "::set-output name=fetch_links::$MATRIX_JSON"
+
+          echo 'markdown_links<<<EOF' >> $GITHUB_OUTPUT
+          nix develop --command -- jq -r '.[] | "- [" + .cif + ".json](" + .url + ")"' nix/autofirma/truststore/prestadores/CAs_fetch_links.json >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+
+      - name: Remove existing CAs-by-provider info
+        run: rm -f nix/autofirma/truststore/prestadores/CAs-by-provider/*.json
+
+  download-CAs:
+    name: Run download-url-linked-CAs for each provider
+    needs: parse-json
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        fetch_link: ${{ fromJson(needs.parse-json.outputs.fetch_links) }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+
+      - name: Download CAs for ${{ matrix.provider.cif }}
+        run: |
+          # Convert the current matrix item to a single-line JSON object:
+          echo '${{ toJson(matrix.fetch_link) }}' \
+            | nix --accept-flake-config develop --command -- download-url-linked-CAs \
+            | tee nix/truststore/prestadores/CAs-by-provider/${{ matrix.fetch_link.cif }}.json
+
+  create-pull-request:
+    name: Create a PR with the new CAs-by-provider contents
+    needs:
+      - download-CAs
+      - parse-json
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Pull Request for the new trusted providers file
+        uses: peter-evans/create-pull-request@67ccf781d68cd99b580ae25a5c18a1cc84ffff1f # v7.0.6
+        with:
+          branch: update/autofirma-CAs-by-provider
+          base: main
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          delete-branch: true
+          labels: |
+            security
+            merge-queue
+          commit-message: 'update: AutoFirma CAs-by-provider'
+          title: "Update Trusted Providers CAs for autofirma-nix"
+          body: |
+            This PR updates the JSON file of each trusted provider based on the information available in their own websites.
+
+            This is the list of URLs of the providers:
+
+            ${{ needs.parse-json.outputs.markdown_links }}
+
+            #### Review Tasks:  
+            1. Verify the updated list aligns with the official source.  
+            2. Beware of massive removal of entries (maybe the page is down temporarily?)
+
+            Thank you for reviewing!
+            
+          add-paths: |
+            nix/autofirma/truststore/prestadores/CAs-by-provider
