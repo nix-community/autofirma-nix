@@ -1,0 +1,47 @@
+"autofirma":
+- changed-files:
+  - any-glob-to-any-file:
+    - nix/autofirma/**/*                # All files under nix/autofirma
+    - nix/tests/**/autofirma/**/*       # Autofirma-related tests
+
+"dnieremote":
+- changed-files:
+  - any-glob-to-any-file:
+    - nix/dnieremote/**/*              # All files under nix/dnieremote
+    - nix/tests/**/dnieremote/**/*     # DNIeRemote-related tests
+
+"configuradorfnmt":
+- changed-files:
+  - any-glob-to-any-file:
+    - nix/configuradorfnmt/**/*        # All files under nix/configuradorfnmt
+    - nix/tests/**/configuradorfnmt/**/*
+
+"modules":
+- changed-files:
+  - any-glob-to-any-file:
+    - nix/**/module.nix                # Generic module definitions
+    - nix/**/hm-module.nix             # Home Manager module definitions
+
+"tools":
+- changed-files:
+  - any-glob-to-any-file:
+    - nix/tools/**/*                   # Generic tools (update scripts, etc.)
+
+"truststore":
+- changed-files:
+  - any-glob-to-any-file:
+    - nix/autofirma/truststore/**/*           
+    - nix/tests/_common/pkgs/test_certs.nix
+    - nix/tests/_common/tests/autofirma_test_server/**/*
+
+"tests":
+- changed-files:
+  - any-glob-to-any-file:
+    - nix/tests/**/*                   # Capture any test changes
+
+"docs":
+- changed-files:
+  - any-glob-to-any-file:
+    - docs/**/*                        # Documentation files
+    - README.md
+
