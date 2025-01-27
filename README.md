@@ -1,7 +1,7 @@
 > **⚠️ Important Notice: Cache Configuration Update**
 >
 > We recently migrated the `autofirma-nix` repository from one of the creators' accounts to the Nix Community's organization.  
-> As part of this migration, the binary cache has also changed. To avoid interruptions, please update your `flake.nix` configuration to use the new cache. Replace the `nixConfig` section in your `flake.nix` file with the following:
+> As part of this migration, the binary cache has also changed. To avoid unnecessary compilations in your local machine, please update your `flake.nix` configuration to use the new cache. Replace the `nixConfig` section in your `flake.nix` file with the following:
 >
 > ```nix
 > nixConfig = {
@@ -14,7 +14,7 @@
 > };
 > ```
 >
-> The old cache will be deprecated soon, so making this change promptly will ensure a seamless experience.
+> The old cache has been be removed, so making this change promptly will ensure a seamless experience.
 
 
 # autofirma-nix
