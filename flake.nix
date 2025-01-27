@@ -123,6 +123,7 @@
 
             maven-dependencies-hash = fixed-output-derivations."autofirma".hash;
           };
+          clienteafirma = autofirma.clienteafirma;
           default = self'.packages.autofirma;
         };
         checks = let
