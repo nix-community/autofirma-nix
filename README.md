@@ -1,3 +1,22 @@
+> **⚠️ Important Notice: Cache Configuration Update**
+>
+> We recently migrated the `autofirma-nix` repository from one of the creators' accounts to the Nix Community's organization.  
+> As part of this migration, the binary cache has also changed. To avoid interruptions, please update your `flake.nix` configuration to use the new cache. Replace the `nixConfig` section in your `flake.nix` file with the following:
+>
+> ```nix
+> nixConfig = {
+>   extra-substituters = [
+>     "https://nix-community.cachix.org"
+>   ];
+>   extra-trusted-public-keys = [
+>     "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+>   ];
+> };
+> ```
+>
+> The old cache will be deprecated soon, so making this change promptly will ensure a seamless experience.
+
+
 # autofirma-nix
 
 This repository provides a suite of tools needed to interact with Spain’s public administration,
