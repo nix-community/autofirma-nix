@@ -114,9 +114,14 @@ def curl_download(url, dest_path, user_agent=None, extra_opts=None):
     """
     cmd = [
         'curl',
-        '-sS',       # silent + show errors
-        '-L',        # follow redirects (similar to requests default)
-        '-k',        # ignore cert errors (requests verify=False)
+        '-sS',                     # silent + show errors
+        '-L',                      # follow redirects (similar to requests default)
+        '-k',                      # ignore cert errors (requests verify=False)
+        '--connect-timeout', '10', # Timeout for the TCP connection phase
+        '--max-time', '30',        # Maximum time for the entire request
+        '--retry', '10',           # Number of retries
+        '--retry-delay', '5',      # Seconds to wait between retries
+        '--retry-all-errors',      # Retry on both transient & some non-transient errors
         '-o', dest_path
     ]
     if user_agent:
