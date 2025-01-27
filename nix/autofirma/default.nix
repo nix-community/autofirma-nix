@@ -238,4 +238,7 @@ in
       ln -s ${thisPkg}/etc/firefox/pref/AutoFirma.js $out/etc/firefox/pref/AutoFirma.js
       ln -s ${thisPkg}/bin/autofirma-setup $out/bin/autofirma-setup
     '';
+    passthru = {
+      clienteafirma = thisPkg;
+    };
   }
