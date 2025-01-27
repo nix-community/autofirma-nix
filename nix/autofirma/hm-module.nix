@@ -17,7 +17,7 @@ with lib; let
   anyFirefoxIntegrationProfileIsEnabled = builtins.any (x: x.enable) (lib.attrsets.attrValues cfg.firefoxIntegration.profiles);
 in {
   options.programs.autofirma.truststore = {
-    package = mkPackageOption (inputs.self.packages.${system}.override { caBundle = ca-certificates; }) "autofirma-truststore" {};
+    package = mkPackageOption inputs.self.packages.${system} "autofirma-truststore" {};
     finalPackage = mkOption {
       type = types.package;
       readOnly = true;

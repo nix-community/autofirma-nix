@@ -149,7 +149,6 @@
           };
         in rec {
           autofirma-truststore = pkgs.callPackage ./nix/autofirma/truststore {
-            caBundle = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt2";
             govTrustedCerts = prestadores;
           };
           autofirma = pkgs.callPackage ./nix/autofirma/default.nix {
