@@ -149,7 +149,7 @@
           };
         in rec {
           autofirma-truststore = pkgs.callPackage ./nix/autofirma/truststore {
-            caBundle = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+            caBundle = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt2";
             govTrustedCerts = prestadores;
           };
           autofirma = pkgs.callPackage ./nix/autofirma/default.nix {
@@ -203,6 +203,10 @@
             # HM standalone installation
             ### AutoFirma
             hm-standalone-autofirma-cli-sign-document = pkgs.callPackage ./nix/tests/hm-standalone/autofirma/cli/sign-document.nix { inherit self home-manager; };
+            hm-standalone-autofirma-firefoxIntegration-protocol-handler = pkgs.callPackage ./nix/tests/hm-standalone/autofirma/firefoxIntegration/protocol-handler { inherit self home-manager; };
+            hm-standalone-autofirma-firefoxIntegration-connection-method-websocket = pkgs.callPackage ./nix/tests/hm-standalone/autofirma/firefoxIntegration/connection-method/websocket { inherit self home-manager; };
+            hm-standalone-autofirma-firefoxIntegration-connection-method-xhr = pkgs.callPackage ./nix/tests/hm-standalone/autofirma/firefoxIntegration/connection-method/xhr { inherit self home-manager; };
+            hm-standalone-autofirma-firefoxIntegration-connection-method-auxiliary-servers = pkgs.callPackage ./nix/tests/hm-standalone/autofirma/firefoxIntegration/connection-method/auxiliary-servers { inherit self home-manager; };
         };
       in
         checks // packages;

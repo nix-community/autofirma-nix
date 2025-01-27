@@ -1,7 +1,33 @@
 { testName, jsTestFile }:
-{ self, pkgs, system, home-manager }:
+{ self, pkgs, system, home-manager, lib }:
 let
   testCerts = pkgs.callPackage ../../../../_common/pkgs/test_certs.nix {};
+  stateVersion = "${lib.versions.major lib.version}.${lib.versions.minor lib.version}";
+  homeManagerStandaloneConfiguration = systemConfig: home-manager.lib.homeManagerConfiguration {
+    inherit pkgs;
+    modules = [
+      self.homeManagerModules.autofirma
+      {
+        home.username = "autofirma-user";
+        home.homeDirectory = "/home/autofirma-user";
+        home.stateVersion = "${stateVersion}";
+
+        home.file.cabundle.text = systemConfig.environment.etc."ssl/certs/ca-certificates.crt".source;
+        
+        programs.autofirma.enable = true;
+        programs.autofirma.truststore.package = self.packages."${system}".autofirma-truststore.override {
+          caBundle = systemConfig.environment.etc."ssl/certs/ca-certificates.crt".source;
+          govTrustedCerts = systemConfig.security.pki.certificateFiles;
+        };
+        programs.autofirma.firefoxIntegration.profiles.default.enable = true;
+
+        programs.firefox.enable = true;
+        programs.firefox.profiles.default.id = 0;
+        # Allow Firefox to open AutoConfig settings without user interaction
+        programs.firefox.profiles.default.settings."network.protocol-handler.expose.afirma" = true;
+      }
+    ];
+  };
 in
 pkgs.nixosTest {
   name = testName;
@@ -10,32 +36,17 @@ pkgs.nixosTest {
       home-manager.nixosModules.home-manager
       (modulesPath + "./../tests/common/x11.nix")
       ../../../../_common/tests/autofirma_test_server
-      ../../../../_common/hm-as-nixos-module/autofirma-user.nix
+      ../../../../_common/hm-standalone/autofirma-user.nix
     ];
 
-    home-manager.users.autofirma-user = {config, osConfig, ... }: {
-      imports = [
-        self.homeManagerModules.autofirma
-      ];
-
-      programs.autofirma.enable = true;
-      programs.autofirma.truststore.package = self.packages."${system}".autofirma-truststore.override (old: {
-        caBundle = osConfig.environment.etc."ssl/certs/ca-certificates.crt".source;
-        govTrustedCerts = old.govTrustedCerts ++ osConfig.security.pki.certificateFiles;
-      });
-      programs.autofirma.firefoxIntegration.profiles.default.enable = true;
-
-      programs.firefox.enable = true;
-      programs.firefox.profiles.default.id = 0;
-      # Allow Firefox to open AutoConfig settings without user interaction
-      programs.firefox.profiles.default.settings."network.protocol-handler.expose.afirma" = true;
-    };
-
     environment.systemPackages = with pkgs; [
+      (homeManagerStandaloneConfiguration config).activationPackage
       nss.tools
     ];
 
     autofirma-test-server.jsTestFile = jsTestFile;
+
+    system.stateVersion = stateVersion;
   };
 
   testScript = ''
@@ -44,6 +55,9 @@ pkgs.nixosTest {
 
     machine.wait_for_unit("default.target")
     machine.wait_for_x()
+    machine.succeed(user_cmd('xhost +SI:localuser:root'))
+
+    machine.succeed(user_cmd('home-manager-generation'))
 
     machine.wait_for_open_port(port=443)
 
@@ -67,4 +81,5 @@ pkgs.nixosTest {
 
   '';
 }
+
 
