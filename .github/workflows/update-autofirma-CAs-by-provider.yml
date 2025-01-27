@@ -72,7 +72,7 @@ jobs:
         run: rm -f nix/autofirma/truststore/prestadores/CAs-by-provider/*.json
 
       - name: Download CA Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: CA-files
           path: nix/autofirma/truststore/prestadores/CAs-by-provider
