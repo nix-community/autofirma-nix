@@ -1,5 +1,3 @@
 [
-  {"cif": "A01337260", "hash": "sha256-HlCRd4dDDwPL9ARHoN8k1znCTkYIpDFiL4OZMIsK6Cs=", "url": "https://www.izenpe.eus/contenidos/informacion/cas_izenpe/es_cas/adjuntos/IZENPE_ROOT_NQC.crt"},
-  {"cif": "A01337260", "hash": "sha256-jluLrtxNWL4OMBzMtu0XPAjXx3zkNQlzOJ/xr6EdemU=", "url": "https://www.izenpe.eus/contenidos/informacion/cas_izenpe/es_cas/adjuntos/IZENPE_ROOT_QC.crt"},
   {"cif": "A01337260", "hash": "sha256-JTDMjpgyFQK62W+bH7obCZ4tKZ4PRUi7kU82O8DUUx8=", "url": "https://www.izenpe.eus/contenidos/informacion/cas_izenpe/es_cas/adjuntos/RAIZ2007_cert_sha256.crt"}
 ]
