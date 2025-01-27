@@ -206,6 +206,9 @@
             hm-standalone-autofirma-firefoxIntegration-connection-method-websocket = pkgs.callPackage ./nix/tests/hm-standalone/autofirma/firefoxIntegration/connection-method/websocket { inherit self home-manager; };
             hm-standalone-autofirma-firefoxIntegration-connection-method-xhr = pkgs.callPackage ./nix/tests/hm-standalone/autofirma/firefoxIntegration/connection-method/xhr { inherit self home-manager; };
             hm-standalone-autofirma-firefoxIntegration-connection-method-auxiliary-servers = pkgs.callPackage ./nix/tests/hm-standalone/autofirma/firefoxIntegration/connection-method/auxiliary-servers { inherit self home-manager; };
+
+            ### Configurador FNMT-RCM
+            hm-standalone-configuradorfnmt-firefoxIntegration-request = pkgs.callPackage ./nix/tests/hm-standalone/configuradorfnmt/firefoxIntegration/request-certificate.nix { inherit self home-manager; };
         };
       in
         checks // packages;
