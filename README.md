@@ -78,10 +78,10 @@ continuación se muestran ejemplos para una configuración de tipo standalone.
 
   nixConfig = {
     extra-substituters = [
-      "https://autofirma-nix.cachix.org"
+      "https://nix-community.cachix.org"
     ];
     extra-trusted-public-keys = [
-      "autofirma-nix.cachix.org-1:cDC9Dtee+HJ7QZcM8s36836scXyRToqNX/T+yvjiI0E="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
   };
 

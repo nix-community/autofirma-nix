@@ -3,10 +3,10 @@
 
   nixConfig = {
     extra-substituters = [
-      "https://autofirma-nix.cachix.org"
+      "https://nix-community.cachix.org"
     ];
     extra-trusted-public-keys = [
-      "autofirma-nix.cachix.org-1:cDC9Dtee+HJ7QZcM8s36836scXyRToqNX/T+yvjiI0E="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
   };
 
@@ -80,12 +80,12 @@
       };
       systems = [
         "x86_64-linux"
-        "i686-linux"
       ];
       perSystem = {
         config,
         system,
         self',
+        lib,
         ...
       }: let
         pkgs = nixpkgs.legacyPackages.${system};
@@ -125,17 +125,10 @@
           };
           default = self'.packages.autofirma;
         };
-        checks = {
-          # autofirma-sign = pkgs.runCommand "autofirma-sign" {} ''
-          #   mkdir -p $out
-          #   echo "NixOS AutoFirma Sign Test" > document.txt
-          #
-          #   ${inputs.nixpkgs.lib.getExe pkgs.openssl} req -x509 -newkey rsa:2048 -keyout private.key -out certificate.crt -days 365 -nodes -subj "/C=ES/O=TEST AUTOFIRMA NIX/OU=DNIE/CN=AC DNIE 004" -passout pass:1234
-          #   ${inputs.nixpkgs.lib.getExe pkgs.openssl} pkcs12 -export -out certificate.p12 -inkey private.key -in certificate.crt -name "testcert" -password pass:1234
-          #
-          #   ${inputs.nixpkgs.lib.getExe self'.packages.autofirma} sign -store pkcs12:certificate.p12 -i document.txt -o document.txt.sign -filter alias.contains=testcert -password 1234 -xml
-          # '';
-        };
+        checks = let
+          blacklistPackages = [ "pom-tools" "jmulticard" "clienteafirma-external" ];
+        in 
+          lib.mapAttrs' (n: lib.nameValuePair "package-${n}") (lib.filterAttrs (n: _v: !(builtins.elem n blacklistPackages)) self'.packages);
       };
     };
 }
