@@ -209,6 +209,13 @@
 
             ### Configurador FNMT-RCM
             hm-standalone-configuradorfnmt-firefoxIntegration-request = pkgs.callPackage ./nix/tests/hm-standalone/configuradorfnmt/firefoxIntegration/request-certificate.nix { inherit self home-manager; };
+
+            ### DNIe Remote
+            hm-standalone-dnieremote-config-jumpintro-wifi = pkgs.callPackage ./nix/tests/hm-standalone/dnieremote/config/jumpintro-wifi.nix { inherit self home-manager; };
+            hm-standalone-dnieremote-config-jumpintro-usb = pkgs.callPackage ./nix/tests/hm-standalone/dnieremote/config/jumpintro-usb.nix { inherit self home-manager; };
+            hm-standalone-dnieremote-config-jumpintro-no = pkgs.callPackage ./nix/tests/hm-standalone/dnieremote/config/jumpintro-no.nix { inherit self home-manager; };
+            hm-standalone-dnieremote-config-wifiport = pkgs.callPackage ./nix/tests/hm-standalone/dnieremote/config/wifiport.nix { inherit self home-manager; };
+
         };
       in
         checks // packages;
