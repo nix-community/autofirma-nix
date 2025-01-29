@@ -1,4 +1,4 @@
-name: URLWatch Monitor
+name: Monitor Upstream Releases
 
 on:
   schedule:
@@ -78,7 +78,7 @@ jobs:
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: 'Updates detected by urlwatch',
+              title: 'New official releases published',
               body: body,
               labels: ['upstream', 'update']  # Add labels
             });
