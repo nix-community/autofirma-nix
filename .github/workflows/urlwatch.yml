@@ -73,10 +73,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const core = require('@actions/core');
-            // Clear variable name for the report content
-            const report = core.getInput('urlwatch_report');
-            // Create Markdown-formatted body
+            const report = process.env.URLWATCH_REPORT;
             const body = `\`\`\`\n${report}\n\`\`\``;
             await github.rest.issues.create({
               owner: context.repo.owner,
@@ -85,4 +82,5 @@ jobs:
               body: body,
               labels: ['upstream', 'update']
             });
-          urlwatch_report: ${{ steps.run-urlwatch.outputs.output }}
+        env:
+          URLWATCH_REPORT: ${{ steps.run-urlwatch.outputs.output }}
