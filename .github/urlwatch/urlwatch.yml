@@ -1,7 +1,7 @@
 display:
   empty-diff: false
   error: true
-  new: false
+  new: true
   unchanged: false
 job_defaults:
   all: {}
