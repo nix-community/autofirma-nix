@@ -52,7 +52,7 @@ jobs:
         id: run-urlwatch
         run: |
           # Move downloaded cache if exists
-          if [ -f cache.db ]; then
+          if [[ -f cache.db ]]; then
             mv cache.db ~/.cache/urlwatch/
           fi
           
