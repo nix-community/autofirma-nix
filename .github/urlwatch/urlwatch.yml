@@ -1,5 +1,5 @@
 display:
-  empty-diff: true
+  empty-diff: false
   error: true
   new: false
   unchanged: false
