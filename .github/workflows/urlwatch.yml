@@ -73,12 +73,16 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const output = JSON.parse('${{ toJSON(steps.run-urlwatch.outputs.output) }}');
-            const body = '```\n' + output + '\n```';  // Wrap output in a Markdown code block
+            const core = require('@actions/core');
+            // Clear variable name for the report content
+            const report = core.getInput('urlwatch_report');
+            // Create Markdown-formatted body
+            const body = `\`\`\`\n${report}\n\`\`\``;
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: 'New official releases available 🎉',
               body: body,
-              labels: ['upstream', 'update']  // Add labels
+              labels: ['upstream', 'update']
             });
+          urlwatch_report: ${{ steps.run-urlwatch.outputs.output }}
