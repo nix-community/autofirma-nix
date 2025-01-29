@@ -57,10 +57,11 @@ jobs:
           fi
           
           # Run urlwatch and capture output
-          output=$(urlwatch)
-          echo "output<<EOF" >> $GITHUB_OUTPUT
-          echo "$output" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          (
+            echo 'output<<EOF'
+            urlwatch
+            echo EOF
+          ) >> $GITHUB_OUTPUT
 
       - name: Upload new cache
         uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
