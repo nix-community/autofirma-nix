@@ -74,7 +74,7 @@ jobs:
         with:
           script: |
             const output = `${{ steps.run-urlwatch.outputs.output }}`;
-            const body = `\`\`\`\n${output}\n\`\`\``;  # Wrap output in a Markdown code block
+            const body = '```\n' + `${output}` + '\n```';  # Wrap output in a Markdown code block
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
