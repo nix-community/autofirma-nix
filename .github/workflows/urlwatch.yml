@@ -1,0 +1,84 @@
+name: Monitor Upstream Releases
+
+on:
+  schedule:
+    - cron: '10 10 * * *'  # Daily at 10:10
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+  issues: write
+
+jobs:
+  urlwatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install urlwatch
+        run: pip install urlwatch
+
+      - name: Setup config directories
+        run: |
+          mkdir -p ~/.config/urlwatch ~/.cache/urlwatch
+          cp -r .github/urlwatch/* ~/.config/urlwatch/
+
+      - name: Get last successful run ID
+        id: last-run
+        uses: actions/github-script@v6
+        continue-on-error: true
+        with:
+          script: |
+            const response = await github.rest.actions.listWorkflowRuns({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'urlwatch.yml',
+              status: 'success',
+              per_page: 1
+            });
+            core.setOutput('run_id', response.data.workflow_runs[0]?.id || 0);
+
+      - name: Download previous cache
+        uses: actions/download-artifact@v4
+        with:
+          name: urlwatch-cache
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ steps.last-run.outputs.run_id }}
+        if: ${{ steps.last-run.outputs.run_id != 0 }}
+
+      - name: Run urlwatch and capture output
+        id: run-urlwatch
+        run: |
+          # Move downloaded cache if exists
+          if [ -f cache.db ]; then
+            mv cache.db ~/.cache/urlwatch/
+          fi
+          
+          # Run urlwatch and capture output
+          output=$(urlwatch)
+          echo "output<<EOF" >> $GITHUB_OUTPUT
+          echo "$output" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Upload new cache
+        uses: actions/upload-artifact@v3
+        with:
+          name: urlwatch-cache
+          path: ~/.cache/urlwatch/cache.db
+
+      - name: Create Issue if changes detected
+        if: ${{ steps.run-urlwatch.outputs.output != '' }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const output = `${{ steps.run-urlwatch.outputs.output }}`;
+            const body = `\`\`\`\n${output}\n\`\`\``;  # Wrap output in a Markdown code block
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'New official releases available 🎉',
+              body: body,
+              labels: ['upstream', 'update']  # Add labels
+            });

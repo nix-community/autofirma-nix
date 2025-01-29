@@ -1,0 +1,114 @@
+display:
+  empty-diff: false
+  error: true
+  new: true
+  unchanged: false
+job_defaults:
+  all: {}
+  browser: {}
+  shell: {}
+  url: {}
+report:
+  discord:
+    colored: true
+    embed: false
+    enabled: false
+    max_message_length: 2000
+    subject: '{count} changes: {jobs}'
+    webhook_url: ''
+  email:
+    enabled: false
+    from: ''
+    html: false
+    method: smtp
+    reply_to: ''
+    sendmail:
+      path: sendmail
+    smtp:
+      auth: true
+      host: localhost
+      port: 25
+      starttls: true
+      user: ''
+    subject: '{count} changes: {jobs}'
+    to: ''
+  gotify:
+    enabled: false
+    priority: 0
+    server_url: ''
+    title: null
+    token: ''
+  html:
+    diff: unified
+    separate: false
+  ifttt:
+    enabled: false
+    event: ''
+    key: ''
+  mailgun:
+    api_key: ''
+    domain: ''
+    enabled: false
+    from_mail: ''
+    from_name: ''
+    region: us
+    subject: '{count} changes: {jobs}'
+    to: ''
+  markdown:
+    details: true
+    footer: true
+    minimal: false
+    separate: false
+  matrix:
+    access_token: ''
+    enabled: false
+    homeserver: ''
+    room_id: ''
+  mattermost:
+    enabled: false
+    max_message_length: 40000
+    webhook_url: ''
+  prowl:
+    api_key: ''
+    application: ''
+    enabled: false
+    priority: 0
+    subject: '{count} changes: {jobs}'
+  pushbullet:
+    api_key: ''
+    enabled: false
+  pushover:
+    app: ''
+    device: null
+    enabled: false
+    priority: normal
+    sound: spacealarm
+    user: ''
+  shell:
+    command: ''
+    enabled: false
+    ignore_stderr: false
+    ignore_stdout: true
+  slack:
+    enabled: false
+    max_message_length: 40000
+    webhook_url: ''
+  stdout:
+    color: false
+    enabled: true
+  telegram:
+    bot_token: ''
+    chat_id: ''
+    enabled: false
+    monospace: false
+    silent: false
+  text:
+    details: true
+    footer: true
+    line_length: 75
+    minimal: false
+    separate: false
+  xmpp:
+    enabled: false
+    recipient: ''
+    sender: ''
