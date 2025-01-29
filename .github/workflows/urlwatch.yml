@@ -2,7 +2,7 @@ name: Monitor Upstream Releases
 
 on:
   schedule:
-    - cron: '10 10 * * *'  # Daily at 4:10am
+    - cron: '10 10 * * *'  # Daily at 10:10
   workflow_dispatch:
 
 permissions:
@@ -78,7 +78,7 @@ jobs:
             await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: 'New official releases published',
+              title: 'New official releases available 🎉',
               body: body,
               labels: ['upstream', 'update']  # Add labels
             });
