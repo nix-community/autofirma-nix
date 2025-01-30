@@ -13,7 +13,7 @@ env:
   NIXOS_STABLE_BRANCH: ${{ vars.NIXOS_STABLE_BRANCH }}
 
 jobs:
-  update_main_and_stable:
+  update_main_develop_and_stable:
     name: Update Main and Stable Branches
     runs-on: ubuntu-latest
     strategy:
@@ -21,6 +21,7 @@ jobs:
       matrix:
         branch: [
           "main",
+          "develop",
           "release-${{ vars.NIXOS_STABLE_BRANCH }}"
         ]
     env:
