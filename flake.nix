@@ -85,6 +85,9 @@
       systems = [
         "x86_64-linux"
       ];
+      imports = [
+        inputs.flake-parts.flakeModules.easyOverlay
+      ];
       perSystem = {
         config,
         system,
@@ -116,6 +119,9 @@
 
       in {
         formatter = pkgs.alejandra;
+        overlayAttrs = {
+          inherit (config.packages) autofirma; # configuradorfnmt dnieremote are specific to x86_64-linux
+        };
         devShells.default = let
           update-fixed-output-derivations = pkgs.callPackage ./nix/tools/update-fixed-output-derivations {};
           download-autofirma-trusted-providers = pkgs.callPackage ./nix/tools/download-autofirma-trusted-providers {};
@@ -215,6 +221,9 @@
             hm-standalone-dnieremote-config-jumpintro-usb = pkgs.callPackage ./nix/tests/hm-standalone/dnieremote/config/jumpintro-usb.nix { inherit self home-manager; };
             hm-standalone-dnieremote-config-jumpintro-no = pkgs.callPackage ./nix/tests/hm-standalone/dnieremote/config/jumpintro-no.nix { inherit self home-manager; };
             hm-standalone-dnieremote-config-wifiport = pkgs.callPackage ./nix/tests/hm-standalone/dnieremote/config/wifiport.nix { inherit self home-manager; };
+
+            # Overlay
+            overlay = pkgs.callPackage ./nix/tests/overlay { inherit self; };
 
         };
       in
