@@ -34,7 +34,7 @@
         ./patches/clienteafirma/pr-367.patch
         ./patches/clienteafirma/certutilpath.patch
         ./patches/clienteafirma/etc_config.patch
-        ./patches/clienteafirma/aarch64_elf.patch
+        ./patches/clienteafirma/aarch64_elf.patch  # Until https://github.com/ctt-gob-es/clienteafirma/pull/435 gets merged
       ]
       ++ (lib.optional disableJavaVersionCheck [
         ./patches/clienteafirma/dont_check_java_version.patch
