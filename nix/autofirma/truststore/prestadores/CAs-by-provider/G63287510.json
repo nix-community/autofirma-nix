@@ -1,7 +1,1 @@
-[
-  {"cif": "G63287510", "hash": "sha256-LP/QaC3INUyGGzvoLEpTonRoSBktLX/FbTPjvnopEAU=", "url": "https://crl.anf.es/certificates-download/ANFACEcuadorRootCA.cer"},
-  {"cif": "G63287510", "hash": "sha256-+NhqlreyFcWoeJaXJkEE0pa0W1x5y0FY7pOhUOFNyaQ=", "url": "https://crl.anf.es/certificates-download/ANFACSLRootCA.cer"},
-  {"cif": "G63287510", "hash": "sha256-DzYdiyWBI+qbuE3T8sghwChUeWJuEYXhLxoEuFVG5Fk=", "url": "https://crl.anf.es/certificates-download/ANFHighAssuranceEcuadorRootCA.cer"},
-  {"cif": "G63287510", "hash": "sha256-+4/sdZFpuRBrHlEWRMYYxRMENz9sBkMIjYvv/RuZdZk=", "url": "https://crl.anf.es/certificates-download/ANFSecureServerRootCA.cer"},
-  {"cif": "G63287510", "hash": "sha256-4K+9LA7pWmjNmjxZCy0/4HwKbQvnlq5SkeQk1HeSF44=", "url": "https://crl.anf.es/certificates-download/ANF_Global_Root_CA_SHA256_2036.cer"}
-]
+[]
