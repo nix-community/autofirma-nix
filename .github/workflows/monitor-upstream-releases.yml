@@ -1,0 +1,116 @@
+name: Monitor Upstream Releases
+on:
+  schedule:
+    - cron: '10 10 * * *'  # Daily at 10:10
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+  issues: write
+
+jobs:
+  monitor_autofirma:
+    name: Monitor AutoFirma Releases
+    runs-on: ubuntu-latest
+    steps:
+      - name: Monitor AutoFirma Releases
+        id: monitor
+        uses: nilp0inter/urlwatch-action@v0.1.0
+        with:
+          cache-name: 'urlwatch-autofirma'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          urls: |
+            url: "https://firmaelectronica.gob.es/Home/Descargas.html"
+            ssl_no_verify: true
+            filter:
+              - xpath: //a
+              - grep: "AutoFirma"
+              - grep: "Linux"
+              - xpath: //@href
+
+      - name: Create change notification
+        if: ${{ steps.monitor.outputs.changes != '' }}
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        env:
+          DETECTED_CHANGES: ${{ steps.monitor.outputs.report }}
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'New official release of AutoFirma found! 🎉',
+              body: process.env.DETECTED_CHANGES,
+              labels: ['upstream', 'update']
+            });
+
+  monitor_configuradorfnmt:
+    name: Monitor Configurador FNMT-RCM Releases
+    runs-on: ubuntu-latest
+    steps:
+      - name: Monitor Configurador FNMT-RCM Releases
+        id: monitor
+        uses: nilp0inter/urlwatch-action@v0.1.0
+        with:
+          cache-name: 'urlwatch-configuradorfnmt'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          urls: |
+            url: "https://www.sede.fnmt.gob.es/descargas/descarga-software/instalacion-software-generacion-de-claves"
+            ssl_no_verify: true
+            filter:
+              - xpath: //a
+              - grep: "Configurador"
+              - grep: "FNMT-RCM"
+              - grep: "Linux"
+              - xpath: //@href
+
+      - name: Create change notification
+        if: ${{ steps.monitor.outputs.changes != '' }}
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        env:
+          DETECTED_CHANGES: ${{ steps.monitor.outputs.report }}
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'New official release of Configurador FNMT-RCM found! 🎉',
+              body: process.env.DETECTED_CHANGES,
+              labels: ['upstream', 'update']
+            });
+
+  monitor_dnieremote:
+    name: Monitor DNIeRemote Releases
+    runs-on: ubuntu-latest
+    steps:
+      - name: Monitor DNIeRemote Releases
+        id: monitor
+        uses: nilp0inter/urlwatch-action@v0.1.0
+        with:
+          cache-name: 'urlwatch-dnieremote'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          urls: |
+            name: "DNIeRemote"
+            url: "https://www.dnielectronico.es/PortalDNIe/PRF1_Cons02.action?pag=REF_1015&id_menu=67"
+            ssl_no_verify: true
+            filter:
+              - xpath: //a
+              - grep: "DNIe"
+              - grep: "Remote"
+              - grep: "Linux"
+              - xpath: //@href
+
+      - name: Create change notification
+        if: ${{ steps.monitor.outputs.changes != '' }}
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        env:
+          DETECTED_CHANGES: ${{ steps.monitor.outputs.report }}
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'New official release of DNIeRemote found! 🎉',
+              body: process.env.DETECTED_CHANGES,
+              labels: ['upstream', 'update']
+            });
