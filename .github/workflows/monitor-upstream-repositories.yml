@@ -1,0 +1,53 @@
+name: Monitor Upstream Repositories
+on:
+  schedule:
+    - cron: '0 10 * * *'  # Daily at 10:00
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+  issues: write
+
+jobs:
+  monitor:
+    name: Monitor ${{ matrix.owner }}/${{ matrix.repo }}/${{ matrix.object }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        object:
+          - tags
+          - branches
+        owner:
+          - ctt-gob-es
+        repo:
+          - clienteafirma
+          - clienteafirma-external
+          - jmulticard
+    steps:
+      - name: Monitor ${{ matrix.owner }}/${{ matrix.repo }}/${{ matrix.object }}
+        id: monitor
+        uses: nilp0inter/urlwatch-action@v0.1.0
+        with:
+          cache-name: 'urlwatch-cache-${{ matrix.owner }}-${{ matrix.repo }}-${{ matrix.object }}'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          urls: |
+            url: https://api.github.com/repos/${{ matrix.owner }}/${{ matrix.repo }}/${{ matrix.object }}
+            filter:
+              - jq: '.[] | .name'
+              - sort:
+
+      - name: Create change notification
+        if: ${{ steps.monitor.outputs.changes != '' }}
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        env:
+          DETECTED_CHANGES: ${{ steps.monitor.outputs.report }}
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '${{ matrix.owner }}/${{ matrix.repo }}: Detected changes in ${{ matrix.object }}',
+              body: `# Detected changes in ${{ matrix.object }}\n\n${process.env.DETECTED_CHANGES}`,
+              labels: ['upstream']
+            });
