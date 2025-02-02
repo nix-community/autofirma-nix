@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Monitor AutoFirma Releases
         id: monitor
-        uses: nilp0inter/urlwatch-action@v0.1.0
+        uses: nilp0inter/urlwatch-action@daaec60bb7dd6071ee3c25665683bedb6515070c # v0.1.0
         with:
           cache-name: 'urlwatch-autofirma'
           token: ${{ secrets.GITHUB_TOKEN }}
