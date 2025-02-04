@@ -48,9 +48,10 @@ pkgs.nixosTest {
 
     machine.wait_for_file(f"~/.mozilla/firefox/{profile_dir}/cert9.db")
     machine.wait_for_file(f"~/.mozilla/firefox/{profile_dir}/key4.db")
-    machine.sleep(3)
+    machine.sleep(5)
 
     machine.succeed(f'pk12util -i ${testCerts}/ciudadano_scard_act.p12 -d sql:/root/.mozilla/firefox/{profile_dir} -W ""')
+    machine.sleep(5)
 
     # Open firefox and allow it to import AutoConfig settings
     machine.execute("firefox --new-tab https://autofirma-nix.com/index.php >&2 &")

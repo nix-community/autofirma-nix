@@ -52,9 +52,10 @@ pkgs.nixosTest {
 
     machine.wait_for_file(f"/home/autofirma-user/.mozilla/firefox/{profile_dir}/cert9.db")
     machine.wait_for_file(f"/home/autofirma-user/.mozilla/firefox/{profile_dir}/key4.db")
-    machine.sleep(3)
+    machine.sleep(5)
 
     machine.succeed(user_cmd(f'pk12util -i ${testCerts}/ciudadano_scard_act.p12 -d sql:/home/autofirma-user/.mozilla/firefox/{profile_dir} -W ""'))
+    machine.sleep(5)
 
     machine.succeed("rm -f /tmp/test_output.txt")
 
