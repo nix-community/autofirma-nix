@@ -169,6 +169,7 @@
           fixed-output-derivations = builtins.fromJSON (builtins.readFile ./fixed-output-derivations.lock);
           prestadores = pkgs.callPackage ./nix/autofirma/truststore/prestadores {};
           pom-tools = pkgs.callPackage ./nix/tools/pom-tools {};
+          properties-to-json = pkgs.callPackage ./nix/tools/properties-to-json {};
           jmulticard = pkgs.callPackage ./nix/autofirma/dependencies/jmulticard {
             inherit pom-tools;
 
@@ -188,7 +189,7 @@
             govTrustedCerts = prestadores;
           };
           autofirma = pkgs.callPackage ./nix/autofirma/default.nix {
-            inherit jmulticard clienteafirma-external pom-tools autofirma-truststore;
+            inherit jmulticard clienteafirma-external pom-tools autofirma-truststore properties-to-json;
 
             src = autofirma-src;
 
