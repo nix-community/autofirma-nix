@@ -26,12 +26,12 @@ in {
         literalExpression
         "`programs.autofirma.truststore.package` with applied configuration";
       description = ''
-        The AutoFirma truststore package after applying configuration.
+        The Autofirma truststore package after applying configuration.
       '';
     };
   };
   options.programs.autofirma = {
-    enable = mkEnableOption "AutoFirma";
+    enable = mkEnableOption "Autofirma";
     package = mkPackageOption inputs.self.packages.${system} "autofirma" {};
     finalPackage = mkOption {
       type = types.package;
@@ -44,7 +44,7 @@ in {
         literalExpression
         "`programs.autofirma.package` with applied configuration";
       description = ''
-        The AutoFirma package after applying configuration.
+        The Autofirma package after applying configuration.
       '';
     };
 
@@ -61,21 +61,21 @@ in {
             description = "Profile name.";
           };
 
-          enable = mkEnableOption "Enable AutoFirma in this firefox profile.";
+          enable = mkEnableOption "Enable Autofirma in this firefox profile.";
         };
       }));
-      description = "Firefox profiles to integrate AutoFirma with.";
+      description = "Firefox profiles to integrate Autofirma with.";
     };
   };
   config = mkIf cfg.enable {
     home.activation.createAutoFirmaCert = lib.hm.dag.entryAfter ["writeBoundary"] ''
       verboseEcho Running create-autofirma-cert
-      run ${lib.getExe create-autofirma-cert} $VERBOSE_ARG ${config.home.homeDirectory}/.afirma/AutoFirma
+      run ${lib.getExe create-autofirma-cert} $VERBOSE_ARG ${config.home.homeDirectory}/.afirma/Autofirma
     '';
     home.packages = [cfg.finalPackage];
     programs.firefox.policies.Certificates = mkIf anyFirefoxIntegrationProfileIsEnabled {
       ImportEnterpriseRoots = true;
-      Install = [ "${config.home.homeDirectory}/.afirma/AutoFirma/AutoFirma_ROOT.cer" ];
+      Install = [ "${config.home.homeDirectory}/.afirma/Autofirma/AutoFirma_ROOT.cer" ];
     };
     programs.firefox.profiles = flip mapAttrs cfg.firefoxIntegration.profiles (name: {enable, ...}: {
       settings = mkIf enable {

@@ -23,13 +23,13 @@ in {
         literalExpression
         "`programs.autofirma.truststore.package` with applied configuration";
       description = ''
-        The AutoFirma truststore package after applying configuration.
+        The Autofirma truststore package after applying configuration.
       '';
     };
   };
 
   options.programs.autofirma = {
-    enable = mkEnableOption "AutoFirma";
+    enable = mkEnableOption "Autofirma";
     fixJavaCerts = mkEnableOption "Fix Java certificates";
     package = mkPackageOption inputs.self.packages.${system} "autofirma" {};
     finalPackage = mkOption {
@@ -43,7 +43,7 @@ in {
         literalExpression
         "`programs.autofirma.package` with applied configuration";
       description = ''
-        The AutoFirma package after applying configuration.
+        The Autofirma package after applying configuration.
       '';
     };
     firefoxIntegration.enable = mkEnableOption "Firefox integration";
@@ -59,18 +59,18 @@ in {
         "${cfg.finalPackage}/etc/firefox/pref/AutoFirma.js"
       ];
       policies.Certificates.ImportEnterpriseRoots = true;
-      policies.Certificates.Install = [ "/etc/AutoFirma/AutoFirma_ROOT.cer" ];
+      policies.Certificates.Install = [ "/etc/Autofirma/AutoFirma_ROOT.cer" ];
     };
   };
 
   config.systemd.services = mkIf (cfg.enable && cfg.firefoxIntegration.enable) {
     create-autofirma-cert = {
       enable = true;
-      description = "Create certificate for AutoFirma and browser communication";
+      description = "Create certificate for Autofirma and browser communication";
       wants = [ "display-manager.service" ];
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = "${lib.getExe create-autofirma-cert} /etc/AutoFirma";
+        ExecStart = "${lib.getExe create-autofirma-cert} /etc/Autofirma";
         RemainAfterExit = true;
       };
       wantedBy = [ "multi-user.target" ];

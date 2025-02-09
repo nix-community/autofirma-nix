@@ -158,8 +158,8 @@
     installPhase = ''
       runHook preInstall
       mkdir -p $out/bin $out/lib/AutoFirma
-      install -Dm644 afirma-simple/target/AutoFirma.jar $out/lib/AutoFirma
-      install -Dm644 afirma-ui-simple-configurator/target/AutoFirmaConfigurador.jar $out/lib/AutoFirma
+      install -Dm644 afirma-simple/target/Autofirma.jar $out/lib/AutoFirma
+      install -Dm644 afirma-ui-simple-configurator/target/AutofirmaConfigurador.jar $out/lib/AutoFirma
 
       runHook postInstall
     '';
@@ -198,7 +198,7 @@
         --add-flags "-Dswing.crossplatformlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel" \
         --add-flags "-Dawt.useSystemAAFontSettings=lcd" \
         --add-flags "-Dswing.aatext=true" \
-        --add-flags "-jar ${autofirma-jar}/lib/AutoFirma/AutoFirma.jar"
+        --add-flags "-jar ${autofirma-jar}/lib/AutoFirma/Autofirma.jar"
 
       substituteInPlace $out/etc/firefox/pref/AutoFirma.js \
         --replace-fail /usr/bin/autofirma $out/bin/autofirma
@@ -217,8 +217,8 @@
   };
 
   desktopItem = makeDesktopItem {
-    name = "AutoFirma";
-    desktopName = "AutoFirma";
+    name = "Autofirma";
+    desktopName = "Autofirma";
     genericName = "Herramienta de firma";
     exec = "autofirma %u";
     icon = "${thisPkg}/lib/AutoFirma/AutoFirma.png";
@@ -244,7 +244,7 @@ in
       ln -s ${thisPkg}/etc/firefox/pref/AutoFirma.js $out/etc/firefox/pref/AutoFirma.js
     '';
     extraBwrapArgs = [
-      "--ro-bind-try /etc/AutoFirma /etc/AutoFirma"
+      "--ro-bind-try /etc/Autofirma /etc/Autofirma"
     ];
     passthru = {
       clienteafirma = thisPkg;
