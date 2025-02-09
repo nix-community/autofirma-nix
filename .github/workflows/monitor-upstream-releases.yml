@@ -1,7 +1,7 @@
 name: Monitor Upstream Releases
 on:
   schedule:
-    - cron: '10 10 * * *'  # Daily at 10:10
+    - cron: "0 5 * * *"  # Daily at 06:00 CET / 07:00 CEST
   workflow_dispatch:
 
 permissions:

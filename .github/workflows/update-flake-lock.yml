@@ -1,8 +1,7 @@
 name: Update Flake Lock
 on:
   schedule:
-    # Update every Sunday and Wednesday at 03:51 UTC
-    - cron: "51 3 * * 0,3"
+    - cron: "0 4 * * 2,4,6"  # Tuesday, Thursday, Saturday at 05:00 CET / 06:00 CEST
   workflow_dispatch:
   repository_dispatch:
 

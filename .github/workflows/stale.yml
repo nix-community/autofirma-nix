@@ -1,7 +1,7 @@
 name: Close Inactive Issues
 on:
   schedule:
-    - cron: "0 2 * * *"
+    - cron: "0 2 * * *"  # Daily at 03:00 CET / 04:00 CEST
   workflow_dispatch:
 
 jobs:
