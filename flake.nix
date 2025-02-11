@@ -16,6 +16,10 @@
     python-updates.url = "github:NixOS/nixpkgs/python-updates";  # Until #376856 get's into nixos-unstable
     home-manager.url = "github:nix-community/home-manager";
     flake-parts.url = "github:hercules-ci/flake-parts";
+    flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
+    nix-unit.url = "github:nix-community/nix-unit";
+    nix-unit.inputs.nixpkgs.follows = "nixpkgs";
+    nix-unit.inputs.flake-parts.follows = "flake-parts";
   };
 
   # Autofirma sources
@@ -45,6 +49,7 @@
     jmulticard-src,
     clienteafirma-external-src,
     autofirma-src,
+    nix-unit
   }:
     flake-parts.lib.mkFlake {inherit inputs;} {
       flake = {
@@ -81,6 +86,7 @@
           dnieremote = pkgs.callPackage ./nix/dnieremote/default.nix {openssl_1_1 = ignoreVulnerable_openssl_1_1;};
           configuradorfnmt = pkgs.callPackage ./nix/configuradorfnmt/default.nix {};
         };
+        tests = import ./nix/tests/unit { inherit self; }; 
         checks.x86_64-linux = let
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
         in {
@@ -117,6 +123,7 @@
       ];
       imports = [
         inputs.flake-parts.flakeModules.easyOverlay
+        inputs.nix-unit.modules.flake.default
       ];
       perSystem = {
         config,
@@ -163,6 +170,7 @@
             update-fixed-output-derivations
             download-autofirma-trusted-providers
             download-url-linked-CAs
+            nix-unit.packages.${system}.default
           ];
         };
         packages = let
