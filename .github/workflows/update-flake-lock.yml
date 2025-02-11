@@ -1,7 +1,7 @@
 name: Update Flake Lock
 on:
   schedule:
-    - cron: "0 4 * * 2,4,6"  # Tuesday, Thursday, Saturday at 05:00 CET / 06:00 CEST
+    - cron: "0 4 * * *"  # Daily at 05:00 CET / 06:00 CEST
   workflow_dispatch:
   repository_dispatch:
 
