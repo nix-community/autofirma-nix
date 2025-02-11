@@ -271,6 +271,10 @@ def main(cli_args):
         for r in results:
             r['cif'] = cif
 
+    if not results:
+        print("No self-signed certificates found. ABORTING RUN!", file=sys.stderr)
+        sys.exit(1)
+
     # Print final JSON array
     sorted_result = sorted([NoIndent(r) for r in  results], key=lambda r: r.value["url"])
     print(json.dumps(sorted_result, cls=MyEncoder, indent=2, sort_keys=True))
