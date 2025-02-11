@@ -25,6 +25,7 @@ jobs:
 
       - id: extract-fetch-links
         name: Extract Fetch Links and Generate Markdown
+        shell: bash
         run: |
           echo "fetch_links=$(jq -c '.' nix/autofirma/truststore/prestadores/CAs_fetch_links.json)" >> $GITHUB_OUTPUT
           echo 'markdown_links<<EOF' >> $GITHUB_OUTPUT
@@ -47,6 +48,7 @@ jobs:
         uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
 
       - name: Download CA for ${{ matrix.fetch_link.cif }}
+        shell: bash  # https://github.com/actions/runner-images/issues/4459#issuecomment-1374859960
         run: |
           echo '${{ toJson(matrix.fetch_link) }}' \
             | nix --accept-flake-config develop --command -- download-url-linked-CAs \

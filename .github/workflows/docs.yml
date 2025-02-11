@@ -78,5 +78,6 @@ jobs:
 
       - name: Check flake-info
         id: flake-info
+        shell: bash
         run: |
           nix run github:NixOS/nixos-search#flake-info -- --json flake github:${{ github.repository }}/${{ github.event.pull_request.head.sha || github.sha }} | jq .
