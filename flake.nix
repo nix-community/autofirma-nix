@@ -13,7 +13,6 @@
   # Common inputs
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    python-updates.url = "github:NixOS/nixpkgs/python-updates";  # Until #376856 get's into nixos-unstable
     home-manager.url = "github:nix-community/home-manager";
     flake-parts.url = "github:hercules-ci/flake-parts";
   };
@@ -39,7 +38,6 @@
   outputs = inputs @ {
     self,
     flake-parts,
-    python-updates,
     nixpkgs,
     home-manager,
     jmulticard-src,
@@ -125,28 +123,7 @@
         lib,
         ...
       }: let
-        workingSeleniumPackage = python-updates.legacyPackages.${system}.python3.pkgs.selenium;
-        pythonPackagesExtensionsOverlay = (final: prev: let
-          seleniumOverlay = pythonFinal: pythonPrev: {
-            selenium = pythonPrev.selenium.overridePythonAttrs (oldAttrs: {
-              inherit (workingSeleniumPackage) version patches;
-              src = final.fetchFromGitHub {
-                inherit (workingSeleniumPackage.src) owner repo tag;
-                hash = workingSeleniumPackage.src.outputHash;
-              };
-            });
-          };
-          python3 = prev.python3.override {
-            packageOverrides = seleniumOverlay;
-          };
-        in
-        {
-          inherit python3;
-          python3Packages = python3.pkgs;
-        });
-
-        pkgs = import nixpkgs { inherit system; overlays = [ pythonPackagesExtensionsOverlay ]; };
-
+        pkgs = nixpkgs.legacyPackages.${system};
       in {
         formatter = pkgs.alejandra;
         overlayAttrs = {

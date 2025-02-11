@@ -131,22 +131,6 @@
         "type": "github"
       }
     },
-    "python-updates": {
-      "locked": {
-        "lastModified": 1737971903,
-        "narHash": "sha256-+26c9vcSbP910FpAzJN2Ctt1WPyq66aXBtIKjw11j8A=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "53b61ec0db99a432b24ca6159597e7bbd644ceb3",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "python-updates",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "autofirma-src": "autofirma-src",
@@ -154,8 +138,7 @@
         "flake-parts": "flake-parts",
         "home-manager": "home-manager",
         "jmulticard-src": "jmulticard-src",
-        "nixpkgs": "nixpkgs_2",
-        "python-updates": "python-updates"
+        "nixpkgs": "nixpkgs_2"
       }
     }
   },
