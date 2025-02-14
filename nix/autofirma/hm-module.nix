@@ -75,7 +75,7 @@ in {
     home.packages = [cfg.finalPackage];
     programs.firefox.policies.Certificates = mkIf anyFirefoxIntegrationProfileIsEnabled {
       ImportEnterpriseRoots = true;
-      Install = [ "${config.home.homeDirectory}/.afirma/Autofirma/AutoFirma_ROOT.cer" ];
+      Install = [ "${config.home.homeDirectory}/.afirma/Autofirma/Autofirma_ROOT.cer" ];
     };
     programs.firefox.profiles = flip mapAttrs cfg.firefoxIntegration.profiles (name: {enable, ...}: {
       settings = mkIf enable {

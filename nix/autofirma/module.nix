@@ -59,7 +59,7 @@ in {
         "${cfg.finalPackage}/etc/firefox/pref/AutoFirma.js"
       ];
       policies.Certificates.ImportEnterpriseRoots = true;
-      policies.Certificates.Install = [ "/etc/Autofirma/AutoFirma_ROOT.cer" ];
+      policies.Certificates.Install = [ "/etc/Autofirma/Autofirma_ROOT.cer" ];
     };
   };
 
