@@ -1,0 +1,60 @@
+name: Update Fixed-Output Derivations Lock
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - 'release-*'
+    paths:
+      - flake.lock
+  workflow_dispatch:
+
+jobs:
+  update_fixed_output:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          # Checks out the branch that triggered the workflow
+          ref: ${{ github.ref }}
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+
+      - name: Update fixed-output derivations
+        run: |
+          nix develop --accept-flake-config --command update-fixed-output-derivations
+
+      - name: Create Pull Request for the updated fixed-output derivations lock file
+        uses: peter-evans/create-pull-request@67ccf781d68cd99b580ae25a5c18a1cc84ffff1f # v7.0.6
+        with:
+          # Use the branch name from the push event for both the new branch and the PR base
+          branch: update/fixed-output-derivations/${{ github.ref_name }}
+          base: ${{ github.ref_name }}
+          author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+          delete-branch: true
+          labels: |
+            dependencies
+            merge-queue
+          commit-message: 'fixed-output-derivations.lock'
+          title: "Update fixed-output-derivations.lock for `${{ github.ref_name }}`"
+          body: |
+            This pull request updates the `fixed-output-derivations.lock` file for the `${{ github.ref_name }}` branch. The updates ensure that the hashes for the fixed-output derivations are current, maintaining the integrity of our build process. These updates encompass all necessary external dependencies required for building the project's components.
+
+            #### Why This Update?
+            Keeping the `fixed-output-derivations.lock` file updated is crucial for:
+            - **Reproducible Builds:** Ensures that builds are consistent across different environments by locking dependency versions.
+            - **Security:** Helps in verifying the integrity of dependencies, mitigating potential security risks from tampered or malicious packages.
+
+            #### Reviewer Instructions:
+            1. **Verify Automated Tests:** Please ensure that all automated tests pass successfully.
+            2. **Merge Guidelines:** Once verification is complete, squash and merge this pull request to maintain a clean commit history.
+
+            Thank you for reviewing!
+
+            ---
+
+            *This PR was generated automatically by a bot to keep dependencies up-to-date.*
+          add-paths: fixed-output-derivations.lock
