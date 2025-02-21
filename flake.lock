@@ -20,11 +20,11 @@
     "clienteafirma-external-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1737554991,
-        "narHash": "sha256-YWHHhgL7VLf4wX7acSHG9WM82yR4pQBZvyXTciwzRx4=",
+        "lastModified": 1740051387,
+        "narHash": "sha256-BtIioz8PtjXTvEAkrhUCd78uCWo9wKEMF3r6fChl07w=",
         "owner": "ctt-gob-es",
         "repo": "clienteafirma-external",
-        "rev": "bd0bc17a54351bf032e32aedb09df1f21c6f6271",
+        "rev": "764b97e025e222f49cb19c97c3860769e5f80a95",
         "type": "github"
       },
       "original": {
@@ -56,11 +56,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1739992710,
-        "narHash": "sha256-9kEscmGnXHjSgcqyJR4TzzHhska4yz1inSQs6HuO9qU=",
+        "lastModified": 1740060750,
+        "narHash": "sha256-FOC9OzJ5Ckh6VjzGSRh4F3UCUOdM8NrzQT19PQcQJ44=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "1c189f011447810af939a886ba7bee33532bb1f9",
+        "rev": "0c0b0ac8af6ca76b1fcb514483a9bd73c18f1e8c",
         "type": "github"
       },
       "original": {
