@@ -95,7 +95,7 @@
       chmod -R +w $out/.m2/repository
 
       mvn install -Dmaven.repo.local=$out/.m2/repository -DskipTests -Denv=dev  # Some install modules are only declared in the dev profile
-
+                                                                                # but are needed in the install profile.  We delete them later.
       mvn dependency:go-offline -Dmaven.repo.local=$out/.m2/repository -DskipTests -Denv=install
 
       runHook postBuild
@@ -155,11 +155,8 @@
       chmod -R u+w .m2
 
       mvn --offline install -Dmaven.javadoc.skip=true -Dmaven.repo.local=.m2/repository -DskipTests -Denv=dev  # As in the dependencies derivation, some modules are only declared in the dev profile
-                                                                                     # but are needed in the install profile.
-      mvn --offline package -Dmaven.javadoc.skip=true -Dmaven.repo.local=.m2/repository -DskipTests -Denv=install
-
-      mvn --offline javadoc:javadoc@xml-doclet -Dmaven.repo.local=.m2/repository -DskipTests -Denv=dev
-      mvn --offline javadoc:javadoc@xml-doclet -Dmaven.repo.local=.m2/repository -DskipTests -Denv=install
+                                                                                                               # but are needed in the install profile.
+      mvn --offline package -Dmaven.repo.local=.m2/repository -DskipTests -Denv=install
 
       properties-to-json "$src/afirma-simple/src/main/resources/properties/preferences.properties" afirma-simple/target/javadoc.xml > preferences.json
 
