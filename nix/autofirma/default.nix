@@ -168,12 +168,11 @@
 
       chmod -R u+w .m2
 
-      mvn --offline install -Dmaven.javadoc.skip=true -Dmaven.repo.local=.m2/repository -DskipTests -Denv=dev  # As in the dependencies derivation, some modules are only declared in the dev profile
-                                                                                                               # but are needed in the install profile.
+      mvn --offline install -Dmaven.repo.local=.m2/repository -DskipTests -Denv=dev  # As in the dependencies derivation, some modules are only declared in the dev profile
+                                                                                     # but are needed in the install profile.
       mvn --offline package -Dmaven.repo.local=.m2/repository -DskipTests -Denv=install
 
-      properties-to-json "$src/afirma-simple/src/main/resources/properties/preferences.properties" afirma-simple/target/javadoc.xml > preferences.json
-
+      properties-to-json "$src/afirma-ui-simple-configurator-common/src/main/resources/properties/preferences.properties" afirma-ui-simple-configurator-common/target/javadoc.xml > preferences.json
     '';
 
     installPhase = ''
