@@ -36,7 +36,6 @@
         ./patches/clienteafirma/certutilpath.patch
         ./patches/clienteafirma/etc_config.patch
         ./patches/clienteafirma/aarch64_elf.patch  # Until https://github.com/ctt-gob-es/clienteafirma/pull/435 gets merged
-        ./patches/clienteafirma/xmldoclet.patch
       ]
       ++ (lib.optional disableJavaVersionCheck [
         ./patches/clienteafirma/dont_check_java_version.patch
@@ -52,19 +51,35 @@
       cp -R . $out/
     '';
 
-    postPatch = ''
-      update-java-version "17"
-      update-pkg-version "${src.rev}-autofirma-nix"
+    postPatch = let
+      javaVersion = "17";
+      srcVersion = "${src.rev}-autofirma-nix";
+      javadocVersion = "3.11.2";
+      xmlDocletVersion = "2.0.2";
+    in
+    ''
+      # Update the version of the Java runtime to use
+      update-java-version "${javaVersion}"
 
+      # Update the version of the package to a custom one based on the revision we're building
+      update-pkg-version "${srcVersion}"
+
+      # Make sure the version of the external dependencies is the one we've built
       update-dependency-version-by-groupId "${clienteafirma-external.groupId}" "${clienteafirma-external.finalVersion}"
       update-dependency-version-by-groupId "${jmulticard.groupId}" "${jmulticard.finalVersion}"
-      update-dependency-version-by-groupId "es.gob.afirma" "${src.rev}-autofirma-nix"
+      update-dependency-version-by-groupId "es.gob.afirma" "${srcVersion}"
 
+      # Remove some modules that we don't need in the build
       remove-module-on-profile "env-install" "afirma-server-triphase-signer"
       remove-module-on-profile "env-install" "afirma-signature-retriever"
       remove-module-on-profile "env-install" "afirma-signature-storage"
 
+      # For the build to be deterministic, we need to reset the project build timestamp
       reset-project-build-timestamp
+
+      # Register the xmldoclet plugin in the pom.xml for documentation generation
+      update-plugin-version-by-groupId "org.apache.maven.plugins" "maven-javadoc-plugin" "${javadocVersion}"
+      add-xml-doclet-to-javadoc-plugin "${javadocVersion}" "${xmlDocletVersion}"
 
       substituteInPlace afirma-ui-simple-configurator/src/main/java/es/gob/afirma/standalone/configurator/ConfiguratorFirefoxLinux.java \
         --replace-fail '@certutilpath' '${nss.tools}/bin/certutil'
