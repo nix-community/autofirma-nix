@@ -1,6 +1,6 @@
 > **⚠️ Important Notice: Cache Configuration Update**
 >
-> We recently migrated the `autofirma-nix` repository from one of the creators' accounts to the Nix Community's organization.  
+> We recently migrated the `autofirma-nix` repository from one of the creators' accounts to the Nix Community's organization.
 > As part of this migration, the binary cache has also changed. To avoid unnecessary compilations in your local machine, please update your `flake.nix` configuration to use the new cache. Replace the `nixConfig` section in your `flake.nix` file with the following:
 >
 > ```nix
@@ -22,9 +22,9 @@
 This repository provides a suite of tools needed to interact with Spain’s public administration,
 alongside NixOS and Home Manager modules for easy integration. These tools include:
 
-- **AutoFirma** for digitally signing documents  
-- **DNIeRemote** for using an NFC-based national ID with an Android device as an NFC reader  
-- **Configurador FNMT-RCM** for securely requesting the personal certificate from the Spanish Royal Mint (**Fábrica Nacional de Moneda y Timbre**)  
+- **Autofirma** for digitally signing documents
+- **DNIeRemote** for using an NFC-based national ID with an Android device as an NFC reader
+- **Configurador FNMT-RCM** for securely requesting the personal certificate from the Spanish Royal Mint (**Fábrica Nacional de Moneda y Timbre**)
 
 ## Usage Example
 
@@ -32,17 +32,17 @@ alongside NixOS and Home Manager modules for easy integration. These tools inclu
 $ nix run --accept-flake-config github:nix-community/autofirma-nix#dnieremote
 ```
 
-## AutoFirma on NixOS and Home Manager
+## Autofirma on NixOS and Home Manager
 
-A NixOS module is provided to enable AutoFirma on NixOS and another one for Home Manager.
-You only need to enable one of them, depending on whether you want AutoFirma
+A NixOS module is provided to enable Autofirma on NixOS and another one for Home Manager.
+You only need to enable one of them, depending on whether you want Autofirma
 system-wide or at the user level.
 
 ### Home Manager Configuration
 
-The integration of AutoFirma in Home Manager enables the `autofirma` command for
+The integration of Autofirma in Home Manager enables the `autofirma` command for
 signing PDF documents and configures the Firefox browser (if enabled through
-`programs.firefox.enable`) to use AutoFirma on websites that require it.
+`programs.firefox.enable`) to use Autofirma on websites that require it.
 
 Additionally, you can enable DNIe integration, including NFC-based DNIe from an
 Android mobile via DNIeRemote.
@@ -98,7 +98,7 @@ Manager installation method. Below are examples for a standalone configuration.
   config = {
     programs.autofirma.enable = true;
     programs.autofirma.firefoxIntegration.profiles = {
-      myprofile = {  # The name of the Firefox profile where AutoFirma will be enabled
+      myprofile = {  # The name of the Firefox profile where Autofirma will be enabled
         enable = true;
       };
     };
@@ -130,9 +130,9 @@ Manager installation method. Below are examples for a standalone configuration.
 
 ### NixOS Configuration
 
-The AutoFirma integration in NixOS enables the `autofirma` command for signing PDF
+The Autofirma integration in NixOS enables the `autofirma` command for signing PDF
 documents and configures the Firefox browser (if enabled through
-`programs.firefox.enable`) to use AutoFirma on websites that require it.
+`programs.firefox.enable`) to use Autofirma on websites that require it.
 
 Additionally, you can enable DNIe integration, including NFC-based DNIe from an
 Android mobile via DNIeRemote.
@@ -154,7 +154,7 @@ Android mobile via DNIeRemote.
         autofirma-nix.nixosModules.default
         ({ pkgs, config, ... }: {
           programs.autofirma.enable = true;
-          programs.autofirma.firefoxIntegration.enable = true;  # Let Firefox use AutoFirma
+          programs.autofirma.firefoxIntegration.enable = true;  # Let Firefox use Autofirma
 
           programs.dnieremote.enable = true;
 
@@ -196,11 +196,11 @@ it.
 The following NixOS options determine which certificates are accepted or blocked in the
 system *truststore*, directly affecting **autofirma-nix**:
 
-- **`security.pki.certificateFiles`**  
+- **`security.pki.certificateFiles`**
   Adds additional certificates to the global *truststore*. If any match the official list,
   **autofirma-nix** will accept them.
 
-- **`security.pki.caCertificateBlacklist`**  
+- **`security.pki.caCertificateBlacklist`**
   Blocks specific certificates. Even if they are on the official list, **autofirma-nix** will
   exclude them if they appear in this blacklist.
 
@@ -227,7 +227,7 @@ official list.
 
 ### Security devices do not seem to update or do not appear
 
-If you have installed AutoFirma and enabled Firefox integration, but Firefox does not
+If you have installed Autofirma and enabled Firefox integration, but Firefox does not
 detect the security devices, you may need to remove the `pkcs11.txt` file from the
 Firefox profile folder. For instance, if you enabled the Home Manager module and the
 profile is named `myprofile`, the file is located in `~/.mozilla/firefox/myprofile/pkcs11.txt`.
@@ -262,7 +262,7 @@ SEVERE: El almacen no contiene ningun certificado que se pueda usar para firmar:
 This occurs because your certificates have expired, as indicated by the “NotAfter:” date.
 
 If the certificates are not expired because you recently renewed them, but you used
-AutoFirma before this renewal, it is possible that OpenSC has cached your old certificates.
+Autofirma before this renewal, it is possible that OpenSC has cached your old certificates.
 To fix this, you need to delete the OpenSC cache. [By default, it is located at
 $HOME/.cache/opensc](https://github.com/OpenSC/OpenSC/wiki/Environment-variables).
 

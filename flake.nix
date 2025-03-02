@@ -1,5 +1,5 @@
 {
-  description = "A Nix flake for AutoFirma and related Spanish e-signature tools.";
+  description = "A Nix flake for Autofirma and related Spanish e-signature tools.";
 
   nixConfig = {
     extra-substituters = [
@@ -180,7 +180,7 @@
           packages = lib.mapAttrs' (n: lib.nameValuePair "package-${n}") (lib.filterAttrs (n: _v: !(builtins.elem n blacklistPackages)) self'.packages);
           checks = {
             # NixOS Modules
-            ## AutoFirma
+            ## Autofirma
             nixos-autofirma-cli-sign-document = pkgs.callPackage ./nix/tests/nixos/autofirma/cli/sign-document.nix { inherit self; };
             nixos-autofirma-firefoxIntegration-protocol-handler = pkgs.callPackage ./nix/tests/nixos/autofirma/firefoxIntegration/protocol-handler { inherit self; };
             nixos-autofirma-firefoxIntegration-connection-method-websocket = pkgs.callPackage ./nix/tests/nixos/autofirma/firefoxIntegration/connection-method/websocket { inherit self; };
@@ -188,7 +188,7 @@
             nixos-autofirma-firefoxIntegration-connection-method-auxiliary-servers = pkgs.callPackage ./nix/tests/nixos/autofirma/firefoxIntegration/connection-method/auxiliary-servers { inherit self; };
             # Home Manager Modules
             ## HM installed as a NixOS Module
-            ### AutoFirma
+            ### Autofirma
             hm-as-nixos-module-autofirma-cli-sign-document = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/cli/sign-document.nix { inherit self home-manager; };
             hm-as-nixos-module-autofirma-firefoxIntegration-protocol-handler = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/firefoxIntegration/protocol-handler { inherit self home-manager; };
             hm-as-nixos-module-autofirma-firefoxIntegration-connection-method-websocket = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/firefoxIntegration/connection-method/websocket { inherit self home-manager; };
@@ -196,7 +196,7 @@
             hm-as-nixos-module-autofirma-firefoxIntegration-connection-method-auxiliary-servers = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/firefoxIntegration/connection-method/auxiliary-servers { inherit self home-manager; };
             hm-as-nixos-module-autofirma-config-omitAskOnClose = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/config/omitAskOnClose.nix { inherit self home-manager; };
             # HM standalone installation
-            ### AutoFirma
+            ### Autofirma
             hm-standalone-autofirma-cli-sign-document = pkgs.callPackage ./nix/tests/hm-standalone/autofirma/cli/sign-document.nix { inherit self home-manager; };
             hm-standalone-autofirma-firefoxIntegration-protocol-handler = pkgs.callPackage ./nix/tests/hm-standalone/autofirma/firefoxIntegration/protocol-handler { inherit self home-manager; };
             hm-standalone-autofirma-firefoxIntegration-connection-method-websocket = pkgs.callPackage ./nix/tests/hm-standalone/autofirma/firefoxIntegration/connection-method/websocket { inherit self home-manager; };
