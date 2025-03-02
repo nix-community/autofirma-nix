@@ -7,7 +7,6 @@ inputs: {
 }:
 with lib; let
   cfg = config.programs.autofirma;
-  ca-certificates = if osConfig != null then osConfig.environment.etc."ssl/certs/ca-certificates.crt".source else "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
   inherit (pkgs.stdenv.hostPlatform) system;
   create-autofirma-cert = pkgs.writeShellApplication {
     name = "create-autofirma-cert";
