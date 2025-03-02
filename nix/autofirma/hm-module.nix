@@ -15,6 +15,41 @@ with lib; let
     text = builtins.readFile ./create-autofirma-cert;
   };
   anyFirefoxIntegrationProfileIsEnabled = builtins.any (x: x.enable) (lib.attrsets.attrValues cfg.firefoxIntegration.profiles);
+  defaultAutofirmaSettings = lib.recursiveUpdate cfg.finalPackage.clienteafirma.preferences {
+    "default.locale".default = if osConfig ? defaultLocale then osConfig.defaultLocale else "en_US";
+  };
+  json-to-xmlprefs = name: value: pkgs.callPackage ({ runCommand, jq }: runCommand name {
+      nativeBuildInputs = [ jq ];
+      value = builtins.toJSON value;
+      passAsFile = [ "value" ];
+      preferLocalBuild = true;
+    } ''
+      (
+        echo '<?xml version="1.0" encoding="UTF-8" standalone="no"?>'
+        echo '<!DOCTYPE map SYSTEM "http://java.sun.com/dtd/preferences.dtd">'
+        echo '<map MAP_XML_VERSION="1.0">'
+
+        # Use jq to parse the JSON and emit each key/value pair as an XML entry
+        jq -r '
+            to_entries
+            | .[]
+            | "  <entry key=\"" + .key + "\" value=\"" + .value + "\"/>"
+          ' "$valuePath"
+
+        echo '</map>'
+      ) > "$out"
+    '') {}; 
+  boolsToStrings = lib.attrsets.mapAttrs (_: v: if builtins.isBool v then lib.boolToString v else v);
+  autofirma-prefs-format = {
+    type = types.submodule {
+      options = lib.attrsets.mapAttrs (_: value: mkOption rec {
+        type = if value.default == "true" || value.default == "false" then types.bool else types.str;
+        default = if (type == types.bool) then (value.default == "true") else value.default;
+        description = if value ? description then value.description else "No description available";
+      }) defaultAutofirmaSettings;
+    };
+    generate = name: value: json-to-xmlprefs name (boolsToStrings value);
+  };
 in {
   options.programs.autofirma.truststore = {
     package = mkPackageOption inputs.self.packages.${system} "autofirma-truststore" {};
@@ -66,13 +101,38 @@ in {
       }));
       description = "Firefox profiles to integrate AutoFirma with.";
     };
+
+    config = mkOption {
+      type = autofirma-prefs-format.type;
+      description = "Settings to apply to the AutoFirma package.";
+      default = { };
+    };
+
   };
   config = mkIf cfg.enable {
-    home.activation.createAutoFirmaCert = lib.hm.dag.entryAfter ["writeBoundary"] ''
-      verboseEcho Running create-autofirma-cert
-      run ${lib.getExe create-autofirma-cert} $VERBOSE_ARG ${config.home.homeDirectory}/.afirma/AutoFirma
-    '';
+    home.activation = mkMerge [
+      (mkIf true {
+        createAutoFirmaCert = lib.hm.dag.entryAfter ["writeBoundary"] ''
+          verboseEcho Running create-autofirma-cert
+          run ${lib.getExe create-autofirma-cert} $VERBOSE_ARG ${config.home.homeDirectory}/.afirma/AutoFirma
+        '';
+      })
+      (mkIf ((boolsToStrings cfg.config) != defaultAutofirmaSettings) {
+        unprotectAutoFirmaConfig = lib.hm.dag.entryBetween ["linkGeneration"] ["writeBoundary"] ''
+          run mkdir -p "${config.home.homeDirectory}/.java/.userPrefs/es/gob/afirma/standalone/ui/preferences"
+          run chmod --silent u+w "${config.home.homeDirectory}/.java/.userPrefs/es/gob/afirma/standalone/ui/preferences"
+        '';
+        protectAutoFirmaConfig = lib.hm.dag.entryAfter ["linkGeneration"] ''
+          run chmod --silent u-w "${config.home.homeDirectory}/.java/.userPrefs/es/gob/afirma/standalone/ui/preferences"
+        '';
+      })
+    ];
     home.packages = [cfg.finalPackage];
+
+    home.file.".java/.userPrefs/es/gob/afirma/standalone/ui/preferences/prefs.xml" = mkIf ((boolsToStrings cfg.config) != defaultAutofirmaSettings) {
+      source = autofirma-prefs-format.generate "prefs.xml" cfg.config;
+    };
+
     programs.firefox.policies.Certificates = mkIf anyFirefoxIntegrationProfileIsEnabled {
       ImportEnterpriseRoots = true;
       Install = [ "${config.home.homeDirectory}/.afirma/AutoFirma/AutoFirma_ROOT.cer" ];
