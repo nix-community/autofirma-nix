@@ -32,7 +32,6 @@
     patches =
       [
         ./patches/clienteafirma/pr-367.patch
-        ./patches/clienteafirma/certutilpath.patch
         ./patches/clienteafirma/etc_config.patch
         ./patches/clienteafirma/aarch64_elf.patch  # Until https://github.com/ctt-gob-es/clienteafirma/pull/435 gets merged
       ]
@@ -79,9 +78,6 @@
       # Register the xmldoclet plugin in the pom.xml for documentation generation
       update-plugin-version-by-groupId "org.apache.maven.plugins" "maven-javadoc-plugin" "${javadocVersion}"
       add-xml-doclet-to-javadoc-plugin "${javadocVersion}" "${xmlDocletVersion}"
-
-      substituteInPlace afirma-ui-simple-configurator/src/main/java/es/gob/afirma/standalone/configurator/ConfiguratorFirefoxLinux.java \
-        --replace-fail '@certutilpath' '${nss.tools}/bin/certutil'
     '';
 
     dontFixup = true;
@@ -178,8 +174,7 @@
     installPhase = ''
       runHook preInstall
       mkdir -p $out/bin $out/lib/AutoFirma
-      install -Dm644 afirma-simple/target/AutoFirma.jar $out/lib/AutoFirma
-      install -Dm644 afirma-ui-simple-configurator/target/AutoFirmaConfigurador.jar $out/lib/AutoFirma
+      install -Dm644 afirma-simple/target/autofirma.jar $out/lib/AutoFirma
       install -Dm644 preferences.json $out/lib/AutoFirma/preferences.json
 
       runHook postInstall
@@ -219,7 +214,7 @@
         --add-flags "-Dswing.crossplatformlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel" \
         --add-flags "-Dawt.useSystemAAFontSettings=lcd" \
         --add-flags "-Dswing.aatext=true" \
-        --add-flags "-jar ${autofirma-jar}/lib/AutoFirma/AutoFirma.jar"
+        --add-flags "-jar ${autofirma-jar}/lib/AutoFirma/autofirma.jar"
 
       substituteInPlace $out/etc/firefox/pref/AutoFirma.js \
         --replace-fail /usr/bin/autofirma $out/bin/autofirma
@@ -239,8 +234,8 @@
   };
 
   desktopItem = makeDesktopItem {
-    name = "AutoFirma";
-    desktopName = "AutoFirma";
+    name = "Autofirma";
+    desktopName = "Autofirma";
     genericName = "Herramienta de firma";
     exec = "autofirma %u";
     icon = "${thisPkg}/lib/AutoFirma/AutoFirma.png";
@@ -266,7 +261,7 @@ in
       ln -s ${thisPkg}/etc/firefox/pref/AutoFirma.js $out/etc/firefox/pref/AutoFirma.js
     '';
     extraBwrapArgs = [
-      "--ro-bind-try /etc/AutoFirma /etc/AutoFirma"
+      "--ro-bind-try /etc/Autofirma /etc/Autofirma"
     ];
     passthru = {
       clienteafirma = thisPkg;
