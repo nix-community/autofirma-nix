@@ -132,6 +132,9 @@
       }: let
         pkgs = nixpkgs.legacyPackages.${system};
       in {
+        nix-unit.inputs = {
+          inherit (inputs) nixpkgs flake-parts nix-unit;
+        };
         formatter = pkgs.alejandra;
         overlayAttrs = {
           inherit (config.packages) autofirma; # configuradorfnmt dnieremote are specific to x86_64-linux
