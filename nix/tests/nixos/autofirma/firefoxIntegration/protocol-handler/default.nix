@@ -48,7 +48,7 @@ pkgs.nixosTest {
     # Open an afirma:// URL in Firefox
     machine.execute("open-autofirma-via-firefox")
 
-    # Wait for the AutoFirma window to appear
+    # Wait for the Autofirma window to appear
     machine.wait_for_window('Seleccione el fichero de datos a firmar', 30)
     machine.screenshot("screen")
   '';

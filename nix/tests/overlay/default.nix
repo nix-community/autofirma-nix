@@ -20,7 +20,7 @@ pkgs.nixosTest {
   };
 
   testScript = ''
-    machine.succeed('echo "NixOS AutoFirma Sign Test" > document.txt')
+    machine.succeed('echo "NixOS Autofirma Sign Test" > document.txt')
     machine.succeed('${openssl} req -x509 -newkey rsa:2048 -keyout private.key -out certificate.crt -days 365 -nodes -subj "/C=ES/O=TEST AUTOFIRMA NIX/OU=DNIE/CN=AC DNIE 004" -passout pass:1234')
     machine.succeed('${openssl} pkcs12 -export -out certificate.p12 -inkey private.key -in certificate.crt -name "testcert" -password pass:1234')
 
