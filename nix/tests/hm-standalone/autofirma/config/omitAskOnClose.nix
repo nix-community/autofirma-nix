@@ -44,7 +44,7 @@ pkgs.nixosTest {
 
     machine.execute(user_cmd("autofirma >&2 &"))
 
-    machine.wait_for_window('AutoFirma\s.*', 30)
+    machine.wait_for_window('Autofirma\s.*', 30)
     machine.sleep(5)
     machine.send_key("alt-f4")
     machine.wait_until_succeeds(user_cmd('[ ! $(pgrep -x java) ]'), 30)
