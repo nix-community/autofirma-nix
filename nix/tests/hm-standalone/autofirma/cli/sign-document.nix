@@ -39,7 +39,7 @@ pkgs.nixosTest {
     machine.wait_for_x()
     machine.succeed(user_cmd('home-manager-generation'))
 
-    machine.succeed(user_cmd('echo "NixOS AutoFirma Sign Test" > document.txt'))
+    machine.succeed(user_cmd('echo "NixOS Autofirma Sign Test" > document.txt'))
     machine.succeed(user_cmd('${openssl} req -x509 -newkey rsa:2048 -keyout private.key -out certificate.crt -days 365 -nodes -subj "/C=ES/O=TEST AUTOFIRMA NIX/OU=DNIE/CN=AC DNIE 004" -passout pass:1234'))
     machine.succeed(user_cmd('${openssl} pkcs12 -export -out certificate.p12 -inkey private.key -in certificate.crt -name "testcert" -password pass:1234'))
 
