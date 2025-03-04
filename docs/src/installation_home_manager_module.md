@@ -22,9 +22,6 @@ First, make sure Home Manager is imported in your NixOS configuration:
     # Your other imports
     home-manager.nixosModules.home-manager
   ];
-
-  home-manager.useGlobalPkgs = true;
-  home-manager.useUserPackages = true;
 }
 ```
 
@@ -50,8 +47,6 @@ Then, configure AutoFirma for a specific user:
     # DNIeRemote for using smartphone as DNIe reader
     programs.dnieremote = {
       enable = true;
-      jumpIntro = "no";
-      wifiPort = 9501;
     };
 
     # FNMT certificate configurator
