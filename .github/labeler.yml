@@ -44,4 +44,5 @@
   - any-glob-to-any-file:
     - docs/**/*                        # Documentation files
     - README.md
+    - nix/tools/properties-to-json/**/*
 
