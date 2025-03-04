@@ -1,35 +1,72 @@
-# NixOS module
+# NixOS Module Installation
 
-For those who prefer system-wide configurations, **autofirma-nix** offers a dedicated NixOS module. Below is an example of how to configure the NixOS module. (The `inputs` section is covered in the previous section.)
+For system-wide installation where all users can access AutoFirma, DNIeRemote, and Configurador FNMT, the NixOS module is the most straightforward approach.
+
+## Quick Start with Template
+
+You can quickly get started with a fully configured template:
+
+```bash
+$ nix flake new --template github:nix-community/autofirma-nix#nixos-module ./my-autofirma-system
+```
+
+This creates a new directory with a complete flake configuration for NixOS with all available options.
+
+## Minimal Configuration
+
+Add the following to your NixOS configuration:
 
 ```nix
 {
-  outputs = { self, nixpkgs, autofirma-nix, ... }:
-    {
-      nixosConfigurations.myHostname = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          autofirma-nix.nixosModules.default
+  imports = [
+    # ... your other imports
+    autofirma-nix.nixosModules.default
+  ];
 
-          {
-            programs.autofirma.enable = true;
-            programs.autofirma.firefoxIntegration.enable = true;
+  # Basic AutoFirma setup
+  programs.autofirma = {
+    enable = true;
+    # Enable Firefox integration to use AutoFirma with web applications
+    firefoxIntegration.enable = true;
+  };
 
-            programs.dnieremote.enable = true;
+  # Optional: Enable DNIe support via NFC with mobile phone
+  programs.dnieremote.enable = true;
 
-            programs.configuradorfnmt.enable = true;
-            programs.configuradorfnmt.firefoxIntegration.enable = true;
+  # Optional: Enable FNMT certificate configurator
+  programs.configuradorfnmt = {
+    enable = true;
+    firefoxIntegration.enable = true;
+  };
 
-            programs.firefox.enable = true;
-            programs.firefox.policies = {
-              SecurityDevices = {
-                "OpenSC PKCS#11" = "${pkgs.opensc}/lib/opensc-pkcs11.so";
-                "DNIeRemote"     = "${config.programs.dnieremote.finalPackage}/lib/libdnieremotepkcs11.so";
-              };
-            };
-          }
-        ];
+  # If Firefox is managed by NixOS, configure security devices
+  programs.firefox = {
+    enable = true;
+    policies = {
+      SecurityDevices = {
+        # For standard smart card readers (physical DNIe)
+        "OpenSC PKCS#11" = "${pkgs.opensc}/lib/opensc-pkcs11.so";
+        # For DNIe via NFC from smartphone
+        "DNIeRemote" = "${config.programs.dnieremote.finalPackage}/lib/libdnieremotepkcs11.so";
       };
     };
+  };
 }
+```
+
+## What This Does
+
+When you enable the NixOS module:
+
+1. The `autofirma` command becomes available system-wide for signing documents
+2. Firefox (if enabled through `programs.firefox.enable`) is configured to work with AutoFirma 
+3. DNIeRemote integration allows using your phone as an NFC card reader for your DNIe
+4. The FNMT certificate configurator helps with requesting and managing digital certificates
+
+## Rebuild and Apply
+
+After adding these changes, rebuild your NixOS configuration:
+
+```bash
+sudo nixos-rebuild switch --flake .#yourHostname
 ```
