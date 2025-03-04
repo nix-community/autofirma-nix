@@ -1,4 +1,14 @@
-# autofirma-nix
+<p align="center">
+  <a href="https://github.com/nix-community/autofirma-nix">
+    <picture>
+      <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/nix-community/autofirma-nix/main/artwork/logo.svg">
+      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/nix-community/autofirma-nix/main/artwork/logo_white.svg">
+      <img src="https://raw.githubusercontent.com/nix-community/autofirma-nix/main/artwork/logo.svg" width="300px" alt="Autofirma-Nix Logo">
+    </picture>
+  </a>
+</p>
+
+<h1 align="center">autofirma-nix</h1>
 
 [![built with nix](https://builtwithnix.org/badge.svg)](https://builtwithnix.org)
 
