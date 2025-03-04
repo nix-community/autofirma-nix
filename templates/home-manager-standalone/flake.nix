@@ -25,8 +25,13 @@
     ];
   };
 
-  outputs = { self, nixpkgs, home-manager, autofirma-nix, ... }: {
+  outputs = { self, nixpkgs, home-manager, autofirma-nix, ... }: 
+  let
+    system = "x86_64-linux";
+    pkgs = nixpkgs.legacyPackages.${system};
+  in {
     homeConfigurations."myuser" = home-manager.lib.homeManagerConfiguration {
+      inherit pkgs;
       
       modules = [
         autofirma-nix.homeManagerModules.default
