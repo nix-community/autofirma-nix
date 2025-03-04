@@ -20,48 +20,25 @@ In your `flake.nix` for Home Manager:
 {
   outputs = { self, nixpkgs, home-manager, autofirma-nix, ... }: {
     homeConfigurations."yourUsername" = home-manager.lib.homeManagerConfiguration {
-      pkgs = nixpkgs.legacyPackages.x86_64-linux; # Adjust system if needed
+      pkgs = nixpkgs.legacyPackages.x86_64-linux;
       
       modules = [
         autofirma-nix.homeManagerModules.default
         
-        # Your home configuration
         {
-          # Basic AutoFirma setup
-          programs.autofirma.enable = true;
-          
-          # Firefox integration with specific profile(s)
-          programs.autofirma.firefoxIntegration.profiles = {
-            default = { # Use your actual profile name
-              enable = true;
-            };
+          # Enable AutoFirma with Firefox integration
+          programs.autofirma = {
+            enable = true;
+            firefoxIntegration.profiles.default.enable = true;
           };
           
-          # Optional: DNIe support via smartphone NFC
-          programs.dnieremote.enable = true;
-          
-          # Optional: FNMT certificate configurator
-          programs.configuradorfnmt.enable = true;
-          programs.configuradorfnmt.firefoxIntegration.profiles = {
-            default = { # Use your actual profile name
-              enable = true;
-            };
-          };
-          
-          # If Firefox is managed by Home Manager
+          # Configure Firefox
           programs.firefox = {
             enable = true;
-            policies = {
-              SecurityDevices = {
-                # For physical smart card readers
-                "OpenSC PKCS11" = "${pkgs.opensc}/lib/opensc-pkcs11.so";
-                # For smartphone NFC
-                "DNIeRemote" = "${config.programs.dnieremote.finalPackage}/lib/libdnieremotepkcs11.so";
-              };
+            policies.SecurityDevices = {
+              "OpenSC PKCS11" = "${pkgs.opensc}/lib/opensc-pkcs11.so";
             };
-            profiles.default = { # Use your actual profile name
-              id = 0; # Makes this profile the default profile
-            };
+            profiles.default.id = 0;
           };
         }
       ];

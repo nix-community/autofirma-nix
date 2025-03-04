@@ -14,42 +14,32 @@ This creates a new directory with a complete flake configuration for NixOS with 
 
 ## Minimal Configuration
 
-Add the following to your NixOS configuration:
+For your NixOS flake configuration:
 
 ```nix
 {
-  imports = [
-    # ... your other imports
-    autofirma-nix.nixosModules.default
-  ];
+  nixosConfigurations.mysystem = nixpkgs.lib.nixosSystem {
+    system = "x86_64-linux";
+    
+    modules = [
+      autofirma-nix.nixosModules.default
+      
+      ({ config, pkgs, ... }: {
+        # Enable AutoFirma with Firefox integration
+        programs.autofirma = {
+          enable = true;
+          firefoxIntegration.enable = true;
+        };
 
-  # Basic AutoFirma setup
-  programs.autofirma = {
-    enable = true;
-    # Enable Firefox integration to use AutoFirma with web applications
-    firefoxIntegration.enable = true;
-  };
-
-  # Optional: Enable DNIe support via NFC with mobile phone
-  programs.dnieremote.enable = true;
-
-  # Optional: Enable FNMT certificate configurator
-  programs.configuradorfnmt = {
-    enable = true;
-    firefoxIntegration.enable = true;
-  };
-
-  # If Firefox is managed by NixOS, configure security devices
-  programs.firefox = {
-    enable = true;
-    policies = {
-      SecurityDevices = {
-        # For standard smart card readers (physical DNIe)
-        "OpenSC PKCS#11" = "${pkgs.opensc}/lib/opensc-pkcs11.so";
-        # For DNIe via NFC from smartphone
-        "DNIeRemote" = "${config.programs.dnieremote.finalPackage}/lib/libdnieremotepkcs11.so";
-      };
-    };
+        # Configure Firefox
+        programs.firefox = {
+          enable = true;
+          policies.SecurityDevices = {
+            "OpenSC PKCS#11" = "${pkgs.opensc}/lib/opensc-pkcs11.so";
+          };
+        };
+      })
+    ];
   };
 }
 ```
