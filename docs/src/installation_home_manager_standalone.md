@@ -26,19 +26,45 @@ In your `flake.nix` for Home Manager:
         autofirma-nix.homeManagerModules.default
         
         {
-          # Enable AutoFirma with Firefox integration
+          # Adds AutoFirma to your personal Home Manager setup
           programs.autofirma = {
             enable = true;
-            firefoxIntegration.profiles.default.enable = true;
+            
+            # Configures Firefox integration for your specific profile(s)
+            firefoxIntegration.profiles = {
+              default = {
+                enable = true;
+              };
+            };
+          };
+          
+          # DNIeRemote for using smartphone as DNIe reader
+          programs.dnieremote = {
+            enable = true;
+          };
+
+          # FNMT certificate configurator
+          programs.configuradorfnmt = {
+            enable = true;
+            firefoxIntegration.profiles = {
+              default = {
+                enable = true;
+              };
+            };
           };
           
           # Configure Firefox
           programs.firefox = {
             enable = true;
-            policies.SecurityDevices = {
-              "OpenSC PKCS11" = "${pkgs.opensc}/lib/opensc-pkcs11.so";
+            policies = {
+              SecurityDevices = {
+                "OpenSC PKCS11" = "${pkgs.opensc}/lib/opensc-pkcs11.so";
+                "DNIeRemote" = "${config.programs.dnieremote.finalPackage}/lib/libdnieremotepkcs11.so";
+              };
             };
-            profiles.default.id = 0;
+            profiles.default = {
+              id = 0;
+            };
           };
         }
       ];
@@ -53,8 +79,10 @@ This configuration:
 
 1. Adds AutoFirma to your personal Home Manager setup
 2. Configures Firefox integration for your specific profile(s)
-3. Provides a complete environment for working with Spanish digital signatures
-4. Preserves the flexibility of Home Manager's standalone mode
+3. DNIeRemote integration allows using your phone as an NFC card reader for your DNIe
+4. The FNMT certificate configurator helps with requesting and managing digital certificates
+5. Provides a complete environment for working with Spanish digital signatures
+6. Preserves the flexibility of Home Manager's standalone mode
 
 ## Apply the Configuration
 

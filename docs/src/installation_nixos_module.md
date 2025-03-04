@@ -25,19 +25,34 @@ For your NixOS flake configuration:
       autofirma-nix.nixosModules.default
       
       ({ config, pkgs, ... }: {
-        # Enable AutoFirma with Firefox integration
+        # The autofirma command becomes available system-wide
         programs.autofirma = {
           enable = true;
           firefoxIntegration.enable = true;
         };
 
-        # Configure Firefox
+        # DNIeRemote integration for using phone as NFC reader
+        programs.dnieremote = {
+          enable = true;
+        };
+
+        # The FNMT certificate configurator
+        programs.configuradorfnmt = {
+          enable = true;
+          firefoxIntegration.enable = true;
+        };
+
+        # Firefox configured to work with AutoFirma
         programs.firefox = {
           enable = true;
           policies.SecurityDevices = {
             "OpenSC PKCS#11" = "${pkgs.opensc}/lib/opensc-pkcs11.so";
+            "DNIeRemote" = "${config.programs.dnieremote.finalPackage}/lib/libdnieremotepkcs11.so";
           };
         };
+
+        # Enable PC/SC smart card service
+        services.pcscd.enable = true;
       })
     ];
   };

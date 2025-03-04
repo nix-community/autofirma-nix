@@ -40,16 +40,42 @@ Then, configure AutoFirma for a specific user:
     # Enable AutoFirma with Firefox integration
     programs.autofirma = {
       enable = true;
-      firefoxIntegration.profiles.default.enable = true;
+      firefoxIntegration.profiles = {
+        default = {
+          enable = true;
+        };
+      };
+    };
+    
+    # DNIeRemote for using smartphone as DNIe reader
+    programs.dnieremote = {
+      enable = true;
+      jumpIntro = "no";
+      wifiPort = 9501;
+    };
+
+    # FNMT certificate configurator
+    programs.configuradorfnmt = {
+      enable = true;
+      firefoxIntegration.profiles = {
+        default = {
+          enable = true;
+        };
+      };
     };
     
     # Configure Firefox
     programs.firefox = {
       enable = true;
-      policies.SecurityDevices = {
-        "OpenSC PKCS11" = "${pkgs.opensc}/lib/opensc-pkcs11.so";
+      policies = {
+        SecurityDevices = {
+          "OpenSC PKCS11" = "${pkgs.opensc}/lib/opensc-pkcs11.so";
+          "DNIeRemote" = "${config.programs.dnieremote.finalPackage}/lib/libdnieremotepkcs11.so";
+        };
       };
-      profiles.default.id = 0;
+      profiles.default = {
+        id = 0;
+      };
     };
   };
 }
@@ -61,8 +87,10 @@ With this configuration:
 
 1. AutoFirma is only available to the specified user(s)
 2. Firefox integration is limited to specific Firefox profiles
-3. Each user can have their own customized setup
-4. Only users who need these tools will have them installed
+3. DNIeRemote integration allows using your phone as an NFC card reader for your DNIe
+4. The FNMT certificate configurator helps with requesting and managing digital certificates
+5. Each user can have their own customized setup
+6. Only users who need these tools will have them installed
 
 ## Rebuild and Apply
 
