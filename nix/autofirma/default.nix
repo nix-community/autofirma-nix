@@ -55,7 +55,7 @@
       javaVersion = "17";
       srcVersion = "${src.rev}-autofirma-nix";
       javadocVersion = "3.11.2";
-      xmlDocletVersion = "2.0.2";
+      xmlDocletVersion = "2.0.3";
     in
     ''
       # Update the version of the Java runtime to use
