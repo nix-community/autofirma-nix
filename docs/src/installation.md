@@ -1,22 +1,25 @@
 # Installation
 
-This project is distributed as a Nix flake for easy integration into your NixOS configuration. It provides both a NixOS module for system-wide configurations and a Home Manager module for user-specific setups. Depending on your preference, you can choose one or the other.
+This project is distributed as a Nix flake that supports three integration paths:
 
-Keep in mind that you should enable either the NixOS module or the Home Manager module—not both simultaneously. Think of it like wearing one hat at a time.
+1. **NixOS module** - For system-wide installation
+2. **Home Manager module with NixOS** - For per-user installation when Home Manager is used as a NixOS module
+3. **Home Manager standalone** - For per-user installation with standalone Home Manager
 
-Depending on your Nix channel:
+## Flake Input Setup
 
-- Use the main branch with `nixpkgs-unstable`.
-- For stable channels, use the `release-XX.YY` branch corresponding to your NixOS version.
-
-We officially support current releases. If you encounter issues on an older branch, upgrading is recommended, as it might resolve the problem—and let’s face it, newer is usually better.
-
-Here’s an example configuration to include `autofirma-nix` as an input:
+For all installation methods, you'll need to add autofirma-nix to your flake inputs:
 
 ```nix
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    
+    # Only needed for Home Manager options
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     autofirma-nix = {
       url = "github:nix-community/autofirma-nix";  # For nixpkgs-unstable
@@ -33,7 +36,7 @@ Here’s an example configuration to include `autofirma-nix` as an input:
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
   };
-
-  # Further configuration details are provided in the sections below.
 }
 ```
+
+The binary cache configuration is strongly recommended to avoid unnecessary local compilation.

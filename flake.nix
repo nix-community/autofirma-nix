@@ -75,6 +75,21 @@
             ];
           };
         };
+        templates = {
+          nixos-module = {
+            path = ./templates/nixos-module;
+            description = "NixOS system with AutoFirma (system-wide installation)";
+          };
+          home-manager-nixos = {
+            path = ./templates/home-manager-nixos;
+            description = "Home Manager with NixOS for AutoFirma (user-specific installation)";
+          };
+          home-manager-standalone = {
+            path = ./templates/home-manager-standalone;
+            description = "Home Manager Standalone for AutoFirma (user-specific installation without NixOS)";
+          };
+          default = self.templates.nixos-module;
+        };
         packages.x86_64-linux = let
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
           ignoreVulnerable_openssl_1_1 = pkgs.openssl_1_1.overrideAttrs (oldAttrs: rec {
