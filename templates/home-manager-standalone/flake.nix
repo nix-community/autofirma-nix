@@ -27,12 +27,11 @@
 
   outputs = { self, nixpkgs, home-manager, autofirma-nix, ... }: {
     homeConfigurations."myuser" = home-manager.lib.homeManagerConfiguration {
-      pkgs = nixpkgs.legacyPackages.x86_64-linux;
       
       modules = [
         autofirma-nix.homeManagerModules.default
         
-        {
+        ({pkgs, config, ... }: {
           home = {
             username = "myuser";
             homeDirectory = "/home/myuser";
@@ -139,14 +138,7 @@
             };
           };
           
-          # Make sure pcsc-lite is available for smart card support
-          home.packages = with pkgs; [
-            opensc
-            pcsc-lite
-            pcsc-tools
-            ccid
-          ];
-        }
+        })
       ];
     };
   };

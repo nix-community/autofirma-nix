@@ -158,14 +158,6 @@
             };
           };
 
-          # Additional useful packages for smart card support
-          environment.systemPackages = with pkgs; [
-            opensc
-            pcsc-lite
-            pcsc-tools
-            ccid
-          ];
-
           # Enable PC/SC smart card service
           services.pcscd.enable = true;
         })
