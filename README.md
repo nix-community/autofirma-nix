@@ -3,7 +3,7 @@
     <picture>
       <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/nix-community/autofirma-nix/main/artwork/logo.svg">
       <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/nix-community/autofirma-nix/main/artwork/logo_white.svg">
-      <img src="https://raw.githubusercontent.com/nix-community/autofirma-nix/main/artwork/logo.svg" width="300px" alt="Autofirma-Nix Logo">
+      <img src="https://raw.githubusercontent.com/nix-community/autofirma-nix/main/artwork/logo.svg" width="200px" alt="Autofirma-Nix Logo">
     </picture>
   </a>
 </p>
