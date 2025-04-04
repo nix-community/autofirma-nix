@@ -27,7 +27,6 @@ jobs:
               - xpath: //a
               - grep: "AutoFirma"
               - grep: "Linux"
-              - xpath: //text()
 
       - name: Create change notification
         if: ${{ steps.monitor.outputs.changes != '' }}
