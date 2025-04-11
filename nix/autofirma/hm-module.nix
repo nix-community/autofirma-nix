@@ -14,6 +14,7 @@ with lib; let
     text = builtins.readFile ./create-autofirma-cert;
   };
   anyFirefoxIntegrationProfileIsEnabled = builtins.any (x: x.enable) (lib.attrsets.attrValues cfg.firefoxIntegration.profiles);
+  anyLibrewolfIntegrationProfileIsEnabled = builtins.any (x: x.enable) (lib.attrsets.attrValues cfg.librewolfIntegration.profiles);
   defaultAutofirmaSettings = lib.recursiveUpdate cfg.finalPackage.clienteafirma.preferences {
     "default.locale".default = if osConfig ? defaultLocale then osConfig.defaultLocale else "en_US";
   };
@@ -49,6 +50,11 @@ with lib; let
     };
     generate = name: value: json-to-xmlprefs name (boolsToStrings value);
   };
+  autofirma-librewolf-wrapper = pkgs.writeScriptBin "autofirma-librewolf-wrapper" ''
+    echo Holiiiiiiii
+    export AFIRMA_NSS_PROFILES_INI=$HOME/.librewolf/profiles.ini
+    exec ${cfg.finalPackage}/bin/autofirma "$@"
+  '';
 in {
   options.programs.autofirma.truststore = {
     package = mkPackageOption inputs.self.packages.${system} "autofirma-truststore" {};
@@ -101,6 +107,25 @@ in {
       description = "Firefox profiles to integrate AutoFirma with.";
     };
 
+    librewolfIntegration.profiles = mkOption {
+      type = types.attrsOf (types.submodule ({
+        config,
+        name,
+        ...
+      }: {
+        options = {
+          name = mkOption {
+            type = types.str;
+            default = name;
+            description = "Profile name.";
+          };
+
+          enable = mkEnableOption "Enable AutoFirma in this librewolf profile.";
+        };
+      }));
+      description = "Firefox profiles to integrate AutoFirma with.";
+    };
+
     config = mkOption {
       type = autofirma-prefs-format.type;
       description = "Settings to apply to the AutoFirma package.";
@@ -141,6 +166,19 @@ in {
         "network.protocol-handler.app.afirma" = "${cfg.finalPackage}/bin/autofirma";
         "network.protocol-handler.warn-external.afirma" = false;
         "network.protocol-handler.external.afirma" = true;
+      };
+    });
+
+    programs.librewolf.policies.Certificates = mkIf anyLibrewolfIntegrationProfileIsEnabled {
+      ImportEnterpriseRoots = true;
+      Install = [ "${config.home.homeDirectory}/.afirma/AutoFirma/AutoFirma_ROOT.cer" ];
+    };
+    programs.librewolf.profiles = flip mapAttrs cfg.librewolfIntegration.profiles (name: {enable, ...}: {
+      settings = mkIf enable {
+        "network.protocol-handler.app.afirma" = "${autofirma-librewolf-wrapper}/bin/autofirma-librewolf-wrapper";
+        "network.protocol-handler.warn-external.afirma" = false;
+        "network.protocol-handler.external.afirma" = true;
+        "network.protocol-handler.expose.afirma" = true;
       };
     });
   };
