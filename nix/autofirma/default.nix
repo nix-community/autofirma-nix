@@ -66,6 +66,7 @@
       update-dependency-version-by-groupId "${clienteafirma-external.groupId}" "${clienteafirma-external.finalVersion}"
       update-dependency-version-by-groupId "${jmulticard.groupId}" "${jmulticard.finalVersion}"
       update-dependency-version-by-groupId "es.gob.afirma" "${srcVersion}"
+      update-dependency-version-by-groupId "org.java-websocket" "1.6.0"
 
       # Remove some modules that we don't need in the build
       remove-module-on-profile "env-install" "afirma-server-triphase-signer"
