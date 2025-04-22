@@ -3,7 +3,7 @@ PRESTADORES_XML_URL="https://sedeaplicaciones.minetur.gob.es/PrestadoresDatosAbi
 xmlstarlet \
 	sel \
 	-t \
-	-m '/PRESTADORES/PRESTADOR[PrestadorCualificado[text() = "true"] and SERVICIOS/SERVICIO[Clasificacion[text() = "Sede cualificado"] and ServicioCualificado[text() = "true"]]]' \
+	-m '/PRESTADORES/PRESTADOR[PrestadorCualificado[text() = "true"] and SERVICIOS/SERVICIO[Clasificacion[text() = "Certificados cualificados de Sede electrónica de la Administración Pública"]]]' \
 	-o '{"name": "'    -v 'normalize-space(NombreSocial)' \
 	-o '", "cif": "'     -v 'normalize-space(Cif)' \
 	-o '", "website": "' -v 'normalize-space(DominioInternet)' \
