@@ -31,7 +31,7 @@ jobs:
           ref: ${{ matrix.branch }}
 
       - name: Install Nix
-        uses: cachix/install-nix-action@754537aaedb35f72ab11a60cc162c49ef3016495 # v31
+        uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
 
       - name: Update flake.lock
         uses: DeterminateSystems/update-flake-lock@a2bbe0274e3a0c4194390a1e445f734c597ebc37 # v24
@@ -76,7 +76,7 @@ jobs:
           ref: "release-${{ vars.NIXOS_OLDSTABLE_BRANCH }}"
 
       - name: Install Nix
-        uses: cachix/install-nix-action@754537aaedb35f72ab11a60cc162c49ef3016495 # v31
+        uses: cachix/install-nix-action@526118121621777ccd86f79b04685a9319637641 # v31
 
       - name: Update flake.lock
         uses: DeterminateSystems/update-flake-lock@a2bbe0274e3a0c4194390a1e445f734c597ebc37 # v24
