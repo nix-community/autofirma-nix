@@ -3,11 +3,11 @@
     "autofirma-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1749485669,
-        "narHash": "sha256-SRDWDtUGu7G0fw0K9s2qfvQWFT1Ko7dy2Qm8ZnhglZM=",
+        "lastModified": 1749565525,
+        "narHash": "sha256-pKn6mO88ZPeMHgIgf9lCjWdSop0DHfVve+ZyaM5aAWY=",
         "owner": "ctt-gob-es",
         "repo": "clienteafirma",
-        "rev": "665d0e35b95ea051988efed237917cf661951f25",
+        "rev": "d79022236aaea98c640863503acb573ce53b8371",
         "type": "github"
       },
       "original": {
