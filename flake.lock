@@ -3,11 +3,11 @@
     "autofirma-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1749565525,
-        "narHash": "sha256-pKn6mO88ZPeMHgIgf9lCjWdSop0DHfVve+ZyaM5aAWY=",
+        "lastModified": 1749712956,
+        "narHash": "sha256-k+sEc4l04XsTFO63WNQIN1R9kQd9zIzbHRKHhh8bIvU=",
         "owner": "ctt-gob-es",
         "repo": "clienteafirma",
-        "rev": "d79022236aaea98c640863503acb573ce53b8371",
+        "rev": "c1781adca14de6a7c839bdde3be0b01d27e0274e",
         "type": "github"
       },
       "original": {
@@ -58,11 +58,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1749657191,
-        "narHash": "sha256-QLilaHuhGxiwhgceDWESj9gFcKIdEp7+9lRqNGpN8S4=",
+        "lastModified": 1749779443,
+        "narHash": "sha256-r6YTIMprNCYcJcA4oZ0x1wPaHPPHUxb8CnyEeMkhGks=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "faeab32528a9360e9577ff4082de2d35c6bbe1ce",
+        "rev": "18f3a0d21c3739a242aafa17c04c5238bbab5a41",
         "type": "github"
       },
       "original": {
