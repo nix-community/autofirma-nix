@@ -34,7 +34,7 @@ jobs:
         uses: cachix/install-nix-action@f0fe604f8a612776892427721526b4c7cfb23aba # v31
 
       - name: Update flake.lock
-        uses: DeterminateSystems/update-flake-lock@428c2b58a4b7414dabd372acb6a03dba1084d3ab # v25
+        uses: DeterminateSystems/update-flake-lock@9070c8924674eb79cc49246b8b6f2e14f4378eb0 # v26
         with:
           branch: "${{ env.UPDATE_BRANCH }}"
           pr-labels: |
@@ -79,7 +79,7 @@ jobs:
         uses: cachix/install-nix-action@f0fe604f8a612776892427721526b4c7cfb23aba # v31
 
       - name: Update flake.lock
-        uses: DeterminateSystems/update-flake-lock@428c2b58a4b7414dabd372acb6a03dba1084d3ab # v25
+        uses: DeterminateSystems/update-flake-lock@9070c8924674eb79cc49246b8b6f2e14f4378eb0 # v26
         with:
           branch: "${{ env.UPDATE_BRANCH }}"
           pr-labels: |
