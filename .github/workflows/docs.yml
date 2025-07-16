@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@c723f3a885e3f1d866d91f4f0c33dd44b1fc7c60 # v18
+        uses: DeterminateSystems/nix-installer-action@90bb610b90bf290cad97484ba341453bd1cbefea # v19
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           extra-conf: |
@@ -68,7 +68,7 @@ jobs:
 
     steps:
       - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@c723f3a885e3f1d866d91f4f0c33dd44b1fc7c60 # v18
+        uses: DeterminateSystems/nix-installer-action@90bb610b90bf290cad97484ba341453bd1cbefea # v19
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           extra-conf: |
