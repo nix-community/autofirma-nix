@@ -29,7 +29,7 @@ jobs:
             extra-experimental-features = nix-command flakes
 
       - name: Set up cache
-        uses: DeterminateSystems/magic-nix-cache-action@e1c1dae8e170ed20fd2e6aaf9979ca2d3905d636 # v12
+        uses: DeterminateSystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39 # v13
 
       - name: Build docs
         run: nix -L build github:${{ github.repository }}/${{ github.sha }}#docs
@@ -75,7 +75,7 @@ jobs:
             extra-experimental-features = nix-command flakes
 
       - name: Set up cache
-        uses: DeterminateSystems/magic-nix-cache-action@e1c1dae8e170ed20fd2e6aaf9979ca2d3905d636 # v12
+        uses: DeterminateSystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39 # v13
 
       - name: Check flake-info
         id: flake-info
