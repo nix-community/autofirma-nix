@@ -49,7 +49,7 @@ pkgs.nixosTest {
     machine.execute("open-configuradorfnmt-via-firefox")
 
     # Configurador FNMT-RCM should open automatically
-    machine.wait_for_window('Uso de tarjeta criptográfico inteligente', 30)
+    machine.wait_for_window('Uso de tarjeta criptográfica inteligente', 30)
     machine.screenshot("screen")
   '';
 }
