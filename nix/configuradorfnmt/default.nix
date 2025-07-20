@@ -3,13 +3,13 @@
   stdenv,
   fetchurl,
   dpkg,
-  jre,
+  temurin-jre-bin-23,
   runtimeShell,
   buildFHSEnv,
   makeDesktopItem,
 }: let
   pname = "configuradorfnmt";
-  version = "4.0.2";
+  version = "5.0.2";
   meta = with lib; {
     description = "Application to request the necessary keys for obtaining a digital certificate from the FNMT.";
     homepage = "https://www.sede.fnmt.gob.es/descargas/descarga-software/instalacion-software-generacion-de-claves";
@@ -24,8 +24,8 @@
     version = version;
 
     src = fetchurl {
-      url = "https://descargas.cert.fnmt.es/Linux/${pname}_${version}_amd64.deb";
-      hash = "sha256-pDzBC9/fa2OypnqBTmzujTH4825r3MExi0BsLmAfHmo=";
+      url = "https://descargas.cert.fnmt.es/Linux/${pname}_${version}.amd64.deb";
+      hash = "sha256-+j/Fj5JwRtPozZLzZkc1RX1J9vRqDymIq/CzwLQjraY=";
     };
 
     buildInputs = [
@@ -46,7 +46,7 @@
       mkdir -p $out/bin
       cat > $out/bin/configuradorfnmt <<EOF
       #!${runtimeShell}
-      ${jre}/bin/java -classpath $out/lib/configuradorfnmt/configuradorfnmt.jar:$out/lib/configuradorfnmt/bcpkix-fips.jar:$out/lib/configuradorfnmt/bc-fips.jar es.gob.fnmt.cert.certrequest.CertRequest \$*
+      ${temurin-jre-bin-23}/bin/java -classpath $out/lib/configuradorfnmt/configuradorfnmt.jar:$out/lib/configuradorfnmt/bcpkix-fips.jar:$out/lib/configuradorfnmt/bc-fips.jar es.gob.fnmt.cert.certrequest.CertRequest \$*
       EOF
       chmod +x $out/bin/configuradorfnmt
     '';
