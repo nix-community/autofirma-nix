@@ -54,7 +54,7 @@ pkgs.nixosTest {
     machine.execute(user_cmd("open-configuradorfnmt-via-firefox"))
 
     # Wait for the ConfiguradorFNMT-RCM window to appear
-    machine.wait_for_window('Introduzca la contraseña', 30)
+    machine.wait_for_window('Uso de tarjeta criptográfico inteligente', 30)
     machine.sleep(5)
     machine.screenshot("screen")
   '';
