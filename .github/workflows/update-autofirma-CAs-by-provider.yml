@@ -21,7 +21,7 @@ jobs:
       markdown_links: ${{ steps.extract-fetch-links.outputs.markdown_links }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
       - id: extract-fetch-links
         name: Extract Fetch Links and Generate Markdown
@@ -42,7 +42,7 @@ jobs:
         fetch_link: ${{ fromJson(needs.parse-ca-fetch-links.outputs.fetch_links) }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
       - name: Install Nix Package Manager
         uses: cachix/install-nix-action@fc6e360bedc9ee72d75e701397f0bb30dce77568 # v31.5.2
@@ -68,7 +68,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
       - name: Clear Existing CA Files
         run: rm -f nix/autofirma/truststore/prestadores/CAs-by-provider/*.json
