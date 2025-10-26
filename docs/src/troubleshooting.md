@@ -47,3 +47,47 @@ $HOME/.cache/opensc](https://github.com/OpenSC/OpenSC/wiki/Environment-variables
 $ rm -rf $HOME/.cache/opensc
 ```
 
+## DNIeRemote Android App Compatibility
+
+The DNIeSmartConnect Android app may not be available on Google Play for modern Android devices (Android 13 and later). This is because the app has not been updated to meet current Google Play requirements. However, the app itself still works on modern Android devices and can be installed using alternative methods.
+
+### Installation Options
+
+#### Option A: Install via APK from APKCombo
+
+1. **Allow installation from unknown sources**
+   - Android 9+ (Pie and newer): `Settings` > `Apps & notifications` > `Special app access` > `Install unknown apps` > select the app (Chrome, your file manager, etc.) > Enable "Allow from this source".
+
+2. **Download the APK with APKCombo**
+   - Visit: https://apkcombo.com/playstore-downloader/
+   - Package name: `es.gob.fnmt.dniesmartconnect`
+   - APKCombo fetches the APK securely from Play servers.
+
+3. **Install the APK**
+   - Open the downloaded APK and follow the prompts.
+
+4. **Post-install**
+   - Grant necessary permissions and test the DNIeRemote integration with the PC side.
+
+#### Option B: Install on a compatible device and transfer the APK
+
+1. **On a compatible Android device, install from Google Play**
+   - Search for "DNIeSmartConnect" on Google Play Store and install the app.
+
+2. **Transfer/export the APK to your target device**
+   - Use a backup/transfer method (e.g., USB, Bluetooth, cloud storage, or an APK extractor/backup tool) to get the APK file from the compatible device to your target device.
+
+3. **Install on the target device**
+   - Ensure unknown sources are allowed for the installer (as described in Option A, Step 1), then install the APK from the transferred location.
+
+4. **Post-install**
+   - Grant permissions and verify that DNIeRemote works with your PC.
+
+### Security Verification
+
+To verify the legitimacy of any downloaded APK, use `apksigner verify --print-certs your-app.apk`. Authenticate that the APK's signing certificate matches the official one from Google Play (CNP-FNMT). This confirms that your download is the genuine, untampered DNIeSmartConnect app.
+
+### Additional Resources
+
+For more detailed instructions and background information, see this blog post: [Como instalar DNIeRemote en Android 13 o posterior](https://www.jasoft.org/Blog/post/como-instalar-dnieremote-en-android-13-o-posterior)
+

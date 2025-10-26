@@ -16,6 +16,7 @@ Nix packages, NixOS modules, and Home Manager modules for the suite of tools req
 
 - **AutoFirma** - Digital document signing and web authentication
 - **DNIeRemote** - Use your smartphone as an NFC reader for your Spanish national ID card
+  > **⚠️ Android Compatibility Note:** The DNIeSmartConnect Android app may not be available on Google Play for modern Android devices. See the [troubleshooting guide](https://nix-community.github.io/autofirma-nix/troubleshooting.html#dnieremote-android-app-compatibility) for installation alternatives.
 - **Configurador FNMT-RCM** - Request and install certificates from the Spanish Royal Mint
 
 ## Quick Start
