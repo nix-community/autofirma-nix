@@ -35,6 +35,8 @@ For your NixOS flake configuration:
         programs.dnieremote = {
           enable = true;
         };
+        # Note: The Android app may not be available on Google Play for modern devices.
+        # See the troubleshooting guide for installation alternatives.
 
         # The FNMT certificate configurator
         programs.configuradorfnmt = {
@@ -65,7 +67,7 @@ When you enable the NixOS module:
 
 1. The `autofirma` command becomes available system-wide for signing documents
 2. Firefox (if enabled through `programs.firefox.enable`) is configured to work with AutoFirma 
-3. DNIeRemote integration allows using your phone as an NFC card reader for your DNIe
+3. DNIeRemote integration allows using your phone as an NFC card reader for your DNIe (see [troubleshooting](./troubleshooting.md#dnieremote-android-app-compatibility) for Android app installation)
 4. The FNMT certificate configurator helps with requesting and managing digital certificates
 
 ## Rebuild and Apply
