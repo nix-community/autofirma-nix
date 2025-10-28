@@ -24,17 +24,17 @@
   # Autofirma sources
   inputs = {
     jmulticard-src = {
-      url = "github:ctt-gob-es/jmulticard/v1.8";
+      url = "github:ctt-gob-es/jmulticard/v2.0";
       flake = false;
     };
 
     clienteafirma-external-src = {
-      url = "github:ctt-gob-es/clienteafirma-external";
+      url = "github:ctt-gob-es/clienteafirma-external/v1.0.6";
       flake = false;
     };
 
     autofirma-src = {
-      url = "github:ctt-gob-es/clienteafirma/develop";
+      url = "github:ctt-gob-es/clienteafirma/v1.9";
       flake = false;
     };
   };
