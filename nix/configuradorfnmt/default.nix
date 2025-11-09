@@ -9,7 +9,7 @@
   makeDesktopItem,
 }: let
   pname = "configuradorfnmt";
-  version = "5.0.2";
+  version = "5.0.3";
   meta = with lib; {
     description = "Application to request the necessary keys for obtaining a digital certificate from the FNMT.";
     homepage = "https://www.sede.fnmt.gob.es/descargas/descarga-software/instalacion-software-generacion-de-claves";
@@ -25,7 +25,7 @@
 
     src = fetchurl {
       url = "https://descargas.cert.fnmt.es/Linux/${pname}_${version}.amd64.deb";
-      hash = "sha256-+j/Fj5JwRtPozZLzZkc1RX1J9vRqDymIq/CzwLQjraY=";
+      hash = "sha256-4E7pw/nopeQJDCDACpaqIrhRU9Zy+x6QhlGkb2qVNQo=";
     };
 
     buildInputs = [
