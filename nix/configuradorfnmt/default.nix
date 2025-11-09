@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   dpkg,
-  temurin-jre-bin-23,
+  temurin-jre-bin-25,
   runtimeShell,
   buildFHSEnv,
   makeDesktopItem,
@@ -46,7 +46,7 @@
       mkdir -p $out/bin
       cat > $out/bin/configuradorfnmt <<EOF
       #!${runtimeShell}
-      ${temurin-jre-bin-23}/bin/java -classpath $out/lib/configuradorfnmt/configuradorfnmt.jar:$out/lib/configuradorfnmt/bcpkix-fips.jar:$out/lib/configuradorfnmt/bc-fips.jar es.gob.fnmt.cert.certrequest.CertRequest \$*
+      ${temurin-jre-bin-25}/bin/java -classpath $out/lib/configuradorfnmt/configuradorfnmt.jar:$out/lib/configuradorfnmt/bcpkix-fips.jar:$out/lib/configuradorfnmt/bc-fips.jar es.gob.fnmt.cert.certrequest.CertRequest \$*
       EOF
       chmod +x $out/bin/configuradorfnmt
     '';
