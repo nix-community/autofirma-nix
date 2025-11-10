@@ -258,6 +258,10 @@ in
     targetPkgs = pkgs: [
       firefox
       pkgs.nss
+      pkgs.fontconfig
+      pkgs.freetype
+      pkgs.dejavu_fonts
+      pkgs.liberation_ttf
     ];
     runScript = lib.getExe thisPkg;
     extraInstallCommands = ''
