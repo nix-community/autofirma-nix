@@ -221,6 +221,7 @@
         --add-flags "-Dswing.crossplatformlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel" \
         --add-flags "-Dawt.useSystemAAFontSettings=lcd" \
         --add-flags "-Dswing.aatext=true" \
+        --add-flags "-Des.gob.afirma.keystores.mozilla.UseEnvironmentVariables=true" \
         --add-flags "-jar ${autofirma-jar}/lib/AutoFirma/AutoFirma.jar"
 
       substituteInPlace $out/etc/firefox/pref/AutoFirma.js \
@@ -246,10 +247,16 @@
     genericName = "Herramienta de firma";
     exec = "autofirma %u";
     icon = "${thisPkg}/lib/AutoFirma/AutoFirma.png";
-    mimeTypes = ["x-scheme-handler/afirma"];
+    # mimeTypes = ["x-scheme-handler/afirma"];
     categories = ["Office" "X-Utilities" "X-Signature" "Java"];
     startupNotify = true;
     startupWMClass = "autofirma";
+  };
+  protocolItem = makeDesktopItem {
+    name = "AutoFirmaProto";
+    desktopName = "AutoFirmaProto";
+    mimeTypes = ["x-scheme-handler/afirma"];
+    categories = ["Office" "X-Utilities" "X-Signature" "Java"];
   };
 in
   buildFHSEnv {
@@ -269,7 +276,7 @@ in
       cp "${desktopItem}/share/applications/"* $out/share/applications
 
       mkdir -p $out/etc/firefox/pref
-      ln -s ${thisPkg}/etc/firefox/pref/AutoFirma.js $out/etc/firefox/pref/AutoFirma.js
+      # ln -s ${thisPkg}/etc/firefox/pref/AutoFirma.js $out/etc/firefox/pref/AutoFirma.js
     '';
     extraBwrapArgs = [
       "--ro-bind-try /etc/AutoFirma /etc/AutoFirma"
