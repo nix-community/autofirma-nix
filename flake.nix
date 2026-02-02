@@ -221,6 +221,8 @@
             hm-as-nixos-module-autofirma-firefoxIntegration-connection-method-xhr = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/firefoxIntegration/connection-method/xhr { inherit self home-manager; };
             hm-as-nixos-module-autofirma-firefoxIntegration-connection-method-auxiliary-servers = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/firefoxIntegration/connection-method/auxiliary-servers { inherit self home-manager; };
             hm-as-nixos-module-autofirma-config-omitAskOnClose = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/config/omitAskOnClose.nix { inherit self home-manager; };
+            hm-as-nixos-module-autofirma-librewolfIntegration-protocol-handler = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/librewolfIntegration/protocol-handler { inherit self home-manager; };
+            hm-as-nixos-module-autofirma-librewolfIntegration-connection-method-websocket = pkgs.callPackage ./nix/tests/hm-as-nixos-module/autofirma/librewolfIntegration/connection-method/websocket { inherit self home-manager; };
             # HM standalone installation
             ### AutoFirma
             hm-standalone-autofirma-cli-sign-document = pkgs.callPackage ./nix/tests/hm-standalone/autofirma/cli/sign-document.nix { inherit self home-manager; };
