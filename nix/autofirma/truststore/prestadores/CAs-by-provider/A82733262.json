@@ -1,4 +1,4 @@
 [
-  {"cif": "A82733262", "hash": "sha256-TIy4l/7V/864eWzf73DB00BE8sUIXoXefOnIZ5iiniw=", "url": "https://psc.sia.es/ac_raiz.crt"},
-  {"cif": "A82733262", "hash": "sha256-IIGYh8BGniUXx2RhhBiPxCIbzJ2YtEBfE+imE6/nyuk=", "url": "https://psc.sia.es/ac_raiz_2020.crt"}
+  {"cif": "A82733262", "hash": "sha256-0UrukvgGXdRXiU63PzZuRQxsyEqP2oVqQNyIXWfaoIM=", "url": "https://crl.sia.es/ac_root_2025.crt"},
+  {"cif": "A82733262", "hash": "sha256-TIy4l/7V/864eWzf73DB00BE8sUIXoXefOnIZ5iiniw=", "url": "https://psc.sia.es/ac_raiz.crt"}
 ]
