@@ -1,4 +1,5 @@
 [
+  {"cif": "Q2826004J", "hash": "sha256-TaTk3/isx80bVNjIRnITIvwQXxhT+6u5OMnjJAtwpAE=", "url": "https://www.sede.fnmt.gob.es/documents/10445900/10526749/AC_RAIZ_FNMTRCM_Servidores_Seguros_G2R.cer"},
   {"cif": "Q2826004J", "hash": "sha256-lWmUjKEh08eh0HvR3X4dSOp6Wx7j5+lVfAbDuLKMAj4=", "url": "https://www.sede.fnmt.gob.es/documents/10445900/10526749/AC_RAIZ_FNMT_RCM_TSA.cer"},
   {"cif": "Q2826004J", "hash": "sha256-VUFTsT0s+d23U7++Gk4K4I0KpBhwWP5gorhisuS4e8s=", "url": "https://www.sede.fnmt.gob.es/documents/10445900/10526749/AC_Raiz_FNMT-RCM-SS.cer"},
   {"cif": "Q2826004J", "hash": "sha256-vTzoQ4eTGakHoSpOsU+uhUsIOQTm3Ahn9xgFJcoimb4=", "url": "https://www.sede.fnmt.gob.es/documents/10445900/10526749/AC_Raiz_FNMT-RCM_G2.cer"},
