@@ -22,7 +22,7 @@ jobs:
           nix develop --accept-flake-config --command download-autofirma-trusted-providers > nix/autofirma/truststore/prestadores/providers.json
 
       - name: Create Pull Request for the new trusted providers file
-        uses: peter-evans/create-pull-request@84ae59a2cdc2258d6fa0732dd66352dddae2a412 # v7.0.9
+        uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8.1.0
         with:
           branch: update/autofirma-trusted-providers
           base: main
