@@ -14,7 +14,7 @@ in
     };
 
     environment.systemPackages = with pkgs; [
-      xorg.xhost.out
+      xhost.out
     ];
 
     system.stateVersion = stateVersion;
