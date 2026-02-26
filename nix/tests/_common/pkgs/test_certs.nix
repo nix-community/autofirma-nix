@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   src = fetchzip {
     url = "https://www.izenpe.eus/contenidos/informacion/cas_izenpe/es_cas/adjuntos/Kit_certificados_ficticios_PRODUCCION_Izenpe.zip";
     stripRoot = false;
-    hash = "sha256-21aKv/XBudooPVmdIw2GkzlqxwieECAA9y/0VIWtLOU=";
+    hash = "sha256-8AC7lk3pj6KHkPQwBHDMmYB6UA45d00njzxUj/TAu/8=";
   };
   buildInputs = [ unzip openssl ];
   phases = "installPhase";
