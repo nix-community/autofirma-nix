@@ -29,7 +29,7 @@ let
     ];
   };
 in
-pkgs.nixosTest {
+pkgs.testers.nixosTest {
   name = testName;
   nodes.machine = { config, pkgs, modulesPath, ... }: {
     imports = [

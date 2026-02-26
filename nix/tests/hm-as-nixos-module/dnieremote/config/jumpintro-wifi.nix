@@ -1,5 +1,5 @@
 { self, pkgs, home-manager}:
-pkgs.nixosTest {
+pkgs.testers.nixosTest {
   name = "test-hm-as-nixos-module-dnieremote-config-jumpintro-wifi";
   nodes.machine = { config, pkgs, modulesPath, ... }: {
     imports = [

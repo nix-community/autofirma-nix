@@ -1,5 +1,5 @@
 { self, pkgs, lib }:
-pkgs.nixosTest {
+pkgs.testers.nixosTest {
   name = "test-nixos-autofirma-firefoxIntegration-sign-document";
   nodes.machine = { config, pkgs, modulesPath, ... }: {
     imports = [

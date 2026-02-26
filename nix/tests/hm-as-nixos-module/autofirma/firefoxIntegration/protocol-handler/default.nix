@@ -1,5 +1,5 @@
 { self, pkgs, home-manager, lib }:
-pkgs.nixosTest {
+pkgs.testers.nixosTest {
   name = "test-hm-as-nixos-module-autofirma-firefoxIntegration-protocol-handler";
   nodes.machine = { config, pkgs, modulesPath, ... }: {
     imports = [

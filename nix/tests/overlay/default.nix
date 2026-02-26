@@ -3,7 +3,7 @@ let
   openssl = lib.getExe pkgs.openssl;
 in
 
-pkgs.nixosTest {
+pkgs.testers.nixosTest {
   name = "test-overlay";
   nodes.machine = { config, pkgs, modulesPath, ... }: let
     pkgs' = pkgs.extend  self.overlays.default;

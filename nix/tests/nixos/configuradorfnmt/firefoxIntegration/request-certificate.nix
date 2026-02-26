@@ -1,5 +1,5 @@
 { self, pkgs, lib }:
-pkgs.nixosTest {
+pkgs.testers.nixosTest {
   name = "test-nixos-configuradorfnmt-firefoxIntegration-request-certificate";
   nodes.machine = { config, pkgs, modulesPath, ... }: {
     imports = [

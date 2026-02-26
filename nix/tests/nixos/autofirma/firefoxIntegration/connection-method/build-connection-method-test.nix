@@ -3,7 +3,7 @@
 let
   testCerts = pkgs.callPackage ../../../../_common/pkgs/test_certs.nix {};
 in
-pkgs.nixosTest {
+pkgs.testers.nixosTest {
   name = testName;
   nodes.machine = { config, pkgs, modulesPath, ... }: {
     imports = [

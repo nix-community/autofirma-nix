@@ -3,7 +3,7 @@ let
   openssl = lib.getExe pkgs.openssl;
 in
 
-pkgs.nixosTest {
+pkgs.testers.nixosTest {
   name = "test-nixos-autofirma-cli-sign-document";
   nodes.machine = { config, pkgs, modulesPath, ... }: {
     imports = [

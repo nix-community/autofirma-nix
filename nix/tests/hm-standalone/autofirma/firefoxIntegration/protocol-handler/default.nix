@@ -37,7 +37,7 @@ let
     ];
   };
 in
-pkgs.nixosTest {
+pkgs.testers.nixosTest {
   name = "test-hm-standalone-autofirma-firefoxIntegration-protocol-handler";
   nodes.machine = { config, pkgs, modulesPath, ... }: {
     imports = [
