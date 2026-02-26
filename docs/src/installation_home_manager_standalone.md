@@ -42,6 +42,8 @@ In your `flake.nix` for Home Manager:
           programs.dnieremote = {
             enable = true;
           };
+          # Note: The Android app may not be available on Google Play for modern devices.
+          # See the troubleshooting guide for installation alternatives.
 
           # FNMT certificate configurator
           programs.configuradorfnmt = {
@@ -79,7 +81,7 @@ This configuration:
 
 1. Adds AutoFirma to your personal Home Manager setup
 2. Configures Firefox integration for your specific profile(s)
-3. DNIeRemote integration allows using your phone as an NFC card reader for your DNIe
+3. DNIeRemote integration allows using your phone as an NFC card reader for your DNIe (see [troubleshooting](./troubleshooting.md#dnieremote-android-app-compatibility) for Android app installation)
 4. The FNMT certificate configurator helps with requesting and managing digital certificates
 5. Provides a complete environment for working with Spanish digital signatures
 6. Preserves the flexibility of Home Manager's standalone mode

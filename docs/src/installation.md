@@ -23,7 +23,7 @@ For all installation methods, you'll need to add autofirma-nix to your flake inp
 
     autofirma-nix = {
       url = "github:nix-community/autofirma-nix";  # For nixpkgs-unstable
-      # url = "github:nix-community/autofirma-nix/release-24.11";  # For NixOS 24.11
+      # url = "github:nix-community/autofirma-nix/release-25.05";  # For NixOS 25.05
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

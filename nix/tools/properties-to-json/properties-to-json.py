@@ -1,7 +1,38 @@
+#!/usr/bin/env python3
 import sys
 import json
 import xml.etree.ElementTree as ET
 import html
+import subprocess
+
+
+def html_to_markdown(html_content):
+    """
+    Convert HTML content to strict markdown using pandoc.
+    Uses stdin/stdout instead of temporary files.
+    """
+    if not html_content.strip():
+        return ""
+
+    try:
+        process = subprocess.Popen(
+            ["pandoc", "--from=html", "--to=markdown_strict"],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
+        stdout, stderr = process.communicate(input=html_content)
+
+        if process.returncode != 0:
+            print(f"Error converting HTML to markdown: {stderr}",
+                  file=sys.stderr)
+            return html_content
+
+        return stdout.strip()
+    except Exception as e:
+        print(f"Failed to convert HTML to markdown: {e}", file=sys.stderr)
+        return html_content
 
 
 def load_properties(properties_file):
@@ -58,6 +89,8 @@ def load_xml_descriptions(xml_file):
             # Combine text and tail if present (to capture inner tags' text)
             comment_text = ''.join(comment_elem.itertext()).strip()
             comment_text = html.unescape(comment_text)
+            # Convert HTML to markdown
+            comment_text = html_to_markdown(comment_text)
 
         pref_info[constant_text] = comment_text
 

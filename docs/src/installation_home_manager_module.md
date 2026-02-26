@@ -48,6 +48,8 @@ Then, configure AutoFirma for a specific user:
     programs.dnieremote = {
       enable = true;
     };
+    # Note: The Android app may not be available on Google Play for modern devices.
+    # See the troubleshooting guide for installation alternatives.
 
     # FNMT certificate configurator
     programs.configuradorfnmt = {
@@ -82,7 +84,7 @@ With this configuration:
 
 1. AutoFirma is only available to the specified user(s)
 2. Firefox integration is limited to specific Firefox profiles
-3. DNIeRemote integration allows using your phone as an NFC card reader for your DNIe
+3. DNIeRemote integration allows using your phone as an NFC card reader for your DNIe (see [troubleshooting](./troubleshooting.md#dnieremote-android-app-compatibility) for Android app installation)
 4. The FNMT certificate configurator helps with requesting and managing digital certificates
 5. Each user can have their own customized setup
 6. Only users who need these tools will have them installed

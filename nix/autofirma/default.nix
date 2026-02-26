@@ -53,7 +53,7 @@
       javaVersion = "17";
       srcVersion = "${src.rev}-autofirma-nix";
       javadocVersion = "3.11.2";
-      xmlDocletVersion = "2.0.2";
+      xmlDocletVersion = "2.0.3";
     in
     ''
       # Update the version of the Java runtime to use
@@ -252,6 +252,10 @@ in
     targetPkgs = pkgs: [
       firefox
       pkgs.nss
+      pkgs.fontconfig
+      pkgs.freetype
+      pkgs.dejavu_fonts
+      pkgs.liberation_ttf
     ];
     runScript = lib.getExe thisPkg;
     extraInstallCommands = ''

@@ -6,7 +6,7 @@
     "hash": "sha256-uTXo9T0rSU8QTAt4BScZLwVdwUEJQM5HbNsqj/R0rys="
   },
   "autofirma.clienteafirma": {
-    "hash": "sha256-AHxRQIynNm1ljSW7kADljfAiNedDDzDE9Bpe3oFGkkc=",
+    "hash": "sha256-saCzegNTOY6JYsaPRhna/V9Mfs+NM5UKXlO0imy+h5w=",
     "dependencies": [
       "autofirma.clienteafirma.dependencies.jmulticard",
       "autofirma.clienteafirma.dependencies.clienteafirma-external"

@@ -45,7 +45,7 @@ in
         phases = ["installPhase"];
         installPhase = ''
           for _src in $srcs; do
-            ${openssl}/bin/openssl verify -CAfile ${finalCABundle} $_src && cat $_src >> $out
+            ${openssl}/bin/openssl verify -CAfile ${finalCABundle} $_src && cat $_src >> $out || echo "Invalid cert in $_src, skipping."
           done
         '';
       };
