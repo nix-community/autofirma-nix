@@ -1,5 +1,5 @@
 { self, pkgs, home-manager, lib }:
-pkgs.nixosTest {
+pkgs.testers.nixosTest {
   name = "test-hm-as-nixos-module-configuradorfnmt-firefoxIntegration-request-certificate";
   nodes.machine = { config, pkgs, modulesPath, ... }: {
     imports = [

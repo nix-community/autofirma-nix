@@ -30,6 +30,10 @@ jobs:
         uses: nilp0inter/urlwatch-action@daaec60bb7dd6071ee3c25665683bedb6515070c # v0.1.0
         with:
           cache-name: 'urlwatch-cache-${{ matrix.owner }}-${{ matrix.repo }}-${{ matrix.object }}'
+          settings: |
+            job_defaults:
+              url:
+                ignore_http_error_codes: 5xx
           token: ${{ secrets.GITHUB_TOKEN }}
           urls: |
             url: https://api.github.com/repos/${{ matrix.owner }}/${{ matrix.repo }}/${{ matrix.object }}

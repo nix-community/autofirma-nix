@@ -1,5 +1,5 @@
 { self, pkgs, home-manager }:
-pkgs.nixosTest {
+pkgs.testers.nixosTest {
   name = "test-hm-as-nixos-module-autofirma-config-omitAskOnClose";
   nodes.machine = { config, pkgs, modulesPath, ... }: {
     imports = [

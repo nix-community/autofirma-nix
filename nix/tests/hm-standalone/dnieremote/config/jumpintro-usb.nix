@@ -17,7 +17,7 @@ let
     ];
   };
 in
-pkgs.nixosTest {
+pkgs.testers.nixosTest {
   name = "test-hm-standalone-dnieremote-config-jumpintro-usb";
   nodes.machine = { config, pkgs, modulesPath, ... }: {
     imports = [

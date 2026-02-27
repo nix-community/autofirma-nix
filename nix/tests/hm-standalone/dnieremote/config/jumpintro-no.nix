@@ -17,7 +17,7 @@ let
     ];
   };
 in
-pkgs.nixosTest {
+pkgs.testers.nixosTest {
   name = "test-hm-standalone-dnieremote-config-jumpintro-no";
   nodes.machine = { config, pkgs, modulesPath, ... }: {
     imports = [

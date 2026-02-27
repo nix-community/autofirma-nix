@@ -1,5 +1,5 @@
 { self, pkgs }:
-pkgs.nixosTest {
+pkgs.testers.nixosTest {
   name = "test-nixos-module-dnieremote-config-wifiport";
   nodes.machine = { config, pkgs, modulesPath, ... }: {
     imports = [

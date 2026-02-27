@@ -17,7 +17,7 @@ let
     ];
   };
 in
-pkgs.nixosTest {
+pkgs.testers.nixosTest {
   name = "test-hm-standalone-autofirma-config-omitAskOnClose";
   nodes.machine = { config, pkgs, modulesPath, ... }: {
     imports = [

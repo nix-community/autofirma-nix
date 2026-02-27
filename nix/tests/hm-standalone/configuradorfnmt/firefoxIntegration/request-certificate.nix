@@ -37,7 +37,7 @@ let
     ];
   };
 in
-pkgs.nixosTest {
+pkgs.testers.nixosTest {
   name = "test-hm-standalone-configuradorfnmt-firefoxIntegration-request-certificate";
   nodes.machine = { config, pkgs, modulesPath, ... }: {
     imports = [
