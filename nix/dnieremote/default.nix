@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   name = "dnieremote";
   version = "1.0-5";
   src = fetchzip {
-    url = "https://www.dnie.es/descargas/Apps/DNIeRemote_${version}_amd64.zip";
+    url = "https://www.dnielectronico.es/descargas/Apps/DNIeRemote_${version}_amd64.zip";
     hash = "sha256-NLIbgLknfHq6volGv9X3mBgIAdpcvnAo8fMBDeIGSQQ=";
     stripRoot = false;
   };
