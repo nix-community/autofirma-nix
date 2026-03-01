@@ -1,12 +1,12 @@
 {
   "autofirma.clienteafirma.dependencies.jmulticard": {
-    "hash": "sha256-UNufxSVb2ers37am3WdIjxVrtwAiFHqSnm2y+rVoTJQ="
+    "hash": "sha256-G+Ko5yxGR6k24X+tNy0QNrRFAeE9uLv5guQ1u+HkqqQ="
   },
   "autofirma.clienteafirma.dependencies.clienteafirma-external": {
-    "hash": "sha256-aeTJ4oo/FF0qO8a8Pj45BAVl4e9tSM/YY+xIXVx9x9o="
+    "hash": "sha256-uTXo9T0rSU8QTAt4BScZLwVdwUEJQM5HbNsqj/R0rys="
   },
   "autofirma.clienteafirma": {
-    "hash": "sha256-KssGxi+w0uaL5rHFXd19E2oQUUI6wd8Cl6jvflj8XpE=",
+    "hash": "sha256-saCzegNTOY6JYsaPRhna/V9Mfs+NM5UKXlO0imy+h5w=",
     "dependencies": [
       "autofirma.clienteafirma.dependencies.jmulticard",
       "autofirma.clienteafirma.dependencies.clienteafirma-external"

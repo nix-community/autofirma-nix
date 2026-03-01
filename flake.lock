@@ -3,16 +3,16 @@
     "autofirma-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1716805628,
-        "narHash": "sha256-GQyj3QuWIHTkYwdJ4oKVsG923YG9mCUXfhqdIvEWNMA=",
+        "lastModified": 1747811913,
+        "narHash": "sha256-vk0I2wpaiwC5kY8R36i/1CLHGCtsl3scDcJ6qg1p50k=",
         "owner": "ctt-gob-es",
         "repo": "clienteafirma",
-        "rev": "f8888062394a4ca41c5802beb2524597a5ce465a",
+        "rev": "1f29aa7a2aae8eda40a70fed79b0428153c78df8",
         "type": "github"
       },
       "original": {
         "owner": "ctt-gob-es",
-        "ref": "v1.8.3",
+        "ref": "v1.9",
         "repo": "clienteafirma",
         "type": "github"
       }
@@ -20,16 +20,16 @@
     "clienteafirma-external-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1712248159,
-        "narHash": "sha256-iS3I6zIxuKG133s/FqDlXZzOZ2ZOJcqZK9X6Tv3+3lc=",
+        "lastModified": 1753702371,
+        "narHash": "sha256-3bXdZ6fQAId6nHqiJ60BDBhFI9cosN7jtI0soggcO9Q=",
         "owner": "ctt-gob-es",
         "repo": "clienteafirma-external",
-        "rev": "f450ac76094ffe387f6590b9ac61b5ada5a501e7",
+        "rev": "d3792cc3816906da7fff652f9bd122f84b29b5c7",
         "type": "github"
       },
       "original": {
         "owner": "ctt-gob-es",
-        "ref": "OT_14395",
+        "ref": "v1.0.6",
         "repo": "clienteafirma-external",
         "type": "github"
       }
@@ -75,16 +75,16 @@
     "jmulticard-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1686816513,
-        "narHash": "sha256-sCqMK4FvwRHsGIB6iQVyqrx0+EDiUfQSAsPqmDq2Giw=",
+        "lastModified": 1753703143,
+        "narHash": "sha256-XHX9MwWQe9BIjEfrrquU9gtzx3x6leGBhWjMPmVtALE=",
         "owner": "ctt-gob-es",
         "repo": "jmulticard",
-        "rev": "9983fc690f3b68dc2c8fde19db269766cf0fb387",
+        "rev": "2550e7eab43b9089673d0989959894846425f499",
         "type": "github"
       },
       "original": {
         "owner": "ctt-gob-es",
-        "ref": "v1.8",
+        "ref": "v2.0",
         "repo": "jmulticard",
         "type": "github"
       }

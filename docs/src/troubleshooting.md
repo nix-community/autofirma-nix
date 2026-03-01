@@ -4,7 +4,7 @@ Encountering issues? Here are some tips to get you back on track:
 
 ## Security devices do not seem to update or do not appear
 
-If you have installed AutoFirma and enabled Firefox integration, but Firefox does not
+If you have installed Autofirma and enabled Firefox integration, but Firefox does not
 detect the security devices, you may need to remove the `pkcs11.txt` file from the
 Firefox profile folder. For instance, if you enabled the Home Manager module and the
 profile is named `myprofile`, the file is located in `~/.mozilla/firefox/myprofile/pkcs11.txt`.
@@ -39,7 +39,7 @@ SEVERE: El almacen no contiene ningun certificado que se pueda usar para firmar:
 This occurs because your certificates have expired, as indicated by the “NotAfter:” date.
 
 If the certificates are not expired because you recently renewed them, but you used
-AutoFirma before this renewal, it is possible that OpenSC has cached your old certificates.
+Autofirma before this renewal, it is possible that OpenSC has cached your old certificates.
 To fix this, you need to delete the OpenSC cache. [By default, it is located at
 $HOME/.cache/opensc](https://github.com/OpenSC/OpenSC/wiki/Environment-variables).
 

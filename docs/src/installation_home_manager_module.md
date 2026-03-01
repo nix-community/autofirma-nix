@@ -18,7 +18,7 @@ First, make sure Home Manager is imported in your NixOS configuration:
 
 ```nix
 {
-  imports = [
+  modules = [
     # Your other imports
     home-manager.nixosModules.home-manager
   ];
