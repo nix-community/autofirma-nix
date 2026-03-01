@@ -22,11 +22,9 @@ jobs:
 
     steps:
       - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@c5a866b6ab867e88becbed4467b93592bce69f8a # v21
+        uses: cachix/install-nix-action@2126ae7fc54c9df00dd18f7f18754393182c73cd # v31.9.1
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          extra-conf: |
-            extra-experimental-features = nix-command flakes
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up cache
         uses: DeterminateSystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39 # v13
@@ -68,11 +66,9 @@ jobs:
 
     steps:
       - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@c5a866b6ab867e88becbed4467b93592bce69f8a # v21
+        uses: cachix/install-nix-action@2126ae7fc54c9df00dd18f7f18754393182c73cd # v31.9.1
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          extra-conf: |
-            extra-experimental-features = nix-command flakes
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up cache
         uses: DeterminateSystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39 # v13
