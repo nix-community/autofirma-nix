@@ -1,6 +1,5 @@
 [book]
 authors = ["Roberto Abdelkader Martínez Pérez", "pancho horrillo", "César Gallego Rodríguez"]
 language = "en"
-multilingual = false
 src = "src"
 title = "autofirma-nix"
