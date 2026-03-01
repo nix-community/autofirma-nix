@@ -22,7 +22,7 @@ jobs:
           settings: |
             job_defaults:
               url:
-                ignore_http_error_codes: 5xx
+                ignore_http_error_codes: 4xx, 5xx
           token: ${{ secrets.GITHUB_TOKEN }}
           urls: |
             url: "https://firmaelectronica.gob.es/Home/Descargas.html"
@@ -53,9 +53,13 @@ jobs:
     steps:
       - name: Monitor Configurador FNMT-RCM Releases
         id: monitor
-        uses: nilp0inter/urlwatch-action@v0.1.0
+        uses: nilp0inter/urlwatch-action@daaec60bb7dd6071ee3c25665683bedb6515070c # v0.1.0
         with:
           cache-name: 'urlwatch-configuradorfnmt'
+          settings: |
+            job_defaults:
+              url:
+                ignore_http_error_codes: 4xx, 5xx
           token: ${{ secrets.GITHUB_TOKEN }}
           urls: |
             url: "https://www.sede.fnmt.gob.es/descargas/descarga-software/instalacion-software-generacion-de-claves"
@@ -88,9 +92,13 @@ jobs:
     steps:
       - name: Monitor DNIeRemote Releases
         id: monitor
-        uses: nilp0inter/urlwatch-action@v0.1.0
+        uses: nilp0inter/urlwatch-action@daaec60bb7dd6071ee3c25665683bedb6515070c # v0.1.0
         with:
           cache-name: 'urlwatch-dnieremote'
+          settings: |
+            job_defaults:
+              url:
+                ignore_http_error_codes: 4xx, 5xx
           token: ${{ secrets.GITHUB_TOKEN }}
           urls: |
             name: "DNIeRemote"

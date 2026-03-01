@@ -33,7 +33,7 @@ jobs:
           settings: |
             job_defaults:
               url:
-                ignore_http_error_codes: 5xx
+                ignore_http_error_codes: 4xx, 5xx
           token: ${{ secrets.GITHUB_TOKEN }}
           urls: |
             url: https://api.github.com/repos/${{ matrix.owner }}/${{ matrix.repo }}/${{ matrix.object }}
