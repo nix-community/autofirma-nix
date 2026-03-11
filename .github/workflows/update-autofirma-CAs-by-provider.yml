@@ -45,7 +45,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Install Nix Package Manager
-        uses: cachix/install-nix-action@2126ae7fc54c9df00dd18f7f18754393182c73cd # v31.9.1
+        uses: cachix/install-nix-action@1ca7d21a94afc7c957383a2d217460d980de4934 # v31.10.1
 
       - name: Download CA for ${{ matrix.fetch_link.cif }}
         shell: bash  # https://github.com/actions/runner-images/issues/4459#issuecomment-1374859960
