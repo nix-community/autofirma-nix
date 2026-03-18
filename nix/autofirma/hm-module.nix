@@ -41,6 +41,8 @@ with lib; let
   boolsToStrings = lib.attrsets.mapAttrs (_: v: if builtins.isBool v then lib.boolToString v else v);
   autofirma-prefs-format = {
     type = types.submodule {
+      freeformType = types.str;
+
       options = lib.attrsets.mapAttrs (_: value: mkOption rec {
         type = if value.default == "true" || value.default == "false" then types.bool else types.str;
         default = if (type == types.bool) then (value.default == "true") else value.default;
