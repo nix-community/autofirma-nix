@@ -28,7 +28,7 @@ jobs:
           nix develop --accept-flake-config --command update-fixed-output-derivations
 
       - name: Create Pull Request for the updated fixed-output derivations lock file
-        uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8.1.0
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           # Use the branch name from the push event for both the new branch and the PR base
           branch: update/fixed-output-derivations/${{ github.ref_name }}
