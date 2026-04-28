@@ -8,14 +8,14 @@ updates:
     directory: "/"
     target-branch: "main"
     schedule:
-      interval: "weekly"
+      interval: "daily"
   - package-ecosystem: "nix"
     directory: "/"
     target-branch: "develop"
     schedule:
-      interval: "weekly"
+      interval: "daily"
   - package-ecosystem: "nix"
     directory: "/"
     target-branch: "release-25.11"
     schedule:
-      interval: "weekly"
+      interval: "daily"
