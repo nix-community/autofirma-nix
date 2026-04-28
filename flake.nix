@@ -24,7 +24,7 @@
   # Autofirma sources
   inputs = {
     jmulticard-src = {
-      url = "github:ctt-gob-es/jmulticard/v2.0";
+      url = "github:ctt-gob-es/jmulticard/v3.0.3";
       flake = false;
     };
 
