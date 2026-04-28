@@ -16,11 +16,6 @@ updates:
       interval: "weekly"
   - package-ecosystem: "nix"
     directory: "/"
-    target-branch: "release-25.05"
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "nix"
-    directory: "/"
     target-branch: "release-25.11"
     schedule:
       interval: "weekly"
