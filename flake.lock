@@ -20,16 +20,16 @@
     "clienteafirma-external-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1753702371,
-        "narHash": "sha256-3bXdZ6fQAId6nHqiJ60BDBhFI9cosN7jtI0soggcO9Q=",
+        "lastModified": 1771341316,
+        "narHash": "sha256-zJc4Kd1fGvY0nKb0QAbHxHaZGn223RxyRG5eEWLVZKc=",
         "owner": "ctt-gob-es",
         "repo": "clienteafirma-external",
-        "rev": "d3792cc3816906da7fff652f9bd122f84b29b5c7",
+        "rev": "1c663c52e4161a48cae9187d02607c65a0b72831",
         "type": "github"
       },
       "original": {
         "owner": "ctt-gob-es",
-        "ref": "v1.0.6",
+        "ref": "v1.0.7",
         "repo": "clienteafirma-external",
         "type": "github"
       }

@@ -28,7 +28,7 @@
     };
 
     clienteafirma-external-src = {
-      url = "github:ctt-gob-es/clienteafirma-external/v1.0.6";
+      url = "github:ctt-gob-es/clienteafirma-external/v1.0.7";
       flake = false;
     };
 
