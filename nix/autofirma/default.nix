@@ -31,7 +31,6 @@
 
     patches =
       [
-        ./patches/clienteafirma/pr-367.patch
         ./patches/clienteafirma/etc_config.patch
         ./patches/clienteafirma/aarch64_elf.patch  # Until https://github.com/ctt-gob-es/clienteafirma/pull/435 gets merged
       ]
