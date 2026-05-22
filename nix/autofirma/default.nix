@@ -34,12 +34,12 @@
         ./patches/clienteafirma/etc_config.patch
         ./patches/clienteafirma/aarch64_elf.patch  # Until https://github.com/ctt-gob-es/clienteafirma/pull/435 gets merged
       ]
-      ++ (lib.optional disableJavaVersionCheck [
+      ++ lib.optionals disableJavaVersionCheck [
         ./patches/clienteafirma/dont_check_java_version.patch
-      ])
-      ++ (lib.optional darkModeFix [
+      ]
+      ++ lib.optionals darkModeFix [
         ./patches/clienteafirma/dark_mode_fix.patch
-      ]);
+      ];
 
     dontBuild = true;
 
