@@ -1,12 +1,14 @@
 diff --git a/afirma-simple/src/main/java/es/gob/afirma/standalone/SimpleAfirma.java b/afirma-simple/src/main/java/es/gob/afirma/standalone/SimpleAfirma.java
-index 22b2cd997..3e52d8a07 100644
+index ae05aa195..3144533cf 100644
 --- a/afirma-simple/src/main/java/es/gob/afirma/standalone/SimpleAfirma.java
 +++ b/afirma-simple/src/main/java/es/gob/afirma/standalone/SimpleAfirma.java
-@@ -1021,7 +1021,6 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
+@@ -1053,9 +1053,6 @@ public final class SimpleAfirma implements PropertyChangeListener, WindowListene
  				LOGGER.info("Iniciando entorno grafico"); //$NON-NLS-1$
- 				saf.initGUI(null);
+ 				saf.initGUI(null, null);
  
+-				LOGGER.info("Comprobando si es una version de Java compatible"); //$NON-NLS-1$
 -				checkJavaVersion(saf.getMainFrame());
- 			} else {
- 				LOGGER.log(Level.WARNING, "La aplicacion ya se encuentra activa en otra ventana. Se cerrara esta instancia"); //$NON-NLS-1$
- 	    		AOUIFactory.showErrorMessage(SimpleAfirmaMessages.getString("SimpleAfirma.3"), //$NON-NLS-1$
+-
+ 				// Comprobamos si el almacen de confianza con el certificado SSL esta instalado correctamente
+     			final CheckTrustKeyStoreTask checkTrustStoreTask = new CheckTrustKeyStoreTask(saf.getMainFrame());
+     			checkTrustStoreTask.execute();
