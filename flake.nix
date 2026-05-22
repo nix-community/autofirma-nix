@@ -34,7 +34,7 @@
     };
 
     autofirma-src = {
-      url = "github:ctt-gob-es/clienteafirma/v1.9.1";
+      url = "github:ctt-gob-es/clienteafirma/v1.9.2";
       flake = false;
     };
   };
