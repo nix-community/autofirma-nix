@@ -18,7 +18,6 @@
     flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
     nix-unit.url = "github:nix-community/nix-unit";
     nix-unit.inputs.nixpkgs.follows = "nixpkgs";
-    nix-unit.inputs.flake-parts.follows = "flake-parts";
   };
 
   # Autofirma sources
