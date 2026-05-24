@@ -75,16 +75,16 @@
     "jmulticard-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1753703143,
-        "narHash": "sha256-XHX9MwWQe9BIjEfrrquU9gtzx3x6leGBhWjMPmVtALE=",
+        "lastModified": 1777459913,
+        "narHash": "sha256-TQ0spXElU3SVTk5bdChj2gz+w1iwyxG8VF+gEjcnOvE=",
         "owner": "ctt-gob-es",
         "repo": "jmulticard",
-        "rev": "2550e7eab43b9089673d0989959894846425f499",
+        "rev": "4ec9494f181a2e94d4aeaf62b63a30bcd98f4624",
         "type": "github"
       },
       "original": {
         "owner": "ctt-gob-es",
-        "ref": "v2.0",
+        "ref": "v2.1",
         "repo": "jmulticard",
         "type": "github"
       }
