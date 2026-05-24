@@ -251,6 +251,7 @@ in
     targetPkgs = pkgs: [
       firefox
       pkgs.nss
+      pkgs.pcsclite
       pkgs.fontconfig
       pkgs.freetype
       pkgs.dejavu_fonts
