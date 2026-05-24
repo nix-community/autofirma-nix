@@ -52,7 +52,7 @@
 
       mkdir -p $out/.m2/repository
 
-      mvn clean package dependency:go-offline -Dmaven.repo.local=$out/.m2/repository -DskipTests
+      mvn clean package dependency:resolve-plugins dependency:go-offline -Dmaven.repo.local=$out/.m2/repository -DskipTests
 
       runHook postBuild
     '';

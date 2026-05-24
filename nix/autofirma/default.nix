@@ -106,7 +106,7 @@
 
       mvn install -Dmaven.repo.local=$out/.m2/repository -DskipTests -Denv=dev  # Some install modules are only declared in the dev profile
                                                                                 # but are needed in the install profile.  We delete them later.
-      mvn dependency:go-offline -Dmaven.repo.local=$out/.m2/repository -DskipTests -Denv=install
+      mvn dependency:resolve-plugins dependency:go-offline -Dmaven.repo.local=$out/.m2/repository -DskipTests -Denv=install
 
       runHook postBuild
     '';
