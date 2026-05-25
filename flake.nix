@@ -17,7 +17,6 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     flake-parts.inputs.nixpkgs-lib.follows = "nixpkgs";
     nix-unit.url = "github:nix-community/nix-unit";
-    nix-unit.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   # Autofirma sources
