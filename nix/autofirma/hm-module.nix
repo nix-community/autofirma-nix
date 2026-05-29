@@ -16,6 +16,8 @@ with lib; let
   anyFirefoxIntegrationProfileIsEnabled = builtins.any (x: x.enable) (lib.attrsets.attrValues cfg.firefoxIntegration.profiles);
   defaultAutofirmaSettings = lib.recursiveUpdate cfg.finalPackage.clienteafirma.preferences {
     "default.locale".default = if osConfig ? defaultLocale then osConfig.defaultLocale else "en_US";
+    # REVIEW: remove when upstream adds it to preferences.properties, see ctt-gob-es/clienteafirma#497
+    "useDefaultStoreInBrowserCalls".default = "false";
   };
   json-to-xmlprefs = name: value: pkgs.callPackage ({ runCommand, jq }: runCommand name {
       nativeBuildInputs = [ jq ];
