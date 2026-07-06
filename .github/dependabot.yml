@@ -14,8 +14,3 @@ updates:
     target-branch: "develop"
     schedule:
       interval: "daily"
-  - package-ecosystem: "nix"
-    directory: "/"
-    target-branch: "release-25.11"
-    schedule:
-      interval: "daily"
