@@ -1,15 +1,15 @@
 [
   {
+    "name": "ANF AUTORIDAD DE CERTIFICACIÓN ASOCIACIÓN (ANF AC)",
+    "cif": "G63287510",
+    "website": "www.anf.es",
+    "source": "Registro Nacional de Asociaciones con el nº 171443 de la Sección 1ª"
+  },
+  {
     "name": "ANF CERTIFICATION AUTHORITY SL",
     "cif": "B87341228",
     "website": "https://www.anf.ac/",
     "source": "Registro Mercantil de Madrid Tomo 33744, Hoja M-607340, Folio 155"
-  },
-  {
-    "name": "Dirección General de la Policía",
-    "cif": "S2816015H",
-    "website": "www.dnielectronico.es/",
-    "source": "Órgano de la Administración del Estado. Sus competencias vienen atribuidas por la Constitución Española de 1978 y por Ley Orgánica 2/1986, de 13 de marzo, de Fuerzas y Cuerpos de Seguridad."
   },
   {
     "name": "EADTrust European Agency of Digital Trust, S.L.",
@@ -24,22 +24,10 @@
     "source": "Registro Mercantil de Barcelona, Tomo 33996, Folio 152, Hoja B240292, Num. Insc. 2"
   },
   {
-    "name": "Fábrica Nacional de Moneda y Timbre - Real Casa de la Moneda, Entidad Pública Empresarial, Medio Propio (FNMT-RCM)",
-    "cif": "Q2826004J",
-    "website": "www.cert.fnmt.es",
-    "source": "Las competencias de la FNMT-RCM quedan definidas por el Real Decreto 1317/2001 de 30 de noviembre, por el que se desarrolla el artículo 81 de la Ley 66/1999"
-  },
-  {
     "name": "Infraestructuras y Servicios de Telecomunicaciones y Certificación S.A.",
     "cif": "A40573396",
     "website": "www.accv.es",
     "source": "Registro Mercantil de Valencia. Sección 8. Hoja 189461."
-  },
-  {
-    "name": "SISTEMAS INFORMATICOS ABIERTOS, S.A.U.",
-    "cif": "A82733262",
-    "website": "https://psc.sia.es",
-    "source": "Registro Mercantil de Madrid Tomo:15741 Folio:28 sección 8 Hoja: M-265398 N.Inscrip.: 1"
   },
   {
     "name": "Ziurtapen eta Zerbitzu Enpresa - Empresa de Certificación y Servicios, Izenpe, S.A.",
