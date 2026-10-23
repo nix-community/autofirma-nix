@@ -98,6 +98,17 @@ function do_init {
 		-name "socketautofirma" \
 		-passout pass:654321 \
 		-out "${_autofirma_pfx}"
+        # AutoFirma's own local WebSocket server (AfirmaWebSocketServerManager)
+        # reads this file as whichever unprivileged user invokes AutoFirma from
+        # the browser, but this script is typically run once as root via a
+        # systemd oneshot service (see ../module.nix). The final permissions on
+        # ${_autofirma_pfx} therefore depend entirely on the umask in effect for
+        # that root process, which is not guaranteed to leave the file
+        # world-readable. Set it explicitly rather than relying on the caller's
+        # umask, to avoid a silent, hard-to-diagnose permission-denied failure
+        # (SocketOperationException / SAF_45) the first time a user tries to
+        # sign from a browser.
+        chmod 644 "${_autofirma_ca}" "${_autofirma_pfx}"
 		rm -rf "${_temp_dir}"
 		unset _ca _req _temp_dir
 }
