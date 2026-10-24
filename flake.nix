@@ -36,6 +36,13 @@
       url = "github:ctt-gob-es/clienteafirma/v1.9";
       flake = false;
     };
+
+    # DNIeRemote is a prebuilt binary linked against OpenSSL 1.1, which nixpkgs
+    # removed on 2026-07-24.  We build it with the last expression nixpkgs had.
+    nixpkgs-openssl_1_1 = {
+      url = "github:NixOS/nixpkgs/7c7f615746d624e6cbfe1baaabb48ead2c82084a";
+      flake = false;
+    };
   };
 
   outputs = inputs @ {
@@ -46,6 +53,7 @@
     jmulticard-src,
     clienteafirma-external-src,
     autofirma-src,
+    nixpkgs-openssl_1_1,
     nix-unit
   }:
     flake-parts.lib.mkFlake {inherit inputs;} {
@@ -91,7 +99,8 @@
         };
         packages.x86_64-linux = let
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
-          ignoreVulnerable_openssl_1_1 = pkgs.openssl_1_1.overrideAttrs (oldAttrs: rec {
+          openssl_1_1 = (pkgs.callPackages "${nixpkgs-openssl_1_1}/pkgs/development/libraries/openssl" {}).openssl_1_1;
+          ignoreVulnerable_openssl_1_1 = openssl_1_1.overrideAttrs (oldAttrs: rec {
             meta = (oldAttrs.meta or {}) // {knownVulnerabilities = [];};
           });
         in {
