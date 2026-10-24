@@ -70,7 +70,7 @@
     installPhase = ''
       runHook preInstall
 
-      rm -rf $out/.m2/respository/es/gob/afirma/jmulticard
+      rm -rf $out/.m2/repository/es/gob/afirma/jmulticard
 
       find $out -type f \( \
         -name \*.lastUpdated \

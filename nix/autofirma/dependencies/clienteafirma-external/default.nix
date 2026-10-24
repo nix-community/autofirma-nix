@@ -62,7 +62,7 @@
     installPhase = ''
       runHook preInstall
 
-      rm -rf $out/.m2/respository/es/gob/afirma/lib
+      rm -rf $out/.m2/repository/es/gob/afirma/lib
 
       find $out -type f \( \
         -name \*.lastUpdated \
