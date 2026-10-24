@@ -10,6 +10,11 @@
 }: let
   name = "jmulticard";
 
+  # bcpkix-jdk18on 1.80 asks for bcutil-jdk18on [1.80,1.81).  Pin it to the
+  # version that range resolves to today, so that Maven does not resolve it
+  # against Maven Central's metadata, which changes with every release.
+  bcutilVersion = "1.80.2";
+
   jmulticard-src = stdenv.mkDerivation {
     name = "${name}-src";
 
@@ -28,6 +33,8 @@
       update-pkg-version "${src.rev}-autofirma-nix"
       update-dependency-version-by-groupId "es.gob.afirma.jmulticard" "${src.rev}-autofirma-nix"
       reset-project-build-timestamp
+      pin-default-plugin-versions
+      pin-managed-version dependency org.bouncycastle bcutil-jdk18on "${bcutilVersion}"
     '';
 
     installPhase = ''
@@ -52,7 +59,10 @@
 
       mkdir -p $out/.m2/repository
 
-      mvn clean package dependency:go-offline -Dmaven.repo.local=$out/.m2/repository -DskipTests
+      # Maven 3.10 (resolver 2) collects dependencies breadth-first and skips
+      # the poms of conflict losers; force the depth-first collector of Maven
+      # 3.9 so the downloaded repository does not depend on the Maven version.
+      mvn clean package dependency:go-offline -Dmaven.repo.local=$out/.m2/repository -DskipTests -Daether.dependencyCollector.impl=df
 
       runHook postBuild
     '';
@@ -65,8 +75,17 @@
       find $out -type f \( \
         -name \*.lastUpdated \
         -o -name resolver-status.properties \
-        -o -name _remote.repositories \) \
+        -o -name _remote.repositories \
+        -o -name \*.md5 \
+        -o -name \*.sha1 \) \
         -delete
+
+      # Remote metadata is only needed to resolve version ranges, and it
+      # changes with every upstream release.  Ranges are pinned in the poms.
+      find $out -type f -name 'maven-metadata-*.xml' -not -name maven-metadata-local.xml -delete
+
+      # Written by Maven 3.10 (resolver 2): remote prefix lists and lock files
+      rm -rf $out/.m2/repository/.meta $out/.m2/repository/.locks
 
       runHook postInstall
     '';
@@ -83,6 +102,7 @@ in
 
     groupId = "es.gob.afirma.jmulticard";
     finalVersion = "${src.rev}-autofirma-nix";
+    inherit bcutilVersion;
 
     src = jmulticard-src;
 

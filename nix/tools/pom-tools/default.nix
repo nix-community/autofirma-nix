@@ -18,11 +18,13 @@
     reset-project-build-timestamp = ./lib/reset-project-build-timestamp.sh;
     reset-maven-metadata-local-timestamp = ./lib/reset-maven-metadata-local-timestamp.sh;
     update-plugin-version-by-groupId = ./lib/update-plugin-version-by-groupId.sh;
+    pin-default-plugin-versions = ./lib/pin-default-plugin-versions.sh;
   };
   pythonScripts = lib.mapAttrsToList (name: path:
       writers.writePython3Bin name { libraries = [ ]; flakeIgnore = [ "E501" ]; } (builtins.readFile path)
       ) {
     add-xml-doclet-to-javadoc-plugin = ./lib/add-xml-doclet-to-javadoc-plugin.py;
+    pin-managed-version = ./lib/pin-managed-version.py;
   };
 in
   symlinkJoin {

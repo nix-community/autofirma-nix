@@ -26,6 +26,7 @@
       update-pkg-version "${src.rev}-autofirma-nix"
       update-dependency-version-by-groupId "es.gob.afirma.lib" "${src.rev}-autofirma-nix"
       reset-project-build-timestamp
+      pin-default-plugin-versions
     '';
 
     installPhase = ''
@@ -50,7 +51,10 @@
 
       mkdir -p $out/.m2/repository
 
-      mvn clean package dependency:go-offline -Dmaven.repo.local=$out/.m2/repository -DskipTests
+      # Maven 3.10 (resolver 2) collects dependencies breadth-first and skips
+      # the poms of conflict losers; force the depth-first collector of Maven
+      # 3.9 so the downloaded repository does not depend on the Maven version.
+      mvn clean package dependency:go-offline -Dmaven.repo.local=$out/.m2/repository -DskipTests -Daether.dependencyCollector.impl=df
 
       runHook postBuild
     '';
@@ -63,8 +67,17 @@
       find $out -type f \( \
         -name \*.lastUpdated \
         -o -name resolver-status.properties \
-        -o -name _remote.repositories \) \
+        -o -name _remote.repositories \
+        -o -name \*.md5 \
+        -o -name \*.sha1 \) \
         -delete
+
+      # Remote metadata is only needed to resolve version ranges, and it
+      # changes with every upstream release.  Ranges are pinned in the poms.
+      find $out -type f -name 'maven-metadata-*.xml' -not -name maven-metadata-local.xml -delete
+
+      # Written by Maven 3.10 (resolver 2): remote prefix lists and lock files
+      rm -rf $out/.m2/repository/.meta $out/.m2/repository/.locks
 
       runHook postInstall
     '';
