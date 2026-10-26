@@ -76,6 +76,11 @@
       # For the build to be deterministic, we need to reset the project build timestamp
       reset-project-build-timestamp
 
+      # Make the downloaded dependencies independent of the Maven version and
+      # of new Bouncy Castle releases (jmulticard brings in a version range)
+      pin-default-plugin-versions
+      pin-managed-version dependency org.bouncycastle bcutil-jdk18on "${jmulticard.bcutilVersion}"
+
       # Register the xmldoclet plugin in the pom.xml for documentation generation
       update-plugin-version-by-groupId "org.apache.maven.plugins" "maven-javadoc-plugin" "${javadocVersion}"
       add-xml-doclet-to-javadoc-plugin "${javadocVersion}" "${xmlDocletVersion}"
@@ -105,9 +110,13 @@
 
       chmod -R +w $out/.m2/repository
 
-      mvn install -Dmaven.repo.local=$out/.m2/repository -DskipTests -Denv=dev  # Some install modules are only declared in the dev profile
-                                                                                # but are needed in the install profile.  We delete them later.
-      mvn dependency:go-offline -Dmaven.repo.local=$out/.m2/repository -DskipTests -Denv=install
+      # Maven 3.10 (resolver 2) collects dependencies breadth-first and skips
+      # the poms of conflict losers; force the depth-first collector of Maven
+      # 3.9 so the downloaded repository does not depend on the Maven version.
+      # Some install modules are only declared in the dev profile but are
+      # needed in the install profile.  We delete them later.
+      mvn install -Dmaven.repo.local=$out/.m2/repository -DskipTests -Daether.dependencyCollector.impl=df -Denv=dev
+      mvn dependency:go-offline -Dmaven.repo.local=$out/.m2/repository -DskipTests -Daether.dependencyCollector.impl=df -Denv=install
 
       runHook postBuild
     '';
@@ -120,8 +129,17 @@
       find $out -type f \( \
         -name \*.lastUpdated \
         -o -name resolver-status.properties \
-        -o -name _remote.repositories \) \
+        -o -name _remote.repositories \
+        -o -name \*.md5 \
+        -o -name \*.sha1 \) \
         -delete
+
+      # Remote metadata is only needed to resolve version ranges, and it
+      # changes with every upstream release.  Ranges are pinned in the poms.
+      find $out -type f -name 'maven-metadata-*.xml' -not -name maven-metadata-local.xml -delete
+
+      # Written by Maven 3.10 (resolver 2): remote prefix lists and lock files
+      rm -rf $out/.m2/repository/.meta $out/.m2/repository/.locks
 
       runHook postInstall
     '';
