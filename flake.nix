@@ -102,6 +102,9 @@
           openssl_1_1 = (pkgs.callPackages "${nixpkgs-openssl_1_1}/pkgs/development/libraries/openssl" {}).openssl_1_1;
           ignoreVulnerable_openssl_1_1 = openssl_1_1.overrideAttrs (oldAttrs: rec {
             meta = (oldAttrs.meta or {}) // {knownVulnerabilities = [];};
+            # Its test suite is irrelevant here (only the prebuilt DNIeRemote links it)
+            # and test_afalg fails on some host kernels.
+            doCheck = false;
           });
         in {
           dnieremote = pkgs.callPackage ./nix/dnieremote/default.nix {openssl_1_1 = ignoreVulnerable_openssl_1_1;};
