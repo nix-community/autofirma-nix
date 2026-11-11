@@ -2,11 +2,13 @@
   lib,
   stdenv,
   fetchzip,
+  fetchurl,
+  patchelf,
   dpkg,
   autoPatchelfHook,
   gtkmm3,
   atkmm,
-  glibmm,
+  glibmm_2_4,
   gtk3,
   pango,
   at-spi2-atk,
@@ -27,7 +29,7 @@ stdenv.mkDerivation rec {
     dpkg
     gtkmm3
     atkmm
-    glibmm
+    glibmm_2_4
     gtk3
     pango
     at-spi2-atk
@@ -36,6 +38,18 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
   nativeBuildInputs = [
+    # patchelf 0.19.2 leaves overlapping LOAD segments in dnieremotewizard and
+    # it segfaults on start.  FIXME: drop once a release with
+    # https://github.com/NixOS/patchelf/pull/672 is the default patchelf.
+    (patchelf.overrideAttrs (
+      finalAttrs: previousAttrs: {
+        version = "0.15.2";
+        src = fetchurl {
+          url = "https://github.com/NixOS/patchelf/releases/download/${finalAttrs.version}/patchelf-${finalAttrs.version}.tar.bz2";
+          hash = "sha256-F3RfVkFZyOIo/EEtplogSLhGxLa0Igt3y/IkFuAvLXw=";
+        };
+      }
+    ))
     autoPatchelfHook
   ];
   propagatedBuildInputs = [
