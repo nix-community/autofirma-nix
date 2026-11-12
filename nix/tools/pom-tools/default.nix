@@ -25,6 +25,7 @@
       ) {
     add-xml-doclet-to-javadoc-plugin = ./lib/add-xml-doclet-to-javadoc-plugin.py;
     pin-managed-version = ./lib/pin-managed-version.py;
+    pin-dependency-versions = ./lib/pin-dependency-versions.py;
   };
 in
   symlinkJoin {

@@ -16,6 +16,7 @@
   rsync,
   src,
   maven-dependencies-hash ? "",
+  maven-dependency-versions ? {},
   disableJavaVersionCheck ? true,
   disableAutoFirmaVersionCheck ? true,
   darkModeFix ? true,
@@ -77,9 +78,10 @@
       reset-project-build-timestamp
 
       # Make the downloaded dependencies independent of the Maven version and
-      # of new Bouncy Castle releases (jmulticard brings in a version range)
+      # of new upstream releases that introduce version ranges.  The exact
+      # resolved versions are pinned from maven-dependency-versions.lock.
       pin-default-plugin-versions
-      pin-managed-version dependency org.bouncycastle bcutil-jdk18on "${jmulticard.bcutilVersion}"
+      pin-dependency-versions "${builtins.toFile "maven-dependency-versions.json" (builtins.toJSON maven-dependency-versions)}" "autofirma.clienteafirma"
 
       # Register the xmldoclet plugin in the pom.xml for documentation generation
       update-plugin-version-by-groupId "org.apache.maven.plugins" "maven-javadoc-plugin" "${javadocVersion}"
@@ -101,6 +103,7 @@
 
     buildPhase = ''
       runHook preBuild
+      set -o pipefail
 
       mkdir -p $out/.m2/repository
 
@@ -115,8 +118,12 @@
       # 3.9 so the downloaded repository does not depend on the Maven version.
       # Some install modules are only declared in the dev profile but are
       # needed in the install profile.  We delete them later.
-      mvn install -Dmaven.repo.local=$out/.m2/repository -DskipTests -Daether.dependencyCollector.impl=df -Denv=dev
-      mvn dependency:go-offline -Dmaven.repo.local=$out/.m2/repository -DskipTests -Daether.dependencyCollector.impl=df -Denv=install
+      # dependency:list records the exact resolved versions (including
+      # transitive ones) so update-fixed-output-derivations can capture them.
+      # It runs inline with install/go-offline so reactor siblings resolve; the
+      # list is read from stdout because -DoutputFile drops modules in a reactor.
+      mvn install dependency:list -Dmaven.repo.local=$out/.m2/repository -DskipTests -Daether.dependencyCollector.impl=df -Denv=dev | tee /dev/stderr | grep -E ':[a-zA-Z0-9._-]+:jar:[a-zA-Z0-9._-]+:(compile|runtime|test|provided)' > $out/resolved-dependencies.txt
+      mvn dependency:go-offline dependency:list -Dmaven.repo.local=$out/.m2/repository -DskipTests -Daether.dependencyCollector.impl=df -Denv=install | tee /dev/stderr | grep -E ':[a-zA-Z0-9._-]+:jar:[a-zA-Z0-9._-]+:(compile|runtime|test|provided)' >> $out/resolved-dependencies.txt
 
       runHook postBuild
     '';
@@ -135,7 +142,8 @@
         -delete
 
       # Remote metadata is only needed to resolve version ranges, and it
-      # changes with every upstream release.  Ranges are pinned in the poms.
+      # changes with every upstream release.  Resolved versions are pinned
+      # from maven-dependency-versions.lock, so no ranges remain.
       find $out -type f -name 'maven-metadata-*.xml' -not -name maven-metadata-local.xml -delete
 
       # Written by Maven 3.10 (resolver 2): remote prefix lists and lock files

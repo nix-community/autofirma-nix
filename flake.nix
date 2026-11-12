@@ -169,6 +169,7 @@
         };
         packages = let
           fixed-output-derivations = builtins.fromJSON (builtins.readFile ./fixed-output-derivations.lock);
+          maven-dependency-versions = builtins.fromJSON (builtins.readFile ./maven-dependency-versions.lock);
           prestadores = pkgs.callPackage ./nix/autofirma/truststore/prestadores {};
           pom-tools = pkgs.callPackage ./nix/tools/pom-tools {};
           properties-to-json = pkgs.callPackage ./nix/tools/properties-to-json {};
@@ -178,6 +179,7 @@
             src = jmulticard-src;
 
             maven-dependencies-hash = fixed-output-derivations."autofirma.clienteafirma.dependencies.jmulticard".hash;
+            maven-dependency-versions = maven-dependency-versions;
           };
           clienteafirma-external = pkgs.callPackage ./nix/autofirma/dependencies/clienteafirma-external {
             inherit pom-tools;
@@ -185,6 +187,7 @@
             src = clienteafirma-external-src;
 
             maven-dependencies-hash = fixed-output-derivations."autofirma.clienteafirma.dependencies.clienteafirma-external".hash;
+            maven-dependency-versions = maven-dependency-versions;
           };
         in rec {
           autofirma-truststore = pkgs.callPackage ./nix/autofirma/truststore {
@@ -196,6 +199,7 @@
             src = autofirma-src;
 
             maven-dependencies-hash = fixed-output-derivations."autofirma.clienteafirma".hash;
+            maven-dependency-versions = maven-dependency-versions;
           };
           docs = import ./docs { inherit pkgs inputs; inherit (nixpkgs) lib; };
           default = self'.packages.autofirma;
