@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  writers,
   fetchFromGitHub,
   maven,
   pom-tools,
@@ -20,15 +21,21 @@
 
     dontBuild = true;
 
-    patchPhase = ''
+    patchPhase = let
+      srcVersion = "${src.rev}-autofirma-nix";
+      pomRules = writers.writeJSON "pom-rules.json" {
+        javaVersion = "1.8";
+        pkgVersion = srcVersion;
+        dependencyVersions = {
+          "es.gob.afirma.lib" = srcVersion;
+        };
+        resetBuildTimestamp = true;
+        pinDependencyVersions =
+          maven-dependency-versions."autofirma.clienteafirma.dependencies.clienteafirma-external".versions or {};
+      };
+    in ''
       find . -name '*.jar' -delete  # just in case
-
-      update-java-version "1.8"
-      update-pkg-version "${src.rev}-autofirma-nix"
-      update-dependency-version-by-groupId "es.gob.afirma.lib" "${src.rev}-autofirma-nix"
-      reset-project-build-timestamp
-      pin-default-plugin-versions
-      pin-dependency-versions "${builtins.toFile "maven-dependency-versions.json" (builtins.toJSON maven-dependency-versions)}" "autofirma.clienteafirma.dependencies.clienteafirma-external"
+      pom-tools ${pomRules}
     '';
 
     installPhase = ''
@@ -54,14 +61,11 @@
 
       mkdir -p $out/.m2/repository
 
-      # Maven 3.10 (resolver 2) collects dependencies breadth-first and skips
-      # the poms of conflict losers; force the depth-first collector of Maven
-      # 3.9 so the downloaded repository does not depend on the Maven version.
       # dependency:list records the exact resolved versions (including
       # transitive ones) so update-fixed-output-derivations can capture them.
       # It runs inline with package so reactor siblings resolve; the list is
       # read from stdout because -DoutputFile drops modules in a reactor.
-      mvn clean package dependency:list dependency:go-offline -Dmaven.repo.local=$out/.m2/repository -DskipTests -Daether.dependencyCollector.impl=df | tee /dev/stderr | grep -E ':[a-zA-Z0-9._-]+:jar:[a-zA-Z0-9._-]+:(compile|runtime|test|provided)' > $out/resolved-dependencies.txt
+      mvn clean package dependency:list dependency:go-offline -Dmaven.repo.local=$out/.m2/repository -DskipTests | tee /dev/stderr | grep -E ':[a-zA-Z0-9._-]+:jar:[a-zA-Z0-9._-]+:(compile|runtime|test|provided)' > $out/resolved-dependencies.txt
 
       runHook postBuild
     '';
@@ -134,9 +138,13 @@ in
         -delete
     '';
 
-    fixupPhase = ''
+    fixupPhase = let
+      pomRules = writers.writeJSON "pom-rules.json" {
+        resetMetadataTimestamp = true;
+      };
+    in ''
       cd $out/.m2/repository
-      reset-maven-metadata-local-timestamp
+      pom-tools ${pomRules}
     '';
 
     meta = with lib; {
