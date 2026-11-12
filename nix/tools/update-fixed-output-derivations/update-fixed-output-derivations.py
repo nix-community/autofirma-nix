@@ -156,7 +156,12 @@ class Derivation:
             self._lock_file.flush()
 
     def build(self):
-        command = f"nix build -L path:.#{self.name}" if not self.command else self.command
+        # Build the fixed-output derivation itself, not the package that consumes
+        # it.  The package's offline build runs against the previous repository
+        # and fails before a hash mismatch is reported when the Maven version
+        # changed; the FOD reports its hash directly.
+        target = self.fod if self.fod else self.name
+        command = f"nix build -L path:.#{target}" if not self.command else self.command
         match, returncode = run_command_and_analyze(command, FIND_HASHES_RE)
         if returncode != 0:
             if not match:
