@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  writers,
   buildFHSEnv,
   jre,
   makeDesktopItem,
@@ -16,6 +17,7 @@
   rsync,
   src,
   maven-dependencies-hash ? "",
+  maven-dependency-versions ? {},
   disableJavaVersionCheck ? true,
   disableAutoFirmaVersionCheck ? true,
   darkModeFix ? true,
@@ -54,31 +56,48 @@
       srcVersion = "${src.rev}-autofirma-nix";
       javadocVersion = "3.11.2";
       xmlDocletVersion = "2.0.3";
-    in
-    ''
-      # Update the version of the Java runtime to use
-      update-java-version "${javaVersion}"
-
-      # Update the version of the package to a custom one based on the revision we're building
-      update-pkg-version "${srcVersion}"
-
-      # Make sure the version of the external dependencies is the one we've built
-      update-dependency-version-by-groupId "${clienteafirma-external.groupId}" "${clienteafirma-external.finalVersion}"
-      update-dependency-version-by-groupId "${jmulticard.groupId}" "${jmulticard.finalVersion}"
-      update-dependency-version-by-groupId "es.gob.afirma" "${srcVersion}"
-      update-dependency-version-by-groupId "org.java-websocket" "1.6.0"
-
-      # Remove some modules that we don't need in the build
-      remove-module-on-profile "env-install" "afirma-server-triphase-signer"
-      remove-module-on-profile "env-install" "afirma-signature-retriever"
-      remove-module-on-profile "env-install" "afirma-signature-storage"
-
-      # For the build to be deterministic, we need to reset the project build timestamp
-      reset-project-build-timestamp
-
-      # Register the xmldoclet plugin in the pom.xml for documentation generation
-      update-plugin-version-by-groupId "org.apache.maven.plugins" "maven-javadoc-plugin" "${javadocVersion}"
-      add-xml-doclet-to-javadoc-plugin "${javadocVersion}" "${xmlDocletVersion}"
+      pomRules = writers.writeJSON "pom-rules.json" {
+        inherit javaVersion;
+        pkgVersion = srcVersion;
+        # Point the external dependencies and the reactor modules at the
+        # versions we build, plus the websocket version the installer expects.
+        dependencyVersions = {
+          ${clienteafirma-external.groupId} = clienteafirma-external.finalVersion;
+          ${jmulticard.groupId} = jmulticard.finalVersion;
+          "es.gob.afirma" = srcVersion;
+          "org.java-websocket" = "1.6.0";
+        };
+        # Drop server modules that are not needed in the build.
+        removeProfileModules = {
+          env-install = [
+            "afirma-server-triphase-signer"
+            "afirma-signature-retriever"
+            "afirma-signature-storage"
+          ];
+        };
+        # Deterministic build timestamp.
+        resetBuildTimestamp = true;
+        # Pin transitive version ranges to the exact resolved versions from
+        # maven-dependency-versions.lock, so the downloaded dependencies do not
+        # drift with new upstream releases.  This is independent of the Maven
+        # version: dependencyManagement forces the pinned versions under any
+        # Maven.  Users on a different Maven supply their own FOD hashes via
+        # lib.mkAutofirma; the version pins are reused as-is.
+        pinDependencyVersions = maven-dependency-versions."autofirma.clienteafirma".versions or {};
+        # Register the xmldoclet plugin for documentation generation.
+        pluginVersions = [
+          {
+            groupId = "org.apache.maven.plugins";
+            artifactId = "maven-javadoc-plugin";
+            version = javadocVersion;
+          }
+        ];
+        addXmlDoclet = {
+          inherit javadocVersion xmlDocletVersion;
+        };
+      };
+    in ''
+      pom-tools ${pomRules}
     '';
 
     dontFixup = true;
@@ -96,6 +115,7 @@
 
     buildPhase = ''
       runHook preBuild
+      set -o pipefail
 
       mkdir -p $out/.m2/repository
 
@@ -105,9 +125,14 @@
 
       chmod -R +w $out/.m2/repository
 
-      mvn install -Dmaven.repo.local=$out/.m2/repository -DskipTests -Denv=dev  # Some install modules are only declared in the dev profile
-                                                                                # but are needed in the install profile.  We delete them later.
-      mvn dependency:go-offline -Dmaven.repo.local=$out/.m2/repository -DskipTests -Denv=install
+      # Some install modules are only declared in the dev profile but are
+      # needed in the install profile.  We delete them later.
+      # dependency:list records the exact resolved versions (including
+      # transitive ones) so update-fixed-output-derivations can capture them.
+      # It runs inline with install/go-offline so reactor siblings resolve; the
+      # list is read from stdout because -DoutputFile drops modules in a reactor.
+      mvn install dependency:list -Dmaven.repo.local=$out/.m2/repository -DskipTests -Denv=dev | tee /dev/stderr | grep -E ':[a-zA-Z0-9._-]+:jar:[a-zA-Z0-9._-]+:(compile|runtime|test|provided)' > $out/resolved-dependencies.txt
+      mvn dependency:go-offline dependency:list -Dmaven.repo.local=$out/.m2/repository -DskipTests -Denv=install | tee /dev/stderr | grep -E ':[a-zA-Z0-9._-]+:jar:[a-zA-Z0-9._-]+:(compile|runtime|test|provided)' >> $out/resolved-dependencies.txt
 
       runHook postBuild
     '';
@@ -120,8 +145,18 @@
       find $out -type f \( \
         -name \*.lastUpdated \
         -o -name resolver-status.properties \
-        -o -name _remote.repositories \) \
+        -o -name _remote.repositories \
+        -o -name \*.md5 \
+        -o -name \*.sha1 \) \
         -delete
+
+      # Remote metadata is only needed to resolve version ranges, and it
+      # changes with every upstream release.  Resolved versions are pinned
+      # from maven-dependency-versions.lock, so no ranges remain.
+      find $out -type f -name 'maven-metadata-*.xml' -not -name maven-metadata-local.xml -delete
+
+      # Written by Maven 3.10 (resolver 2): remote prefix lists and lock files
+      rm -rf $out/.m2/repository/.meta $out/.m2/repository/.locks
 
       runHook postInstall
     '';

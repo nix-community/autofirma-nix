@@ -1,12 +1,14 @@
 {
   lib,
   stdenv,
+  writers,
   fetchFromGitHub,
   maven,
   pom-tools,
   rsync,
   src,
   maven-dependencies-hash ? "",
+  maven-dependency-versions ? {},
 }: let
   name = "clienteafirma-external";
 
@@ -19,13 +21,21 @@
 
     dontBuild = true;
 
-    patchPhase = ''
+    patchPhase = let
+      srcVersion = "${src.rev}-autofirma-nix";
+      pomRules = writers.writeJSON "pom-rules.json" {
+        javaVersion = "1.8";
+        pkgVersion = srcVersion;
+        dependencyVersions = {
+          "es.gob.afirma.lib" = srcVersion;
+        };
+        resetBuildTimestamp = true;
+        pinDependencyVersions =
+          maven-dependency-versions."autofirma.clienteafirma.dependencies.clienteafirma-external".versions or {};
+      };
+    in ''
       find . -name '*.jar' -delete  # just in case
-
-      update-java-version "1.8"
-      update-pkg-version "${src.rev}-autofirma-nix"
-      update-dependency-version-by-groupId "es.gob.afirma.lib" "${src.rev}-autofirma-nix"
-      reset-project-build-timestamp
+      pom-tools ${pomRules}
     '';
 
     installPhase = ''
@@ -47,10 +57,15 @@
 
     buildPhase = ''
       runHook preBuild
+      set -o pipefail
 
       mkdir -p $out/.m2/repository
 
-      mvn clean package dependency:go-offline -Dmaven.repo.local=$out/.m2/repository -DskipTests
+      # dependency:list records the exact resolved versions (including
+      # transitive ones) so update-fixed-output-derivations can capture them.
+      # It runs inline with package so reactor siblings resolve; the list is
+      # read from stdout because -DoutputFile drops modules in a reactor.
+      mvn clean package dependency:list dependency:go-offline -Dmaven.repo.local=$out/.m2/repository -DskipTests | tee /dev/stderr | grep -E ':[a-zA-Z0-9._-]+:jar:[a-zA-Z0-9._-]+:(compile|runtime|test|provided)' > $out/resolved-dependencies.txt
 
       runHook postBuild
     '';
@@ -58,13 +73,23 @@
     installPhase = ''
       runHook preInstall
 
-      rm -rf $out/.m2/respository/es/gob/afirma/lib
+      rm -rf $out/.m2/repository/es/gob/afirma/lib
 
       find $out -type f \( \
         -name \*.lastUpdated \
         -o -name resolver-status.properties \
-        -o -name _remote.repositories \) \
+        -o -name _remote.repositories \
+        -o -name \*.md5 \
+        -o -name \*.sha1 \) \
         -delete
+
+      # Remote metadata is only needed to resolve version ranges, and it
+      # changes with every upstream release.  Resolved versions are pinned
+      # from maven-dependency-versions.lock, so no ranges remain.
+      find $out -type f -name 'maven-metadata-*.xml' -not -name maven-metadata-local.xml -delete
+
+      # Written by Maven 3.10 (resolver 2): remote prefix lists and lock files
+      rm -rf $out/.m2/repository/.meta $out/.m2/repository/.locks
 
       runHook postInstall
     '';
@@ -81,6 +106,7 @@ in
 
     groupId = "es.gob.afirma.lib";
     finalVersion = "${src.rev}-autofirma-nix";
+    passthru.dependencyFod = clienteafirma-external-dependencies;
 
     src = clienteafirma-external-src;
 
@@ -112,9 +138,13 @@ in
         -delete
     '';
 
-    fixupPhase = ''
+    fixupPhase = let
+      pomRules = writers.writeJSON "pom-rules.json" {
+        resetMetadataTimestamp = true;
+      };
+    in ''
       cd $out/.m2/repository
-      reset-maven-metadata-local-timestamp
+      pom-tools ${pomRules}
     '';
 
     meta = with lib; {

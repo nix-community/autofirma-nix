@@ -2,6 +2,7 @@ from contextlib import contextmanager
 from copy import deepcopy
 from dataclasses import dataclass
 import json
+import os
 import re
 import subprocess
 import sys
@@ -11,9 +12,12 @@ import toposort
 
 
 LOCK_FILE = "fixed-output-derivations.lock"
+VERSIONS_LOCK_FILE = "maven-dependency-versions.lock"
 FIND_HASHES_RE = re.compile(
     r"^\s+specified: sha256-A{43}=\n\s+got:\s+(?P<new_hash>sha256-.{44})$",
     re.MULTILINE)
+# dependency:list stdout lines look like "[INFO]    g:a:jar:1.0:compile -- module ...".
+RESOLVED_DEP_RE = re.compile(r"([\w.\-]+):([\w.\-]+):jar:([\w.\-]+):(compile|runtime|test|provided)")
 
 
 """
@@ -62,6 +66,7 @@ class LockFile:
             hash=data["hash"],
             dependencies=data.get("dependencies", []),
             command=data.get("command", ""),
+            fod=data.get("fod", ""),
             _lock_file=self
         )
 
@@ -86,6 +91,7 @@ class LockFile:
     def update(self, derivation):
         name, contents = derivation.as_tuple()
         self.data[name] = contents
+        self.flush()
 
     def flush(self, alternative_data=None):
         with open(self.path, "w") as f:
@@ -95,12 +101,38 @@ class LockFile:
                 indent=2)
 
 
+class VersionsLockFile:
+    """Maps derivation names to the exact Maven dependency versions their FOD
+    resolved, as {"versions": {"groupId:artifactId": version}}."""
+
+    def __init__(self, path):
+        self.path = path
+        try:
+            with open(path) as f:
+                self.data = json.load(f)
+        except FileNotFoundError:
+            self.data = {}
+
+    def get(self, name):
+        return self.data.get(name, {}).get("versions", {})
+
+    def set(self, name, versions):
+        self.data[name] = {"versions": versions}
+        self.flush()
+
+    def flush(self):
+        with open(self.path, "w") as f:
+            json.dump(self.data, f, indent=2, sort_keys=True)
+            f.write("\n")
+
+
 @dataclass
 class Derivation:
     name: str
     hash: str
     dependencies: list[str]
     command: str
+    fod: str
     _lock_file: LockFile
 
     def __post_init__(self):
@@ -111,7 +143,8 @@ class Derivation:
         return (self.name, {
             "hash": self.hash,
             **({"dependencies": self.dependencies} if self.dependencies else {}),
-            **({"command": self.command} if self.command else {})
+            **({"command": self.command} if self.command else {}),
+            **({"fod": self.fod} if self.fod else {})
         })
 
     @contextmanager
@@ -123,15 +156,74 @@ class Derivation:
             self._lock_file.flush()
 
     def build(self):
-        command = f"nix build -L .#{self.name}" if not self.command else self.command
+        # Build the fixed-output derivation itself, not the package that consumes
+        # it.  The package's offline build runs against the previous repository
+        # and fails before a hash mismatch is reported when the Maven version
+        # changed; the FOD reports its hash directly.
+        target = self.fod if self.fod else self.name
+        command = f"nix build -L path:.#{target}" if not self.command else self.command
         match, returncode = run_command_and_analyze(command, FIND_HASHES_RE)
         if returncode != 0:
             if not match:
                 raise Exception(f"Failed to build {self.name} and no hash was found in the output")
-            else:
-                return match.group("new_hash")
-        else:
-            return self.hash
+            return match.group("new_hash")
+        # Build succeeded: the recorded hash may be stale or cleared, so read
+        # the actual fixed-output hash from the derivation.
+        return self.fod_hash() if self.fod else self.hash
+
+    def fod_hash(self):
+        drv = subprocess.run(
+            ["nix", "path-info", "--derivation", f"path:.#{self.fod}"],
+            check=True, capture_output=True, text=True).stdout.strip()
+        show = subprocess.run(
+            ["nix", "derivation", "show", drv],
+            check=True, capture_output=True, text=True).stdout
+        return json.loads(show)["derivations"][os.path.basename(drv)]["outputs"]["out"]["hash"]
+
+    def build_and_capture(self, versions_lock):
+        """Build the FOD, capture its resolved dependency versions, and if they
+        changed, pin them and rebuild so the recorded hash matches the pinned
+        resolution.  Returns the final hash."""
+        hash = self.build()
+        if not self.fod:
+            return hash
+        # The first build ran with a cleared hash and failed the fixed-output
+        # check.  Record the hash it reported so the FOD is buildable and its
+        # output (with the resolution manifest) can be inspected.
+        self.update_hash(hash)
+        versions = self.capture_versions()
+        if versions_lock.get(self.name) == versions:
+            return hash
+        versions_lock.set(self.name, versions)
+        # The source derivation now pins the captured versions, so the FOD
+        # input changes and must be rebuilt to obtain the matching hash.
+        self._lock_file._clear_hash(self.name)
+        return self.build()
+
+    def capture_versions(self):
+        out = subprocess.run(
+            ["nix", "build", "--no-link", "--print-out-paths", f"path:.#{self.fod}"],
+            check=True, capture_output=True, text=True).stdout.strip()
+        with open(f"{out}/resolved-dependencies.txt") as f:
+            manifest = f.read()
+        versions = {}
+        conflicts = {}
+        for line in manifest.splitlines():
+            m = RESOLVED_DEP_RE.search(line)
+            if not m:
+                continue
+            group, artifact, version, _scope = m.groups()
+            if group.startswith("es.gob.afirma"):
+                continue  # reactor modules, built from source not downloaded
+            coordinate = f"{group}:{artifact}"
+            if coordinate in versions and versions[coordinate] != version:
+                conflicts.setdefault(coordinate, {versions[coordinate]}).add(version)
+            versions[coordinate] = version
+        if conflicts:
+            raise Exception(
+                f"{self.name}: resolved graph has multiple versions for "
+                f"{sorted(conflicts)}; cannot pin a single version")
+        return versions
 
     def update_hash(self, new_hash):
         self.hash = new_hash
@@ -207,11 +299,13 @@ def run_command_and_analyze(cmd, pattern):
 
 
 def main():
+    versions_lock = VersionsLockFile(VERSIONS_LOCK_FILE)
     with LockFile(LOCK_FILE) as lf:
         for derivation in lf:
             with derivation.clear_hash():
-                hash = derivation.build()
+                hash = derivation.build_and_capture(versions_lock)
                 derivation.update_hash(hash)
+    versions_lock.flush()
 
 
 if __name__ == "__main__":

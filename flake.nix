@@ -50,6 +50,9 @@
   }:
     flake-parts.lib.mkFlake {inherit inputs;} {
       flake = {
+        lib.mkAutofirma = import ./nix/lib/mk-autofirma.nix {
+          inherit jmulticard-src clienteafirma-external-src autofirma-src;
+        };
         homeManagerModules = rec {
           autofirma = import ./nix/autofirma/hm-module.nix inputs;
           dnieremote = import ./nix/dnieremote/hm-module.nix inputs;
@@ -168,35 +171,9 @@
           ];
         };
         packages = let
-          fixed-output-derivations = builtins.fromJSON (builtins.readFile ./fixed-output-derivations.lock);
-          prestadores = pkgs.callPackage ./nix/autofirma/truststore/prestadores {};
-          pom-tools = pkgs.callPackage ./nix/tools/pom-tools {};
-          properties-to-json = pkgs.callPackage ./nix/tools/properties-to-json {};
-          jmulticard = pkgs.callPackage ./nix/autofirma/dependencies/jmulticard {
-            inherit pom-tools;
-
-            src = jmulticard-src;
-
-            maven-dependencies-hash = fixed-output-derivations."autofirma.clienteafirma.dependencies.jmulticard".hash;
-          };
-          clienteafirma-external = pkgs.callPackage ./nix/autofirma/dependencies/clienteafirma-external {
-            inherit pom-tools;
-
-            src = clienteafirma-external-src;
-
-            maven-dependencies-hash = fixed-output-derivations."autofirma.clienteafirma.dependencies.clienteafirma-external".hash;
-          };
-        in rec {
-          autofirma-truststore = pkgs.callPackage ./nix/autofirma/truststore {
-            govTrustedCerts = prestadores;
-          };
-          autofirma = pkgs.callPackage ./nix/autofirma/default.nix {
-            inherit jmulticard clienteafirma-external pom-tools autofirma-truststore properties-to-json;
-
-            src = autofirma-src;
-
-            maven-dependencies-hash = fixed-output-derivations."autofirma.clienteafirma".hash;
-          };
+          autofirma-set = self.lib.mkAutofirma pkgs {};
+        in {
+          inherit (autofirma-set) autofirma autofirma-truststore;
           docs = import ./docs { inherit pkgs inputs; inherit (nixpkgs) lib; };
           default = self'.packages.autofirma;
         };
@@ -204,6 +181,8 @@
           blacklistPackages = [ "docs" ];
           packages = lib.mapAttrs' (n: lib.nameValuePair "package-${n}") (lib.filterAttrs (n: _v: !(builtins.elem n blacklistPackages)) self'.packages);
           checks = {
+            # pom-tools unit tests
+            pom-tools = pkgs.callPackage ./nix/tools/pom-tools/test.nix {};
             # NixOS Modules
             ## Autofirma
             nixos-autofirma-cli-sign-document = pkgs.callPackage ./nix/tests/nixos/autofirma/cli/sign-document.nix { inherit self; };
