@@ -47,7 +47,8 @@ in
     maven-dependencies-hash ? default-fixed-output-derivations,
     maven-dependency-versions ? default-maven-dependency-versions,
   }: let
-    hashFor = name: maven-dependencies-hash.${name}.hash;
+    # Fall back per name: a caller may override only the FODs that mismatch.
+    hashFor = name: (maven-dependencies-hash.${name} or default-fixed-output-derivations.${name}).hash;
 
     prestadores = pkgs.callPackage ../autofirma/truststore/prestadores {};
     pom-tools = pkgs.callPackage ../tools/pom-tools {};
