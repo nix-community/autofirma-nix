@@ -6,6 +6,7 @@
   - [NixOS module](./installation_nixos_module.md)
   - [Home Manager with NixOS](./installation_home_manager_module.md)
   - [Home Manager standalone](./installation_home_manager_standalone.md)
+  - [Using your own nixpkgs (different Maven)](./own_nixpkgs_maven.md)
 - [Security](./security.md)
 - [Troubleshooting](./troubleshooting.md)
 

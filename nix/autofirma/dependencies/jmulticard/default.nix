@@ -1,12 +1,14 @@
 {
   lib,
   stdenv,
+  writers,
   fetchFromGitHub,
   maven,
-  pom-tools,
+  pom-apply-rules,
   rsync,
   src,
   maven-dependencies-hash ? "",
+  maven-dependency-versions ? {},
 }: let
   name = "jmulticard";
 
@@ -16,18 +18,26 @@
     inherit src;
 
     nativeBuildInputs = [
-      pom-tools
+      pom-apply-rules
     ];
 
     dontBuild = true;
 
-    patchPhase = ''
+    patchPhase = let
+      srcVersion = "${src.rev}-autofirma-nix";
+      pomRewriteRules = writers.writeJSON "pom-rewrite-rules.json" {
+        javaVersion = "1.8";
+        pkgVersion = srcVersion;
+        dependencyVersions = {
+          "es.gob.afirma.jmulticard" = srcVersion;
+        };
+        resetBuildTimestamp = true;
+        pinDependencyVersions =
+          maven-dependency-versions."autofirma.clienteafirma.dependencies.jmulticard".versions or {};
+      };
+    in ''
       find . -name '*.jar' -delete  # just in case
-
-      update-java-version "1.8"
-      update-pkg-version "${src.rev}-autofirma-nix"
-      update-dependency-version-by-groupId "es.gob.afirma.jmulticard" "${src.rev}-autofirma-nix"
-      reset-project-build-timestamp
+      pom-apply-rules ${pomRewriteRules}
     '';
 
     installPhase = ''
@@ -49,10 +59,15 @@
 
     buildPhase = ''
       runHook preBuild
+      set -o pipefail
 
       mkdir -p $out/.m2/repository
 
-      mvn clean package dependency:go-offline -Dmaven.repo.local=$out/.m2/repository -DskipTests
+      # dependency:list records the exact resolved versions (including
+      # transitive ones) so update-fixed-output-derivations can capture them.
+      # It runs inline with package so reactor siblings resolve; the list is
+      # read from stdout because -DoutputFile drops modules in a reactor.
+      mvn clean package dependency:list dependency:go-offline -Dmaven.repo.local=$out/.m2/repository -DskipTests | tee /dev/stderr | grep -E ':[a-zA-Z0-9._-]+:jar:[a-zA-Z0-9._-]+:(compile|runtime|test|provided)' > $out/resolved-dependencies.txt
 
       runHook postBuild
     '';
@@ -60,13 +75,23 @@
     installPhase = ''
       runHook preInstall
 
-      rm -rf $out/.m2/respository/es/gob/afirma/jmulticard
+      rm -rf $out/.m2/repository/es/gob/afirma/jmulticard
 
       find $out -type f \( \
         -name \*.lastUpdated \
         -o -name resolver-status.properties \
-        -o -name _remote.repositories \) \
+        -o -name _remote.repositories \
+        -o -name \*.md5 \
+        -o -name \*.sha1 \) \
         -delete
+
+      # Remote metadata is only needed to resolve version ranges, and it
+      # changes with every upstream release.  Resolved versions are pinned
+      # from maven-dependency-versions.lock, so no ranges remain.
+      find $out -type f -name 'maven-metadata-*.xml' -not -name maven-metadata-local.xml -delete
+
+      # Written by Maven 3.10 (resolver 2): remote prefix lists and lock files
+      rm -rf $out/.m2/repository/.meta $out/.m2/repository/.locks
 
       runHook postInstall
     '';
@@ -83,13 +108,14 @@ in
 
     groupId = "es.gob.afirma.jmulticard";
     finalVersion = "${src.rev}-autofirma-nix";
+    passthru.dependencyFOD = jmulticard-dependencies;
 
     src = jmulticard-src;
 
     nativeBuildInputs = [
       rsync
       maven
-      pom-tools
+      pom-apply-rules
     ];
 
     buildPhase = ''
@@ -114,9 +140,13 @@ in
         -delete
     '';
 
-    fixupPhase = ''
+    fixupPhase = let
+      pomRewriteRules = writers.writeJSON "pom-rewrite-rules.json" {
+        resetMetadataTimestamp = true;
+      };
+    in ''
       cd $out/.m2/repository
-      reset-maven-metadata-local-timestamp
+      pom-apply-rules ${pomRewriteRules}
     '';
 
     meta = with lib; {
