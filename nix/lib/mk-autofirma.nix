@@ -14,9 +14,9 @@
 #
 #     autofirma = autofirma-nix.lib.mkAutofirma pkgs {
 #       maven-dependencies-hash = {
-#         "autofirma.clienteafirma.dependencies.jmulticard" = "sha256-…";
-#         "autofirma.clienteafirma.dependencies.clienteafirma-external" = "sha256-…";
-#         "autofirma.clienteafirma" = "sha256-…";
+#         "autofirma.clienteafirma.dependencies.jmulticard".hash = "sha256-…";
+#         "autofirma.clienteafirma.dependencies.clienteafirma-external".hash = "sha256-…";
+#         "autofirma.clienteafirma".hash = "sha256-…";
 #       };
 #     };
 #
@@ -39,8 +39,8 @@ in
   #
   # `pkgs` is the caller's package set; its `maven` is the one used to build.
   # `overrides` may set:
-  #   maven-dependencies-hash    attrset of FOD name -> sha256, defaulting to the
-  #                              committed fixed-output-derivations.lock
+  #   maven-dependencies-hash    attrset of FOD name -> { hash = sha256; }, defaulting
+  #                              per name to the committed fixed-output-derivations.lock
   #   maven-dependency-versions  the version-pin lock, defaulting to the committed
   #                              maven-dependency-versions.lock (rarely overridden)
   pkgs: {
