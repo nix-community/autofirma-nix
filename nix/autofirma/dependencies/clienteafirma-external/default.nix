@@ -23,7 +23,7 @@
 
     patchPhase = let
       srcVersion = "${src.rev}-autofirma-nix";
-      pomRules = writers.writeJSON "pom-rules.json" {
+      pomRewriteRules = writers.writeJSON "pom-rewrite-rules.json" {
         javaVersion = "1.8";
         pkgVersion = srcVersion;
         dependencyVersions = {
@@ -35,7 +35,7 @@
       };
     in ''
       find . -name '*.jar' -delete  # just in case
-      pom-tools ${pomRules}
+      pom-apply-rules ${pomRewriteRules}
     '';
 
     installPhase = ''
@@ -106,7 +106,7 @@ in
 
     groupId = "es.gob.afirma.lib";
     finalVersion = "${src.rev}-autofirma-nix";
-    passthru.dependencyFod = clienteafirma-external-dependencies;
+    passthru.dependencyFOD = clienteafirma-external-dependencies;
 
     src = clienteafirma-external-src;
 
@@ -139,12 +139,12 @@ in
     '';
 
     fixupPhase = let
-      pomRules = writers.writeJSON "pom-rules.json" {
+      pomRewriteRules = writers.writeJSON "pom-rewrite-rules.json" {
         resetMetadataTimestamp = true;
       };
     in ''
       cd $out/.m2/repository
-      pom-tools ${pomRules}
+      pom-apply-rules ${pomRewriteRules}
     '';
 
     meta = with lib; {

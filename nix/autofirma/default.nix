@@ -56,7 +56,7 @@
       srcVersion = "${src.rev}-autofirma-nix";
       javadocVersion = "3.11.2";
       xmlDocletVersion = "2.0.3";
-      pomRules = writers.writeJSON "pom-rules.json" {
+      pomRewriteRules = writers.writeJSON "pom-rewrite-rules.json" {
         inherit javaVersion;
         pkgVersion = srcVersion;
         # Point the external dependencies and the reactor modules at the
@@ -97,7 +97,7 @@
         };
       };
     in ''
-      pom-tools ${pomRules}
+      pom-apply-rules ${pomRewriteRules}
     '';
 
     dontFixup = true;

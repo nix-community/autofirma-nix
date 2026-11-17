@@ -1,4 +1,4 @@
-"""Tests for the single-pass pom-tools patcher.
+"""Tests for the single-pass pom-apply-rules patcher.
 
 Each operation is exercised against realistic Maven POM fixtures, plus the
 cross-cutting invariants: idempotency, dirty-only writes, canonical operation
@@ -10,7 +10,7 @@ import json
 import pytest
 from lxml import etree
 
-import pom_tools as pt
+import pom_apply_rules as pt
 
 NS = {"m": pt.POM_NS}
 
@@ -594,16 +594,16 @@ class TestCli:
         bad.write_text("{not json", encoding="utf-8")
         monkeypatch.chdir(tmp_path)
         assert pt.main([str(bad)]) == 1
-        assert "pom-tools" in capsys.readouterr().err
+        assert "pom-apply-rules" in capsys.readouterr().err
 
     def test_malformed_rules(self, tmp_path, monkeypatch, capsys):
         bad = tmp_path / "rules.json"
         bad.write_text(json.dumps({"javaVersion": 17}), encoding="utf-8")
         monkeypatch.chdir(tmp_path)
         assert pt.main([str(bad)]) == 1
-        assert "pom-tools" in capsys.readouterr().err
+        assert "pom-apply-rules" in capsys.readouterr().err
 
     def test_missing_rules_file(self, tmp_path, monkeypatch, capsys):
         monkeypatch.chdir(tmp_path)
         assert pt.main([str(tmp_path / "absent.json")]) == 1
-        assert "pom-tools" in capsys.readouterr().err
+        assert "pom-apply-rules" in capsys.readouterr().err

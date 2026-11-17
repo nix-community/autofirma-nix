@@ -128,7 +128,7 @@ to refresh the hashes.
 ## Notes
 
 - The updater builds the FOD attributes directly
-  (`autofirma.clienteafirma.dependencies.<name>.dependencyFod`), not the final
+  (`autofirma.clienteafirma.dependencies.<name>.dependencyFOD`), not the final
   package. Building the package would run its offline step against the previous
   repository and fail before the new hash is reported.
 - Your flake must expose the `autofirma` package (as in the examples above) so

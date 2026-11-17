@@ -433,17 +433,17 @@ def apply_rules(root, rules):
 def main(argv=None):
     argv = sys.argv[1:] if argv is None else argv
     if len(argv) != 1:
-        sys.stderr.write(f"Usage: {sys.argv[0]} <pom-rules.json>\n")
+        sys.stderr.write(f"Usage: {sys.argv[0]} <pom-rewrite-rules.json>\n")
         return 1
     rules_path = Path(argv[0])
     try:
         rules = json.loads(rules_path.read_text(encoding="utf-8"))
         apply_rules(Path.cwd(), rules)
     except RulesError as exc:
-        sys.stderr.write(f"pom-tools: {exc}\n")
+        sys.stderr.write(f"pom-apply-rules: {exc}\n")
         return 1
     except (OSError, etree.XMLSyntaxError, json.JSONDecodeError) as exc:
-        sys.stderr.write(f"pom-tools: {exc}\n")
+        sys.stderr.write(f"pom-apply-rules: {exc}\n")
         return 1
     return 0
 
