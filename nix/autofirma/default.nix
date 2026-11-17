@@ -33,6 +33,7 @@
       [
         ./patches/clienteafirma/etc_config.patch
         ./patches/clienteafirma/aarch64_elf.patch  # Until https://github.com/ctt-gob-es/clienteafirma/pull/435 gets merged
+        ./patches/clienteafirma/fix_nss_secretkey_entries.patch  # Backport of https://github.com/ctt-gob-es/clienteafirma/pull/561 (fixes #559)
       ]
       ++ lib.optionals disableJavaVersionCheck [
         ./patches/clienteafirma/dont_check_java_version.patch
