@@ -9,7 +9,7 @@
   maven,
   nss,
   firefox,
-  pom-tools,
+  pom-apply-rules,
   properties-to-json,
   jmulticard,
   clienteafirma-external,
@@ -29,7 +29,7 @@
 
     inherit src;
 
-    nativeBuildInputs = [pom-tools];
+    nativeBuildInputs = [pom-apply-rules];
 
     patches =
       [

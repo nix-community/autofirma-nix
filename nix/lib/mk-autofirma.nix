@@ -51,18 +51,18 @@ in
     hashFor = name: (maven-dependencies-hash.${name} or default-fixed-output-derivations.${name}).hash;
 
     prestadores = pkgs.callPackage ../autofirma/truststore/prestadores {};
-    pom-tools = pkgs.callPackage ../tools/pom-tools {};
+    pom-apply-rules = pkgs.callPackage ../tools/pom-apply-rules {};
     properties-to-json = pkgs.callPackage ../tools/properties-to-json {};
 
     jmulticard = pkgs.callPackage ../autofirma/dependencies/jmulticard {
-      inherit pom-tools;
+      inherit pom-apply-rules;
       src = jmulticard-src;
       maven-dependencies-hash = hashFor "autofirma.clienteafirma.dependencies.jmulticard";
       inherit maven-dependency-versions;
     };
 
     clienteafirma-external = pkgs.callPackage ../autofirma/dependencies/clienteafirma-external {
-      inherit pom-tools;
+      inherit pom-apply-rules;
       src = clienteafirma-external-src;
       maven-dependencies-hash = hashFor "autofirma.clienteafirma.dependencies.clienteafirma-external";
       inherit maven-dependency-versions;
@@ -73,11 +73,11 @@ in
     };
 
     autofirma = pkgs.callPackage ../autofirma/default.nix {
-      inherit jmulticard clienteafirma-external pom-tools autofirma-truststore properties-to-json;
+      inherit jmulticard clienteafirma-external pom-apply-rules autofirma-truststore properties-to-json;
       src = autofirma-src;
       maven-dependencies-hash = hashFor "autofirma.clienteafirma";
       inherit maven-dependency-versions;
     };
   in {
-    inherit autofirma autofirma-truststore jmulticard clienteafirma-external pom-tools properties-to-json;
+    inherit autofirma autofirma-truststore jmulticard clienteafirma-external pom-apply-rules properties-to-json;
   }

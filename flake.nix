@@ -181,8 +181,8 @@
           blacklistPackages = [ "docs" ];
           packages = lib.mapAttrs' (n: lib.nameValuePair "package-${n}") (lib.filterAttrs (n: _v: !(builtins.elem n blacklistPackages)) self'.packages);
           checks = {
-            # pom-tools unit tests
-            pom-tools = pkgs.callPackage ./nix/tools/pom-tools/test.nix {};
+            # pom-apply-rules unit tests
+            pom-apply-rules = pkgs.callPackage ./nix/tools/pom-apply-rules/test.nix {};
             # NixOS Modules
             ## Autofirma
             nixos-autofirma-cli-sign-document = pkgs.callPackage ./nix/tests/nixos/autofirma/cli/sign-document.nix { inherit self; };

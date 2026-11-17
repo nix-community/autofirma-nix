@@ -4,7 +4,7 @@
   writers,
   fetchFromGitHub,
   maven,
-  pom-tools,
+  pom-apply-rules,
   rsync,
   src,
   maven-dependencies-hash ? "",
@@ -17,7 +17,7 @@
 
     inherit src;
 
-    nativeBuildInputs = [pom-tools];
+    nativeBuildInputs = [pom-apply-rules];
 
     dontBuild = true;
 
@@ -113,7 +113,7 @@ in
     nativeBuildInputs = [
       maven
       rsync
-      pom-tools
+      pom-apply-rules
     ];
 
     buildPhase = ''
